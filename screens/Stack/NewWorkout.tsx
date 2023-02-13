@@ -6,12 +6,13 @@ import React, {useState} from 'react';
 import { Button } from '../../components/Button';
 import TimeSetter from '../../components/TimeSetter';
 import { HIITWorkout, IWorkout, Workout } from '../../src/Workout';
+import WorkoutEditor from './WorkoutEditor';
 
-export default function NewWorkout({ navigation } : any) {
+export default function NewWorkout({ navigation: { navigate } } : any) {
   const [checkedRadio, setChecked] = useState('Strength');
   const [name, getWorkoutName] = useState('');
 
-  function createWorkout(navigation : any) : void{
+  function createWorkout( navigate : Function) : void{
     let workout : IWorkout;
     if (checkedRadio == 'Strength')
       workout = new Workout(name);
@@ -19,8 +20,8 @@ export default function NewWorkout({ navigation } : any) {
       workout = new HIITWorkout(name);
 
     workout.saveData();
-
-    navigation.navigate('WorkoutEditor')
+    
+    navigate('WorkoutEditor', { headerName:  name });
   }
 
   return (
@@ -32,7 +33,7 @@ export default function NewWorkout({ navigation } : any) {
         <RadioButton value='HIIT' checked={checkedRadio=='HIIT'} onPress={() => setChecked('HIIT')} style = {styles.radioButton}>HIIT Workout</RadioButton>
       </View>
       {(checkedRadio == 'HIIT')? <TimeSetter/> : null}
-      <Button style={styles.nextButton} onPress={() => createWorkout(navigation)}>Next</Button>
+      <Button style={styles.nextButton} onPress={() => createWorkout(navigate)}>Next</Button>
     </View>
   );
 }

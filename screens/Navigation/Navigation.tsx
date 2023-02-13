@@ -85,13 +85,19 @@ export function StackNavigator() {
     <Stack.Navigator
       initialRouteName="BottomTabNavigator"
     >
-      <Stack.Screen name="NewWorkout" component={NewWorkout} />
-      <Stack.Screen name="WorkoutEditor" component={WorkoutEditor} />
+      <Stack.Screen 
+        name="NewWorkout" 
+        component={NewWorkout} 
+        options={{
+          title: "Workout"
+        }}
+      />
+      <Stack.Screen name="WorkoutEditor" component={WorkoutEditor}/>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen 
-          name='ExerciseSearch' 
-          component={ExerciseSearchModal}
-        />
+          <Stack.Screen 
+            name='ExerciseSearch' 
+            component={ExerciseSearchModal}
+          />
       </Stack.Group>
       <Stack.Screen
         name="BottomTabNavigator"

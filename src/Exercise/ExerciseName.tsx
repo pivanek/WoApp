@@ -1,4 +1,4 @@
-enum ExerciseName{
+export enum ExerciseName{
     Bar_Dip,
     Bench_Press,
     Cable_Chest_Press,

@@ -1,15 +1,28 @@
 import { StyleSheet } from 'react-native';
 import {  View } from '../../components/Themed';
 import { AddNew_Empty } from '../../components/Add';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function WorkoutsScreen({ navigation } : any) {
+
+export default function WorkoutsEditor({ navigation, route } : any) {
+  navigation.setOptions({
+    title: route.params.headerName
+  });
+
+  const value = AsyncStorage.getItem('Workouts')
+    .then(() => {
+      console.log('Data loaded successfully');
+    })
+    .catch(error => {
+      console.log('Error loading data', error);
+    });
+
   return (
     <View style={styles.container}>
       <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch')}/>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

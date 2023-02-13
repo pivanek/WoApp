@@ -1,6 +1,5 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Pressable, Text, View } from "./Themed";
-import { useState } from "react";
 
 export default function RadioButton(props:{
     value? : any,
