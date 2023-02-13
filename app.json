@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "WoApp_clv",
-    "slug": "WoApp_clv",
+    "name": "WoApp",
+    "slug": "WoApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

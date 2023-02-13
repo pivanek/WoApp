@@ -1,0 +1,21 @@
+enum MuscleGroup{
+    Chest,
+    Back,
+    Biceps,
+    Triceps,
+    Forearm_Flexors,
+    Core,
+    Abs,
+    Obliques,
+    Lats,
+    Trapezius,
+    Shoulders,
+    Rotator_Cuff,
+    Lower_Back,
+    Legs,
+    Quads,
+    Glutes,
+    Hamstrings,
+    Calves,
+    Adductors
+}
