@@ -12,8 +12,6 @@ import NewWorkout from '../Stack/NewWorkout';
 import WorkoutEditor from '../Stack/WorkoutEditor';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
 
-const Tab = createBottomTabNavigator();
-
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -21,6 +19,36 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     </NavigationContainer>
   );
 }
+
+const Stack = createStackNavigator();
+
+export function StackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="BottomTabNavigator"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="NewWorkout" 
+        component={NewWorkout} 
+        options={{
+          title: "Workout"
+        }}
+      />
+      <Stack.Screen name="WorkoutEditor" component={WorkoutEditor}/>
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+          <Stack.Screen 
+            name='ExerciseSearch' 
+            component={ExerciseSearchModal}
+          />
+      </Stack.Group>
+    </Stack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 export function TabNavigator() {
   return (
@@ -75,35 +103,5 @@ export function TabNavigator() {
         }}
       />
     </Tab.Navigator>
-  );
-}
-
-const Stack = createStackNavigator();
-
-export function StackNavigator() {
-  return (
-    <Stack.Navigator
-      initialRouteName="BottomTabNavigator"
-    >
-      <Stack.Screen 
-        name="NewWorkout" 
-        component={NewWorkout} 
-        options={{
-          title: "Workout"
-        }}
-      />
-      <Stack.Screen name="WorkoutEditor" component={WorkoutEditor}/>
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-          <Stack.Screen 
-            name='ExerciseSearch' 
-            component={ExerciseSearchModal}
-          />
-      </Stack.Group>
-      <Stack.Screen
-        name="BottomTabNavigator"
-        component={TabNavigator}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
   );
 }

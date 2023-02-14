@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { Text, View, TextInput } from '../../components/Themed';
 import RadioButton from '../../components/RadioButton';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button } from '../../components/Button';
 import TimeSetter from '../../components/TimeSetter';
 import { HIITWorkout, IWorkout, Workout } from '../../src/Workout';

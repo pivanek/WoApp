@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ExerciseName } from "./Exercise/ExerciseName";
 
 export interface IWorkout{
     getName() : string;

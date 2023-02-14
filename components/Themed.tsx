@@ -4,10 +4,25 @@ import useColorScheme from '../hooks/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 
 
+// export function useThemeColor(
+//   props: { light?: string; dark?: string },
+//   colorName: keyof typeof DarkTheme.colors & keyof typeof DefaultTheme.colors
+// ){
+//   const theme = useColorScheme();
+//   const colorFromProps = props[theme];
+//   const themes = {dark: DarkTheme, light: DefaultTheme}
+
+//   if (colorFromProps) {
+//     return colorFromProps;
+//   } else {
+//     return themes[theme].colors[colorName];
+//   }
+// }
+
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof DarkTheme.colors & keyof typeof DefaultTheme.colors
-){
+) {
   const theme = useColorScheme();
   const colorFromProps = props[theme];
   const themes = {dark: DarkTheme, light: DefaultTheme}
@@ -15,7 +30,7 @@ export function useThemeColor(
   if (colorFromProps) {
     return colorFromProps;
   } else {
-    return themes[theme].colors[colorName];
+    return  themes[theme].colors[colorName];
   }
 }
 
@@ -32,6 +47,8 @@ export type TextInputProps = ThemeProps & DefaultTextInput['props'];
 export function Text(props : TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+
+  console.log(useColorScheme());
 
   return <DefaultText style={[{ color }, style]} {...otherProps}/>;
 }
