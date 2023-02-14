@@ -9,14 +9,6 @@ export default function WorkoutsEditor({ navigation, route } : any) {
     title: route.params.headerName
   });
 
-  const value = AsyncStorage.getItem('Workouts')
-    .then(() => {
-      console.log('Data loaded successfully');
-    })
-    .catch(error => {
-      console.log('Error loading data', error);
-    });
-
   return (
     <View style={styles.container}>
       <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch')}/>

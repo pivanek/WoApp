@@ -11,7 +11,7 @@ export default function ExerciseSearchScreen(){
 
     function changeRegex(search : string) : string[] {
         if(search){
-            const regexSearch = new RegExp(search.replace(' ', '_'), 'i');
+            const regexSearch = new RegExp(search.replaceAll(' ', '_'), 'i');
             let exercisesHelper : string[] = [];
             
             exercisesData.forEach(exercise => {

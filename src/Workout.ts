@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExerciseName } from "./Exercise/ExerciseName";
+import { getData } from ".";
 
 export interface IWorkout{
     getName() : string;
     changeName(name : string) : void;
     getExercises() : Array<IExercise>;
-    saveData() : any;
+    saveData() : void;
 }
 
 export class Workout implements IWorkout{
@@ -46,15 +47,23 @@ export class Workout implements IWorkout{
         this.name = name;
     }
 
-    public saveData(){
-        AsyncStorage.setItem('Workouts', JSON.stringify(this))
-            .then(() => {
-                console.log('Data saved successfully');
-            })
-            .catch(error => {
-                console.log('Error saving data', error);
-            });
-    }
+    public saveData() {        
+        getData('Workouts', (workouts) => {
+            console.log('Before set: ');
+            console.log(workouts);
+    
+            workouts.set(this.name, this);
+    
+            AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(workouts)))
+                .then(() => {
+                    console.log('Data saved successfully: ');
+                    console.log(workouts);
+                })
+                .catch(error => {
+                    console.log('Error saving data', error);
+                });
+        });
+    } 
 }
 
 export class HIITWorkout extends Workout implements IWorkout{

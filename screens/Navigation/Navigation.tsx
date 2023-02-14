@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import useColorScheme from '../../hooks/useColorScheme';
 import { LogsIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
-import WorkoutsScreen from './WorkoutScreen';
+import WorkoutsScreen from './WorkoutsScreen';
 import CalendarScreen from './CalendarScreen';
 import StatsScreen from './StatsScreen';
 import SettingsScreen from './SettingsScreen';
