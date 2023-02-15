@@ -11,7 +11,7 @@ export default function ExerciseSearchScreen(){
 
     function changeRegex(search : string) : string[] {
         if(search){
-            const regexSearch = new RegExp(search.replaceAll(' ', '_'), 'i');
+            const regexSearch = new RegExp(search.replace(/_/g, ' '), 'i');
             let exercisesHelper : string[] = [];
             
             exercisesData.forEach(exercise => {
@@ -37,7 +37,7 @@ export default function ExerciseSearchScreen(){
 export function Item(params: {data: string}){
     return(
         <View style={styles.itemContainer}>
-            <Text style={styles.item}>{params.data.replaceAll('_', ' ')}</Text>
+            <Text style={styles.item}>{params.data.replace(/_/g, ' ')}</Text>
         </View>
     );
 }

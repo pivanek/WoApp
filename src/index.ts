@@ -7,11 +7,10 @@ export function getData(key : string, callback: (data: Map<any, any>) => void){
   AsyncStorage.getItem(key)
     .then(result => {
       if (result != null) {
-        console.log('Data loaded: ');
-        data = JSON.parse(result);
-        console.log(new Map(data));
-      
-        callback(new Map(data));
+        const data = new Map(JSON.parse(result));
+        callback(data);
+      } else {
+        callback(new Map());
       }
     })
     .catch(error => {

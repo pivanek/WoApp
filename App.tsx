@@ -1,4 +1,4 @@
-import Navigation from './screens/navigation/Navigation';
+import Navigation from './screens/navigation';
 import useColorScheme from './hooks/useColorScheme';
 import useCachedResources from './hooks/useCachedResources';
 import { StatusBar } from 'expo-status-bar';

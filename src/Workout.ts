@@ -1,23 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExerciseName } from "./Exercise/ExerciseName";
 import { getData } from ".";
+import { Callback } from "@react-native-async-storage/async-storage/lib/typescript/types";
 
 export interface IWorkout{
     getName() : string;
     changeName(name : string) : void;
-    getExercises() : Array<IExercise>;
-    saveData() : void;
+    getExercises() : string[];
+    saveData(callback: (success: boolean) => void) : void;
 }
 
 export class Workout implements IWorkout{
     private name : string;
-    private exercises : Array<IExercise>;
+    private exercises : string[];
     private lastUpdate : Date;
     private isSync : boolean = false;
     
     constructor(name : string){
         this.name = name
-        this.exercises = new Array<IExercise>;
+        this.exercises = [];
         this.lastUpdate = new Date();
     }
 
@@ -25,19 +26,15 @@ export class Workout implements IWorkout{
         this.lastUpdate = new Date();
     }
 
-    public getName() : string{
+    public getName(){
         return this.name;
     }
 
-    public getExercises() : Array<IExercise>{
+    public getExercises() : string[]{
         return this.exercises;
     }
 
-    public getExercise(name : ExerciseName) : IExercise | undefined{
-        return this.exercises.find(exercise => exercise.getName() == name);
-    }
-
-    public addExercise(exercise : IExercise) : void{
+    public addExercise(exercise : string) : void{
         this.update;
         this.exercises.push(exercise);
     }
@@ -47,7 +44,7 @@ export class Workout implements IWorkout{
         this.name = name;
     }
 
-    public saveData() {        
+    public saveData(callback: (success: boolean) => void) : void{
         getData('Workouts', (workouts) => {
             console.log('Before set: ');
             console.log(workouts);
@@ -58,9 +55,11 @@ export class Workout implements IWorkout{
                 .then(() => {
                     console.log('Data saved successfully: ');
                     console.log(workouts);
+                    callback(true)
                 })
                 .catch(error => {
                     console.log('Error saving data', error);
+                    callback(false)
                 });
         });
     } 

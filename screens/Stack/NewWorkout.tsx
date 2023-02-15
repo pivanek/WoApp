@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { Text, View, TextInput } from '../../components/Themed';
 import RadioButton from '../../components/RadioButton';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import TimeSetter from '../../components/TimeSetter';
 import { HIITWorkout, IWorkout, Workout } from '../../src/Workout';
@@ -19,9 +19,13 @@ export default function NewWorkout({ navigation: { navigate } } : any) {
     else (checkedRadio == 'HIIT')
       workout = new HIITWorkout(name);
 
-    workout.saveData();
-    
-    navigate('WorkoutEditor', { headerName:  name });
+    workout.saveData(success => {
+      if (success) {
+        navigate('WorkoutEditor', { headerName: name });
+      } else {
+        console.log('Failed to save workout data');
+      }
+    });
   }
 
   return (
