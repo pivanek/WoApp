@@ -40,7 +40,11 @@ export function Item(params: {data: any, pressed : string, navigation : any}){
   return(
     <>
       <Text darkColor='#fff' lightColor='#000' style={styles.itemText}>{name}</Text>
-      { (exercises.length == 0)? null : <><View style={styles.separatorHorizontal} /><FlatList data={exercises} renderItem={({ item }) => <Text>{item}</Text>} /></>}
+      { (exercises.length == 0)? null : 
+        <>
+          <View style={styles.separatorHorizontal} />
+          <FlatList style={styles.flatList} data={exercises} renderItem={({ item }) => <Text style={styles.exercise}>{item.replace(/_/g, ' ')}</Text>} />
+        </>}
       { (params.pressed == name)?
         <>
           <View style={styles.separatorHorizontal}/>
@@ -69,7 +73,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flatList:{
+    alignSelf: 'center',
     width: '80%',
+  },
+  exercise:{
+    color: '#929494'
   },
   title: {
     fontSize: 20,

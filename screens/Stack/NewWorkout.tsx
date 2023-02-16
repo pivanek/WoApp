@@ -21,11 +21,10 @@ export default function NewWorkout( { navigation, route } : any) {
       workout = new HIITWorkout(name);
       
     workout.saveData(success => {
-      if (success) {
+      if (success)
         navigation.navigate('WorkoutEditor', { headerName: name });
-      } else {
+      else
         console.log('Failed to save workout data');
-      }
     });
   }
 

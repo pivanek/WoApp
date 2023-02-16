@@ -28,9 +28,8 @@ export default function ExerciseSearchScreen({ route } : any){
             
             return exercisesHelper;
         }
-        else{
-            return(exercisesData)
-        }
+        else
+            return(exercisesData);
     } 
 
     return(
@@ -85,23 +84,25 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     item: {
-        width: '80%',
+        width: '79%',
         padding: 10,
         fontSize: 18,
         height: 44,
     },
     addButton:{
-        width:'20%',
+        width:'21%',
         padding: 10,
         fontSize: 18,
         height: 44,
     },
     addText:{
+        textAlign: 'right',
         textAlignVertical: 'center',
         color: '#00C5FF',
         fontSize: 18,
     },
     addedText:{
+        textAlign: 'right',
         textAlignVertical: 'center',
         color: '#4F5152',
         fontSize: 18,
