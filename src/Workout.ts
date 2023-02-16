@@ -9,7 +9,7 @@ export enum WorkoutType{
 }
 
 export interface IWorkout{
-    getName() : string;
+    getName() : string | undefined;
     changeName(name : string) : void;
     getType() : WorkoutType;
     getExercises() : string[];
@@ -19,22 +19,26 @@ export interface IWorkout{
 }
 
 export class Workout implements IWorkout{
-    private name : string;
-    private exercises : string[];
-    protected workoutType : WorkoutType;
-    private lastUpdate : Date;    
+    name : string | undefined;
+    exercises : string[];
+    workoutType : WorkoutType;
+    lastUpdate : Date;    
     
-    constructor(name : string){
-        this.name = name
-        this.exercises = [];
-        this.workoutType = WorkoutType.Strength;
-        this.lastUpdate = new Date();
+    constructor(name : string);
+    constructor(workout : Workout);
+    constructor(arg : string | Workout){
+        if (typeof arg === 'string') {
+            this.name = arg;
+            this.exercises = [];
+            this.workoutType = WorkoutType.Strength;
+            this.lastUpdate = new Date();
+        } else {
+            this.name = arg.name;
+            this.exercises = arg.exercises;
+            this.workoutType = arg.workoutType;
+            this.lastUpdate = arg.lastUpdate;
+        }
     }
-
-    constructor(workout : IWorkout){
-        this = workout
-    }
-
     private update(){
         this.lastUpdate = new Date();
     }
@@ -45,7 +49,7 @@ export class Workout implements IWorkout{
     
     public static getWorkout(name : string, callback: (workout : IWorkout) => void){
         getData('Workouts', (data) => {
-            const workoutHelper = data.get(name);
+            const workoutHelper : any = data.get(name);
             
             callback((workoutHelper.workoutType === WorkoutType.Strength) ? new Workout(workoutHelper) : new HIITWorkout(workoutHelper));
         });
@@ -106,9 +110,19 @@ export class HIITWorkout extends Workout implements IWorkout{
     private pauseTime : Date = new Date(0);
     private sets : number = 1;
 
-    constructor(name : string){
-        super(name);
-        this.workoutType = WorkoutType.HIIT;
+    constructor(name : string);
+    constructor(workout : HIITWorkout);
+    constructor(arg : string | HIITWorkout){
+        if (typeof arg === 'string') {
+            super(arg);
+            this.workoutType = WorkoutType.HIIT;
+        }
+        else{
+            super(arg);
+            this.workoutTime = arg.workoutTime;
+            this.pauseTime = arg.pauseTime;
+            this.sets = arg.sets;
+        }
     }
 
     changeWorkoutTime(time : Date){

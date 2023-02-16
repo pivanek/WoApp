@@ -43,20 +43,17 @@ export default function ExerciseSearchScreen({ route } : any){
 
 const Item = memo(({ name, workout, isAdded }: { name: string, workout : IWorkout | undefined, isAdded : boolean | undefined,  }) => {
     function handleAdd () {
-        console.log('before manipulating: ');
-        console.log(workout);
-
         if(isAdded)
             workout?.removeExercise(name);
-        else{
+        else
             workout?.addExercise(name);
-            isAdded = true;
-            console.log('After handleAdd: ');
-            console.log(workout);
-        }
 
-        console.log('After manipulating: ');
-        console.log(workout);
+        workout?.saveData((success) => {
+            if (success) 
+                console.log('Successfuly saved workout data');
+            else 
+                console.log('Failed to save workout data');
+        });
     }
 
     return (
@@ -106,7 +103,7 @@ const styles = StyleSheet.create({
     },
     addedText:{
         textAlignVertical: 'center',
-        color: '#00C5FF',
+        color: '#4F5152',
         fontSize: 18,
     }
 });
