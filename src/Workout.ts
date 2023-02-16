@@ -3,23 +3,36 @@ import { ExerciseName } from "./Exercise/ExerciseName";
 import { getData } from ".";
 import { Callback } from "@react-native-async-storage/async-storage/lib/typescript/types";
 
+export enum WorkoutType{
+    Strength,
+    HIIT   
+}
+
 export interface IWorkout{
     getName() : string;
     changeName(name : string) : void;
+    getType() : WorkoutType;
     getExercises() : string[];
+    addExercise(exercise : String) : void;
+    removeExercise(name : string) : void;
     saveData(callback: (success: boolean) => void) : void;
 }
 
 export class Workout implements IWorkout{
     private name : string;
     private exercises : string[];
-    private lastUpdate : Date;
-    private isSync : boolean = false;
+    protected workoutType : WorkoutType;
+    private lastUpdate : Date;    
     
     constructor(name : string){
         this.name = name
         this.exercises = [];
+        this.workoutType = WorkoutType.Strength;
         this.lastUpdate = new Date();
+    }
+
+    constructor(workout : IWorkout){
+        this = workout
     }
 
     private update(){
@@ -29,18 +42,40 @@ export class Workout implements IWorkout{
     public getName(){
         return this.name;
     }
+    
+    public static getWorkout(name : string, callback: (workout : IWorkout) => void){
+        getData('Workouts', (data) => {
+            const workoutHelper = data.get(name);
+            
+            callback((workoutHelper.workoutType === WorkoutType.Strength) ? new Workout(workoutHelper) : new HIITWorkout(workoutHelper));
+        });
+    }
+
+    public getType(){
+        return this.workoutType;
+    }
 
     public getExercises() : string[]{
         return this.exercises;
     }
 
     public addExercise(exercise : string) : void{
-        this.update;
+        this.update();
         this.exercises.push(exercise);
+        console.log('After add: ');
+        console.log(this);
+    }
+
+    removeExercise(name: string): void {
+        const index = this.exercises.indexOf(name);
+        if (index !== -1)
+            this.exercises.splice(index, 1);
+        console.log('After remove: ');
+        console.log(this);
     }
 
     public changeName(name : string) : void{
-        this.lastUpdate = new Date();
+        this.update;
         this.name = name;
     }
 
@@ -58,7 +93,8 @@ export class Workout implements IWorkout{
                     callback(true)
                 })
                 .catch(error => {
-                    console.log('Error saving data', error);
+                    console.log('Error saving data');
+                    console.error(error);
                     callback(false)
                 });
         });
@@ -72,6 +108,7 @@ export class HIITWorkout extends Workout implements IWorkout{
 
     constructor(name : string){
         super(name);
+        this.workoutType = WorkoutType.HIIT;
     }
 
     changeWorkoutTime(time : Date){

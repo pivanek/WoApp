@@ -26,7 +26,7 @@ export default function WorkoutsScreen({ navigation } : any) {
     else{
       return(
         <View style={styles.container}>
-            <FlatList style={styles.flatList} data={Array.from(workouts.values())} renderItem={({ item }) => <Pressable style={styles.itemContainer} onPress={() => setPressed(item.name)}><Item data={item} pressed={isPressed} navigation={navigation}/></Pressable>}/>
+            <FlatList style={styles.flatList} data={Array.from(workouts.values())} renderItem={({ item }) => <Pressable style={styles.itemContainer} darkColor="#313131" lightColor="#D4D4D3" onPress={() => setPressed(item.name)}><Item data={item} pressed={isPressed} navigation={navigation}/></Pressable>}/>
             <Button style={styles.buttonAdd} onPress={() => navigation.navigate('NewWorkout')}>Add new workout</Button>
         </View>
       );
@@ -45,7 +45,7 @@ export function Item(params: {data: any, pressed : string, navigation : any}){
         <>
           <View style={styles.separatorHorizontal}/>
           <View style={styles.buttonsContainer}>
-            <Pressable onPress={() => params.navigation.navigate('WorkoutEditor', name)} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+            <Pressable onPress={() => params.navigation.navigate('NewWorkout', {headerName: name})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
               <Text style={styles.workoutButtonsText}>Edit</Text>
             </Pressable>
             <View style={styles.separatorVertical}/>
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemContainer: {
-    backgroundColor: '#26292A',
     paddingVertical: 10,
     borderRadius: 15,
     minHeight: 30,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   separatorHorizontal:{
-    marginTop: 2,
+    marginTop: 5,
     marginHorizontal: 20,
     height: 1,
     backgroundColor: '#929494'
@@ -110,6 +109,7 @@ const styles = StyleSheet.create({
   },
   workoutButtonsText:{
     color: '#00C5FF',
+    fontSize: 16
   },
   buttonAdd: {
     width: '80%',

@@ -1,9 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IWorkout } from "./Workout";
+import { HIITWorkout, IWorkout, Workout, WorkoutType } from "./Workout";
 
 export function getData(key : string, callback: (data: Map<any, any>) => void){
-  var data = new Map<any, any>();   
-
   AsyncStorage.getItem(key)
     .then(result => {
       if (result != null) {
@@ -14,9 +12,11 @@ export function getData(key : string, callback: (data: Map<any, any>) => void){
       }
     })
     .catch(error => {
-      console.log('Error saving data', error);
+      console.log('Error saving data');
+      console.error(error);
     }); 
 }
+
 
 
 export function deleteWorkouts(){
@@ -28,7 +28,7 @@ export function deleteWorkouts(){
         console.log('Error deleting data', error);
     });
 
-  AsyncStorage.setItem('Workouts', JSON.stringify(new Map<string, IWorkout>()))
+  AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(new Map<string, any>())))
     .then(() => {
       console.log('Data saved successfully');
     })

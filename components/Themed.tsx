@@ -60,7 +60,7 @@ export function View(props: ViewProps) {
 
 export function Pressable(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
   const color = "blue";
 
   return <DefaultPressable style={[{ color, backgroundColor}, style]} {...otherProps}/>;
@@ -68,7 +68,8 @@ export function Pressable(props: TextProps) {
 
 export function TextInput(props: TextInputProps){
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  
-  return <DefaultTextInput style={[{backgroundColor}, style]} {...otherProps}/>;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const color = useThemeColor({ light: '#000', dark: '#fff' }, 'text');
+
+  return <DefaultTextInput style={[{backgroundColor, color}, style]} {...otherProps}/>;
 }

@@ -5,13 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function WorkoutsEditor({ navigation, route } : any) {
+  const name = route.params.headerName;
+
   navigation.setOptions({
-    title: route.params.headerName
+    title: name
   });
 
   return (
     <View style={styles.container}>
-      <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch')}/>
+      <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch', { headerName: name })}/>
     </View>
   );
 }
