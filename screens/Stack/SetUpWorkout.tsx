@@ -10,7 +10,6 @@ import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
 export default function SetUpWorkout( { navigation, route } : any) {
   const workoutParam : IWorkout = (route.params?.workout !== undefined)? route.params?.workout : new Workout('');
 
-
   const [checkedRadio, setChecked] = useState<WorkoutType>(workoutParam.getType());
   const [workout, setWorkout] = useState<IWorkout>(workoutParam);
   const [name, setName] = useState<string>(workoutParam.getName());
@@ -33,7 +32,10 @@ export default function SetUpWorkout( { navigation, route } : any) {
         <RadioButton value={WorkoutType.HIIT} checked={checkedRadio==WorkoutType.HIIT} onPress={() => setChecked(WorkoutType.HIIT)} style = {styles.radioButton}>HIIT Workout</RadioButton>
       </View>
       {(checkedRadio == WorkoutType.HIIT)? <TimeSetter/> : null}
-      <Button style={styles.nextButton} onPress={() => saveWorkout(navigation)}>Next</Button>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <Button style={styles.nextButton} onPress={() => saveWorkout(navigation)}>Save</Button>
+        <Button style={styles.nextButton} onPress={() => navigation.goBack()}>Cancel</Button>
+      </View>
     </View>
   );
 }

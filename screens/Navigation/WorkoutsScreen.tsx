@@ -56,7 +56,7 @@ export function Item(params: {data: IWorkout, pressed : string, navigation : any
         <>
           <View style={styles.separatorHorizontal}/>
           <View style={styles.buttonsContainer}>
-            <Pressable onPress={() => params.navigation.navigate('SetUpWorkout', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+            <Pressable onPress={() => params.navigation.navigate('SetUpWorkout', {workout: params.data, headerName: params.data.getName()})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
               <Text style={styles.workoutButtonsText}>Edit</Text>
             </Pressable>
             <View style={styles.separatorVertical}/>
