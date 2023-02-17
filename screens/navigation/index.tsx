@@ -8,9 +8,10 @@ import StatsScreen from './StatsScreen';
 import SettingsScreen from './SettingsScreen';
 import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import NewWorkout from '../Stack/NewWorkout';
+import NewWorkout from '../Stack/SetUpWorkout';
 import WorkoutEditor from '../Stack/WorkoutEditor';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
+import SetUpWorkout from '../Stack/SetUpWorkout';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -31,10 +32,10 @@ export function StackNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen 
-        name="NewWorkout" 
-        component={NewWorkout} 
+        name="SetUpWorkout" 
+        component={SetUpWorkout} 
         options={{
-          title: "Workout"
+          title: "New workout"
         }}
       />
       <Stack.Screen name="WorkoutEditor" component={WorkoutEditor}/>

@@ -5,24 +5,22 @@ import { IWorkout, Workout } from '../../src/Workout';
 import { useEffect, useState } from 'react';
 
 
-export default function WorkoutsEditor({ navigation, route } : any) {
+export default function WorkoutEditor({ navigation, route } : any) {
   const [workout, setWorkout] = useState<IWorkout>();;
 
   const name : string = route.params.headerName;
 
-  useEffect(() => Workout.getWorkout(name, (workout) => setWorkout(workout)));
+  useEffect(() => Workout.loadWorkout(name, (workout) => setWorkout(workout)));
 
   navigation.setOptions({
     title: name
   });
 
-  if(workout?.getExercises()){
-    return (
-      <View style={styles.container}>
-        <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch', { headerName: name })}/>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <AddNew_Empty text="Add Exercise" onPress={() => navigation.navigate('ExerciseSearch', { headerName: name })}/>
+    </View>
+  );
 }
 const styles = StyleSheet.create({
   container: {

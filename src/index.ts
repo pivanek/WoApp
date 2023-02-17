@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IWorkout } from "./Workout";
 
 export function getData(key : string, callback: (data: Map<any, any>) => void){
   AsyncStorage.getItem(key)

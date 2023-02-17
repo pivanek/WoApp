@@ -9,8 +9,8 @@ export enum WorkoutType{
 }
 
 export interface IWorkout{
-    getName() : string | undefined;
-    changeName(name : string) : void;
+    getName() : string;
+    setName(name : string) : void;
     getType() : WorkoutType;
     getExercises() : string[];
     addExercise(exercise : String) : void;
@@ -19,7 +19,7 @@ export interface IWorkout{
 }
 
 export class Workout implements IWorkout{
-    name : string | undefined;
+    name : string;
     exercises : string[];
     workoutType : WorkoutType;
     lastUpdate : Date;    
@@ -47,14 +47,6 @@ export class Workout implements IWorkout{
         return this.name;
     }
     
-    public static getWorkout(name : string, callback: (workout : IWorkout) => void){
-        getData('Workouts', (data) => {
-            const workoutHelper : any = data.get(name);
-            
-            callback((workoutHelper.workoutType === WorkoutType.Strength) ? new Workout(workoutHelper) : new HIITWorkout(workoutHelper));
-        });
-    }
-
     public getType(){
         return this.workoutType;
     }
@@ -78,8 +70,7 @@ export class Workout implements IWorkout{
         console.log(this);
     }
 
-    public changeName(name : string) : void{
-        this.update;
+    public setName(name : string) : void{
         this.name = name;
     }
 
@@ -103,6 +94,19 @@ export class Workout implements IWorkout{
                 });
         });
     } 
+
+    public static loadWorkout(name : string, callback: (workout : IWorkout) => void){
+        getData('Workouts', (data) => {
+            const workoutHelper : any = data.get(name);
+            
+            callback(this.from(workoutHelper));
+        });
+    }
+
+    public static from(workoutData : any) : IWorkout {
+        return (workoutData.workoutType === WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData);
+    }
+
 }
 
 export class HIITWorkout extends Workout implements IWorkout{

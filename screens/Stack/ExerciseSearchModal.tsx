@@ -14,7 +14,7 @@ export default function ExerciseSearchScreen({ route } : any){
 
     const name : string = route.params.headerName;
 
-    useEffect(() => Workout.getWorkout(name, (workout) => setWorkout(workout)));
+    useEffect(() => Workout.loadWorkout(name, (workout) => setWorkout(workout)));
 
     function changeRegex(search : string) : string[] {
         if(search){
