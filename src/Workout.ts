@@ -14,15 +14,15 @@ export interface IWorkout{
     getType() : WorkoutType;
     getExercises() : string[];
     addExercise(exercise : String) : void;
-    removeExercise(name : string) : void;
-    saveData(callback: (success: boolean) => void) : void;
+    deleteExercise(name : string) : void;
+    save(callback: (success: boolean) => void) : void;
+    delete(callback: (success: boolean) => void) : void;
 }
 
 export class Workout implements IWorkout{
     name : string;
     exercises : string[];
     workoutType : WorkoutType;
-    lastUpdate : Date;    
     
     constructor(name : string);
     constructor(workout : Workout);
@@ -31,16 +31,11 @@ export class Workout implements IWorkout{
             this.name = arg;
             this.exercises = [];
             this.workoutType = WorkoutType.Strength;
-            this.lastUpdate = new Date();
         } else {
             this.name = arg.name;
             this.exercises = arg.exercises;
             this.workoutType = arg.workoutType;
-            this.lastUpdate = arg.lastUpdate;
         }
-    }
-    private update(){
-        this.lastUpdate = new Date();
     }
 
     public getName(){
@@ -56,44 +51,45 @@ export class Workout implements IWorkout{
     }
 
     public addExercise(exercise : string) : void{
-        this.update();
         this.exercises.push(exercise);
-        console.log('After add: ');
-        console.log(this);
     }
 
-    removeExercise(name: string): void {
+    public deleteExercise(name: string): void {
         const index = this.exercises.indexOf(name);
-        if (index !== -1)
-            this.exercises.splice(index, 1);
-        console.log('After remove: ');
-        console.log(this);
+        this.exercises.splice(index, 1);
     }
 
     public setName(name : string) : void{
         this.name = name;
     }
 
-    public saveData(callback: (success: boolean) => void) : void{
+    public save(callback: (success: boolean) => void) : void{
         getData('Workouts', (workouts) => {
-            console.log('Before set: ');
-            console.log(workouts);
-    
             workouts.set(this.name, this);
     
             AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(workouts)))
                 .then(() => {
-                    console.log('Data saved successfully: ');
-                    console.log(workouts);
                     callback(true)
                 })
                 .catch(error => {
-                    console.log('Error saving data');
-                    console.error(error);
                     callback(false)
                 });
         });
     } 
+
+    public delete(callback: (success: boolean) => void) : void{
+        getData('Workouts', (workouts) => {
+            workouts.delete(this.name);
+    
+            AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(workouts)))
+                .then(() => {
+                    callback(true)
+                })
+                .catch(error => {
+                    callback(false)
+                });
+        });
+    }
 
     public static loadWorkout(name : string, callback: (workout : IWorkout) => void){
         getData('Workouts', (data) => {

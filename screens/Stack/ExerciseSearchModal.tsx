@@ -1,20 +1,26 @@
-import { useEffect, useState, memo } from 'react';
-import { FlatList, StyleSheet, VirtualizedList } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, StyleSheet, VirtualizedList } from "react-native";
+import { HeaderBackButton } from "@react-navigation/elements";
 import { TextInput, View, Text, Pressable } from "../../components/Themed";
 import { ExerciseName } from "../../src/Exercise/ExerciseName";
 import { IWorkout, Workout } from '../../src/Workout';
 import { deleteWorkouts } from '../../src';
 
-export default function ExerciseSearchScreen({ route } : any){
+export default function ExerciseSearchScreen({ navigation, route } : any){
     const exercisesData = Object.keys(ExerciseName).filter((v) => isNaN(Number(v)));
     exercisesData.sort();
     
     const [exercises, setExercises] = useState(exercisesData);
-    const [workout, setWorkout] = useState<IWorkout>();;
+    const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
 
-    const name : string = route.params.headerName;
+    function addExercise(exercise: string) {
+        if(workout.getExercises().includes(exercise))
+            workout.deleteExercise(exercise);
 
-    useEffect(() => Workout.loadWorkout(name, (workout) => setWorkout(workout)));
+        else workout.addExercise(exercise);
+        
+        setWorkout(workout);
+    }
 
     function changeRegex(search : string) : string[] {
         if(search){
@@ -32,38 +38,35 @@ export default function ExerciseSearchScreen({ route } : any){
             return(exercisesData);
     } 
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <HeaderBackButton onPress={() => {workout.save(success => console.log(success? 'Succefully saved workout data' : 'Failed to save workout data')); navigation.goBack({workout: workout});}}/>
+            ), 
+        });
+    });
+    
+
     return(
         <View>
             <TextInput style={styles.input} onChangeText={search => setExercises(changeRegex(search))} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of exercise'/>
-            <FlatList data={exercises} renderItem={({ item }) => <Item name={item} workout={workout} isAdded={workout?.getExercises().includes(item)}/>}/>
+            <FlatList data={exercises} renderItem={({ item }) => <Item name={item} isAdded={workout.getExercises().includes(item)} onAdd={(exercise) => addExercise(exercise)} />} />
         </View>
     );
 }
 
-const Item = memo(({ name, workout, isAdded }: { name: string, workout : IWorkout | undefined, isAdded : boolean | undefined,  }) => {
-    function handleAdd () {
-        if(isAdded)
-            workout?.removeExercise(name);
-        else
-            workout?.addExercise(name);
-
-        workout?.saveData((success) => {
-            if (success) 
-                console.log('Successfuly saved workout data');
-            else 
-                console.log('Failed to save workout data');
-        });
-    }
+function Item ( params: { name: string, isAdded: boolean, onAdd: (exercise: string) => void}) {
+    const [isAdded, setAdded] = useState(params.isAdded);
 
     return (
       <View style={styles.itemContainer}>
-        <Text style={styles.item}>{name.replace(/_/g, ' ')}</Text>
-        <Pressable style={styles.addButton} onPress={() => handleAdd()}>
+        <Text style={styles.item}>{params.name.replace(/_/g, ' ')}</Text>
+        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.name); setAdded(!isAdded)}}>
           <Text style={(isAdded)? styles.addedText : styles.addText}>{(isAdded)? 'Added' : 'Add'}</Text>
         </Pressable>
       </View>
     );
-});
+}
 
 const styles = StyleSheet.create({
     itemContainer: {

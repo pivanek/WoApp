@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import useColorScheme from '../../hooks/useColorScheme';
 import { LogsIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
 import WorkoutsScreen from './WorkoutsScreen';
 import CalendarScreen from './CalendarScreen';
@@ -8,8 +7,6 @@ import StatsScreen from './StatsScreen';
 import SettingsScreen from './SettingsScreen';
 import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import NewWorkout from '../Stack/SetUpWorkout';
-import WorkoutEditor from '../Stack/WorkoutEditor';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
 import SetUpWorkout from '../Stack/SetUpWorkout';
 
@@ -35,10 +32,9 @@ export function StackNavigator() {
         name="SetUpWorkout" 
         component={SetUpWorkout} 
         options={{
-          title: "New workout"
+          title: "Workout setup"
         }}
       />
-      <Stack.Screen name="WorkoutEditor" component={WorkoutEditor}/>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen 
             name='ExerciseSearch' 
