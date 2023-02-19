@@ -14,12 +14,11 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
 
     function addExercise(exercise: string) {
-        if(workout.getExercises().includes(exercise))
+        if(workout.getExercises().includes(exercise)){
             workout.deleteExercise(exercise);
-
+        }
         else workout.addExercise(exercise);
         
-        setWorkout(workout);
     }
 
     function changeRegex(search : string) : string[] {
@@ -41,7 +40,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
-                <HeaderBackButton onPress={() => {workout.save(success => console.log(success? 'Succefully saved workout data' : 'Failed to save workout data')); navigation.goBack({workout: workout});}}/>
+                <HeaderBackButton onPress={() => {navigation.navigate('SetUpWorkout' ,{workout: workout});}}/>
             ), 
         });
     });

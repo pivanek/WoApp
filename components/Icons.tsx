@@ -61,3 +61,18 @@ export function PlusIcon(){
         </svg>`;
     return <SvgXml xml={workoutXml} height="50px" width="50px"/>
 }
+
+export function CrossIcon(props: {color? :string}){
+    const workoutXml = `
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+    width="32.000000pt" height="32.000000pt" viewBox="0 0 32.000000 32.000000" preserveAspectRatio="xMidYMid meet">
+   
+   <g transform="translate(0.000000,32.000000) scale(0.100000,-0.100000)" fill="${props.color}" stroke="none">
+   <path d="M57 263 c-4 -4 14 -28 40 -55 l47 -48 -47 -48 c-26 -27 -44 -51 -40
+   -55 4 -4 28 14 55 40 l48 47 48 -47 c27 -26 51 -44 55 -40 4 4 -14 28 -40 55
+   l-47 48 47 48 c26 27 44 51 40 55 -4 4 -28 -14 -55 -40 l-48 -47 -48 47 c-27
+   26 -51 44 -55 40z"/>
+   </g>
+   </svg>`;
+    return <SvgXml xml={workoutXml} height="20px" width="20px" color='#fff'/>
+}

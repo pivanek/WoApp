@@ -1,7 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ExerciseName } from "./Exercise/ExerciseName";
 import { getData } from ".";
-import { Callback } from "@react-native-async-storage/async-storage/lib/typescript/types";
 
 export enum WorkoutType{
     Strength,
@@ -13,7 +11,7 @@ export interface IWorkout{
     setName(name : string) : void;
     getType() : WorkoutType;
     getExercises() : string[];
-    addExercise(exercise : String) : void;
+    addExercise(exercise : string | string[]) : void;
     deleteExercise(name : string) : void;
     save(callback: (success: boolean) => void) : void;
     delete(callback: (success: boolean) => void) : void;
@@ -50,8 +48,9 @@ export class Workout implements IWorkout{
         return this.exercises;
     }
 
-    public addExercise(exercise : string) : void{
-        this.exercises.push(exercise);
+    public addExercise(exercise : string | string[]) : void{
+        if (typeof exercise === "string") this.exercises.push(exercise);
+        else if(typeof exercise === typeof Array) exercise.forEach(element => this.exercises.push(element));
     }
 
     public deleteExercise(name: string): void {

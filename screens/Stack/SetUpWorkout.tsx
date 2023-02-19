@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, GestureResponderEvent, RefreshControl, ScrollView, StyleProp, StyleSheet, ViewStyle, VirtualizedList } from 'react-native';
 
 import { Text, View, TextInput, Pressable } from '../../components/Themed';
 import RadioButton from '../../components/RadioButton';
@@ -6,79 +6,76 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import TimeSetter from '../../components/TimeSetter';
 import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CrossIcon } from '../../components/Icons';
 
 export default function SetUpWorkout( { navigation, route } : any) {
   const [workout, setWorkout] = useState<IWorkout>((route.params?.workout !== undefined)? route.params?.workout : new Workout(''));
-  const [exercises, setExercises] = useState<string[]>(workout.getExercises());
 
   const [checkedRadio, setChecked] = useState<WorkoutType>(workout.getType());
   const [name, setName] = useState<string>(workout.getName());
 
   function saveWorkout( navigation : any) : void{
-    workout.save(success => {
-      if (success)
-        navigation.goBack();
-      else
-        console.log('Failed to save workout data');
-    });
+    if(workout.getName() != name){
+      workout.delete(success => {
+        if(success) {
+          workout.setName(name)
+          workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
+        }
+        else console.log('Failed to delete workout data')});
+    }
   }
 
-
-  useEffect(() => {
-   navigation.addListener('focus', () => {
-      if (route.params?.workout) {
-        setWorkout(route.params?.workout);
-        setExercises(workout.getExercises());
-        console.log(exercises);
-      }
-    });
-  },[route.params.workout, workout]);
+  useEffect(() => console.log(workout), [workout]);
 
   return (
-    <View style={styles.container}>
-      <TextInput style={styles.input} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of your workout' value={name} onChangeText={name => {setName(name); workout.setName(name);}}/>
+    <ScrollView>
+      <TextInput style={styles.input} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of your workout' value={name} onChangeText={name => {setName(name);}}/>
       <View style={{marginTop: 20, alignSelf: 'center', width: '80%'}}>
-        <Text style={[styles.header, {marginBottom: 20}]}>Choose type</Text>
+        <Text style={[styles.header]}>Choose type</Text>
+        <View style={[styles.separatorHorizontal, {marginBottom: 20, height: 2}]}/>
         <RadioButton value={WorkoutType.Strength} checked={checkedRadio==WorkoutType.Strength} onPress={() => setChecked(WorkoutType.Strength)} style = {styles.radioButton}>Strength Workout</RadioButton>
         <RadioButton value={WorkoutType.HIIT} checked={checkedRadio==WorkoutType.HIIT} onPress={() => setChecked(WorkoutType.HIIT)} style = {styles.radioButton}>HIIT Workout</RadioButton>
       </View>
-      <View style={{marginTop: 20, alignSelf: 'center', width: '80%'}}>
-        <Text style={styles.header}> Exercises</Text>
-        <FlatList style={{alignSelf: 'center', width: '100%'}} data={exercises} renderItem={({ item }) => <Item name={item} onChange={() => console.log(exercises)}/>} />
-        <Pressable style={{alignItems: 'center'}} onPress={() => {navigation.navigate('ExerciseSearch', { workout: workout })}}>
+      {(checkedRadio == WorkoutType.HIIT)? <TimeSetter/> : null}
+      <View style={{width: '80%', alignSelf: 'center', marginTop: 20}}>
+        <Text style={styles.header}>Exercises</Text>
+        <View style={[styles.separatorHorizontal, {height: 2}]}/>
+        {
+          workout.getExercises().map((element : string, index: number) => 
+          <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
+            <Text style={styles.item}>{ element }</Text>
+            <Pressable style={{alignItems: 'center'}} onPress={() => workout.deleteExercise(element)}><CrossIcon color='red'/></Pressable>
+          </View>
+          )
+        }
+          
+        <Pressable style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch' as never, {workout: workout } as never)}>
           <Text style = {{fontSize: 16, padding:7, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
         </Pressable>
       </View>
-      {(checkedRadio == WorkoutType.HIIT)? <TimeSetter/> : null}
-      <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+      <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 50}}>
         <Button style={styles.button} onPress={() => navigation.goBack()}>Cancel</Button>
-        <Button style={styles.button} onPress={() => saveWorkout(navigation)}>Save</Button>
+        <Button style={styles.button} onPress={() => saveWorkout(navigation)} >Save</Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
-function Item ( params: { name: string, onChange: (Workout: IWorkout) => void}) {
+function Exercise ( params: { exercise: string, onPress?: ((event: GestureResponderEvent) => void)}) {
   return (
-    <View style={styles.itemContainer}>
-      <Text style={styles.item}>{params.name.replace(/_/g, ' ')}</Text>
+    <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
+      <Text style={styles.item}>{ params.exercise }</Text>
+      <Pressable style={{alignItems: 'center'}} onPress={params.onPress}><CrossIcon color='red'/></Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-  },
   header: {
     fontWeight: 'bold',
-    alignSelf:'center',
     fontSize: 20,
-    borderBottomWidth: 2,
-    borderBottomColor: '#929494',
-    width: '100%'
   },
   input: {
     marginBottom:20,
@@ -90,6 +87,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
+  separatorHorizontal:{
+    height: 1,
+    backgroundColor: '#929494'
+  },
   radioButton:{
     margin: 5,
     marginLeft: 10
@@ -98,13 +99,8 @@ const styles = StyleSheet.create({
     width: 150,
     margin: 15
   },
-  itemContainer: {
-        flexDirection: 'row',
-        borderBottomWidth: 2,
-        borderBottomColor: '#929494',
-  },
   item: {
-      width: '79%',
+      width: '90%',
       paddingVertical: 7,
       paddingLeft: 15,
       fontSize: 16,

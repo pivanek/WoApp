@@ -1,19 +1,15 @@
-import { StyleProp, ViewStyle, StyleSheet } from "react-native";
+import { StyleProp, ViewStyle, StyleSheet, PressableProps, ButtonProps } from "react-native";
 import { Text, Pressable } from "./Themed";
+import { TextProps } from "react-native";
 
-export function Button(props: {
-    style? : StyleProp<ViewStyle>
-    children? : string
-    label?: string
-    onPress? : any
-}) {
-    var text = (props.label === undefined)? '' : props.label;
-    text += (props.children === undefined)? '' : props.children;
+
+export function Button(props : PressableProps & TextProps) {
+    const { style, children, ...otherProps } = props;
 
     return (
-    <Pressable darkColor="#313131" lightColor="#D4D4D3" onPress={props.onPress} style= {[props.style , styles.button]}>
-        <Text style={styles.text}>{text}</Text>
-    </Pressable>
+        <Pressable darkColor="#313131" lightColor="#D4D4D3" style= {[props.style , styles.button]} {...otherProps}>
+            <Text style={styles.text}>{children}</Text>
+        </Pressable>
     );
 }
 
