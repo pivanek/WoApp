@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, VirtualizedList } from "react-native";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { TextInput, View, Text, Pressable } from "../../components/Themed";
-import { ExerciseName } from "../../src/Exercise/ExerciseName";
+import { ExerciseName } from "../../src/ExerciseName";
 import { IWorkout, Workout } from '../../src/Workout';
 import { deleteWorkouts } from '../../src';
+import IExercise from '../../src/Exercise';
 
 export default function ExerciseSearchScreen({ navigation, route } : any){
     const exercisesData = Object.keys(ExerciseName).filter((v) => isNaN(Number(v)));
     exercisesData.sort();
     
-    const [exercises, setExercises] = useState(exercisesData);
+    const [exercises, setExercises] = useState<IExercise[]>(exercisesData);
     const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
 
-    function addExercise(exercise: string) {
+    function addExercise(exercise: IExercise) {
         if(workout.getExercises().includes(exercise)){
             workout.deleteExercise(exercise);
         }
@@ -49,18 +50,18 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     return(
         <View>
             <TextInput style={styles.input} onChangeText={search => setExercises(changeRegex(search))} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of exercise'/>
-            <FlatList data={exercises} renderItem={({ item }) => <Item name={item} isAdded={workout.getExercises().includes(item)} onAdd={(exercise) => addExercise(exercise)} />} />
+            <FlatList data={exercises} renderItem={({ item }) => <Item exercise={item} isAdded={workout.getExercises().includes(item)} onAdd={(exercise) => addExercise(exercise)} />} />
         </View>
     );
 }
 
-function Item ( params: { name: string, isAdded: boolean, onAdd: (exercise: string) => void}) {
+function Item ( params: { exercise: IExercise, isAdded: boolean, onAdd: (exercise: string) => void}) {
     const [isAdded, setAdded] = useState(params.isAdded);
 
     return (
       <View style={styles.itemContainer}>
-        <Text style={styles.item}>{params.name.replace(/_/g, ' ')}</Text>
-        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.name); setAdded(!isAdded)}}>
+        <Text style={styles.item}>{params.exercise.getName().replace(/_/g, ' ')}</Text>
+        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.exercise.getName()); setAdded(!isAdded)}}>
           <Text style={(isAdded)? styles.addedText : styles.addText}>{(isAdded)? 'Added' : 'Add'}</Text>
         </Pressable>
       </View>

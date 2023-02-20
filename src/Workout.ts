@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
+import IExercise from "./Exercise";
 
 export enum WorkoutType{
     Strength,
@@ -10,16 +11,16 @@ export interface IWorkout{
     getName() : string;
     setName(name : string) : void;
     getType() : WorkoutType;
-    getExercises() : string[];
-    addExercise(exercise : string | string[]) : void;
-    deleteExercise(name : string) : void;
+    getExercises() : IExercise[];
+    addExercise(exercise : IExercise | IExercise[]) : void;
+    deleteExercise(name : IExercise) : void;
     save(callback: (success: boolean) => void) : void;
     delete(callback: (success: boolean) => void) : void;
 }
 
 export class Workout implements IWorkout{
     name : string;
-    exercises : string[];
+    exercises : IExercise[];
     workoutType : WorkoutType;
     
     constructor(name : string);
@@ -44,16 +45,15 @@ export class Workout implements IWorkout{
         return this.workoutType;
     }
 
-    public getExercises() : string[]{
+    public getExercises() : IExercise[]{
         return this.exercises;
     }
 
-    public addExercise(exercise : string | string[]) : void{
-        if (typeof exercise === "string") this.exercises.push(exercise);
-        else if(typeof exercise === typeof Array) exercise.forEach(element => this.exercises.push(element));
+    public addExercise(exercise : IExercise) : void{
+        this.exercises.push(exercise);
     }
 
-    public deleteExercise(name: string): void {
+    public deleteExercise(name: IExercise): void {
         const index = this.exercises.indexOf(name);
         this.exercises.splice(index, 1);
     }

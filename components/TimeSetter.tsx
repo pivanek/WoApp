@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { View, Text, TextInput } from "./Themed";
-import { Exercise } from "../src/Exercise/Exercise";
+import { Exercise } from "../src/Exercise
 import { useEffect, useState } from "react";
 import { HIITWorkout } from "../src/Workout";
 
@@ -48,7 +48,7 @@ export default function TimeSetter(params: {workoutValue : Date, pauseValue : Da
         params.onChangeWorkout(newWorkoutValue);
       }
     }
-    else finalValue = '00';
+    else finalValue = '';
 
     return finalValue.toString();
   }
@@ -60,16 +60,16 @@ export default function TimeSetter(params: {workoutValue : Date, pauseValue : Da
               <Text style={[styles.header, styles.timerItem]}>Workout time</Text>
           </View>
           <View style={styles.timerRow}>
-          <View style={[styles.timer, styles.timerItem]}>
-              <TextInput value={pauseTimeMinutes} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeMinutes(handleChange(value, inputNames.pauseTimeMinutes))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
-              <Text style={styles.timerText}>:</Text>
-              <TextInput value={pauseTimeSeconds} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeSeconds(handleChange(value, inputNames.pauseTimeSeconds))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
-          </View>
-          <View style={[styles.timer, styles.timerItem]}>
-              <TextInput value={workoutTimeMinutes} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeMinutes(handleChange(value, inputNames.workoutTimeMinutes))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
-              <Text style={styles.timerText}>:</Text>
-              <TextInput value={workoutTimeSeconds} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeSeconds(handleChange(value, inputNames.workoutTimeSeconds))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
-          </View>
+            <View style={[styles.timer, styles.timerItem]}>
+                <TextInput value={pauseTimeMinutes} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeMinutes(handleChange(value, inputNames.pauseTimeMinutes))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
+                <Text style={styles.timerText}>:</Text>
+                <TextInput value={pauseTimeSeconds} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeSeconds(handleChange(value, inputNames.pauseTimeSeconds))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
+            </View>
+            <View style={[styles.timer, styles.timerItem]}>
+                <TextInput value={workoutTimeMinutes} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeMinutes(handleChange(value, inputNames.workoutTimeMinutes))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
+                <Text style={styles.timerText}>:</Text>
+                <TextInput value={workoutTimeSeconds} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeSeconds(handleChange(value, inputNames.workoutTimeSeconds))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
+            </View> 
           </View>
       </View>
   );
@@ -90,20 +90,20 @@ const styles = StyleSheet.create({
       timerRow:{
         margin: 10,
         flexDirection: 'row',
-        justifyContent:  'center'
+        justifyContent:  'center',
       },
       timer:{ 
         flexDirection: 'row',
       },
       timerInput:{
-        
         color: '#949494',
         width: 55,
         height: 55,
+        alignSelf: "center",
         textAlign: 'center',
         borderRadius: 20,
         fontSize: 20,
-        padding: 10,
+        padding: 15,
       },
       timerText:{
         color: '#949494',
