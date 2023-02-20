@@ -11,23 +11,31 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { CrossIcon } from '../../components/Icons';
 
 export default function SetUpWorkout( { navigation, route } : any) {
-  const [workout, setWorkout] = useState<IWorkout>((route.params?.workout !== undefined)? route.params?.workout : new Workout(''));
+  const [workout] = useState<IWorkout>((route.params?.workout !== undefined)? route.params?.workout : new Workout(''));
+  const [exercises, setExercises] = useState<IWorkout>((route.params?.workout !== undefined)? route.params?.workout : new Workout(''));
 
   const [checkedRadio, setChecked] = useState<WorkoutType>(workout.getType());
   const [name, setName] = useState<string>(workout.getName());
 
+  const [pauseTime, setPauseTime] = useState<Date>(typeof workout == typeof HIITWorkout? (workout as HIITWorkout).getPauseTime() : new Date());
+  const [workoutTime, setWorkoutTime] = useState<Date>(typeof workout == typeof HIITWorkout? (workout as HIITWorkout).getWorkoutTime() : new Date());
+
+  console.log(pauseTime);
+  console.log(workoutTime);
+  
+
   function saveWorkout( navigation : any) : void{
-    if(workout.getName() != name){
-      workout.delete(success => {
-        if(success) {
-          workout.setName(name)
-          workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
-        }
-        else console.log('Failed to delete workout data')});
+    if(name){
+      if(workout.getName() != name){
+        workout.delete(success => {
+          if(success) {
+            workout.setName(name)
+            workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
+          }
+          else console.log('Failed to delete workout data')});
+      }
     }
   }
-
-  useEffect(() => console.log(workout), [workout]);
 
   return (
     <ScrollView>
@@ -36,25 +44,10 @@ export default function SetUpWorkout( { navigation, route } : any) {
         <Text style={[styles.header]}>Choose type</Text>
         <View style={[styles.separatorHorizontal, {marginBottom: 20, height: 2}]}/>
         <RadioButton value={WorkoutType.Strength} checked={checkedRadio==WorkoutType.Strength} onPress={() => setChecked(WorkoutType.Strength)} style = {styles.radioButton}>Strength Workout</RadioButton>
-        <RadioButton value={WorkoutType.HIIT} checked={checkedRadio==WorkoutType.HIIT} onPress={() => setChecked(WorkoutType.HIIT)} style = {styles.radioButton}>HIIT Workout</RadioButton>
+        <RadioButton value={WorkoutType.HIIT} checked={checkedRadio==WorkoutType.HIIT} onPress={() => setChecked(WorkoutType.HIIT)} style = {styles.radioButton}>Interval Workout</RadioButton>
       </View>
-      {(checkedRadio == WorkoutType.HIIT)? <TimeSetter/> : null}
-      <View style={{width: '80%', alignSelf: 'center', marginTop: 20}}>
-        <Text style={styles.header}>Exercises</Text>
-        <View style={[styles.separatorHorizontal, {height: 2}]}/>
-        {
-          workout.getExercises().map((element : string, index: number) => 
-          <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
-            <Text style={styles.item}>{ element }</Text>
-            <Pressable style={{alignItems: 'center'}} onPress={() => workout.deleteExercise(element)}><CrossIcon color='red'/></Pressable>
-          </View>
-          )
-        }
-          
-        <Pressable style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch' as never, {workout: workout } as never)}>
-          <Text style = {{fontSize: 16, padding:7, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
-        </Pressable>
-      </View>
+      {(checkedRadio == WorkoutType.HIIT)? <TimeSetter workoutValue={workoutTime} pauseValue={pauseTime} onChangeWorkout={time => setWorkoutTime(time)} onChangePause={time => setPauseTime(time)}/> : null}
+      
       <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 50}}>
         <Button style={styles.button} onPress={() => navigation.goBack()}>Cancel</Button>
         <Button style={styles.button} onPress={() => saveWorkout(navigation)} >Save</Button>
@@ -63,12 +56,23 @@ export default function SetUpWorkout( { navigation, route } : any) {
   );
 }
 
-function Exercise ( params: { exercise: string, onPress?: ((event: GestureResponderEvent) => void)}) {
+function ExerciseList ( params: { exercise: string, onPress?: (event: GestureResponderEvent) => void}) {
   return (
-    <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
-      <Text style={styles.item}>{ params.exercise }</Text>
-      <Pressable style={{alignItems: 'center'}} onPress={params.onPress}><CrossIcon color='red'/></Pressable>
-    </View>
+    <View style={{width: '80%', alignSelf: 'center', marginTop: 20}}>
+        <Text style={styles.header}>Exercises</Text>
+        <View style={[styles.separatorHorizontal, {height: 2}]}/>
+        {
+        workout.getExercises().map((element : string, index: number) => 
+          <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
+            <Text style={styles.item}>{ element }</Text>
+            <Pressable style={{alignItems: 'center'}} onPress={() => workout.deleteExercise(element)}><CrossIcon color='red'/></Pressable>
+          </View>
+          )
+        }
+        <Pressable style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch' as never, {workout: workout } as never)}>
+          <Text style = {{fontSize: 16, padding:7, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
+        </Pressable>
+      </View>
   );
 }
 

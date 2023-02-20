@@ -1,12 +1,12 @@
 import { ExerciseName } from "./ExerciseName";
 
-interface IExercise{
+export default interface IExercise{
     getName() : ExerciseName;
     getMuscleGroups() : Array<MuscleGroup> | undefined;
     getDescription() : string | undefined;
 }
 
-class Exercise implements IExercise{
+export class Exercise implements IExercise{
     private name : ExerciseName;
     private muscleGroups? : Array<MuscleGroup>;
     private description? : string;
@@ -66,7 +66,7 @@ class RepsExercise extends Exercise implements IExercise{
     }
 }
 
-class HoldExercise extends Exercise implements IExercise{
+export class HoldExercise extends Exercise implements IExercise{
     private time : Array<Date> = [];
     
     constructor(name : ExerciseName, muscleGroups? : Array<MuscleGroup>,  description? : string){

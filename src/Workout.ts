@@ -124,15 +124,27 @@ export class HIITWorkout extends Workout implements IWorkout{
         }
     }
 
-    changeWorkoutTime(time : Date){
+    public getWorkoutTime() : Date{
+        return this.workoutTime;
+    }
+
+    public getPauseTime() : Date{
+        return this.pauseTime;
+    }
+
+    public getNumberOfSets(sets : number){
+        return this.sets;
+    }
+
+    public setWorkoutTime(time : Date){
         this.workoutTime = time;
     }
 
-    changePauseTime(time : Date){
+    public setPauseTime(time : Date){
         this.pauseTime = time;
     }
 
-    changeNumberOfSets(sets : number){
+    public setNumberOfSets(sets : number){
         this.sets = sets;
     }
 }
