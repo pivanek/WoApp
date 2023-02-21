@@ -5,6 +5,7 @@ import { deleteWorkouts, getData } from '../../src';
 import { Button } from '../../components/Button';
 import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
 import { useState, useEffect, useLayoutEffect } from 'react';
+import exercises = require("../../src/exercises.json");
 
 export default function WorkoutsScreen({ navigation } : any) {
   const [workouts, setWorkouts] = useState<IWorkout[]>();
@@ -32,7 +33,7 @@ export default function WorkoutsScreen({ navigation } : any) {
     }
     else{
       return(
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 10}}>
             <FlatList style={styles.flatList} data={workouts} renderItem={({ item }) => <Pressable style={styles.itemContainer} darkColor="#313131" lightColor="#D4D4D3" onPress={() => setPressed((item.getName() == isPressed)? '' : item.getName())}><Item data={item} pressed={isPressed} navigation={navigation}/></Pressable>}/>
             <Button style={styles.buttonAdd} onPress={() => navigation.navigate('SetUpWorkout')}>Add new workout</Button>
         </View>
@@ -69,7 +70,7 @@ export function Item(params: {data: IWorkout, pressed : string, navigation : any
       { (exercises.length == 0)? null : 
         <>
           <View style={styles.separatorHorizontal} />
-          <FlatList style={styles.flatList} data={exercises} renderItem={({ item }) => <Text style={{color: '#929494'}}>{item.replace(/_/g, ' ')}</Text>} />
+          <FlatList style={styles.flatList} data={exercises} renderItem={({ item }) => <Text style={{color: '#929494', marginVertical: 2}}>{item.replace(/_/g, ' ')}</Text>} />
         </>}
       { (params.pressed == name)?
         <>
@@ -97,7 +98,7 @@ export function Item(params: {data: IWorkout, pressed : string, navigation : any
 const styles = StyleSheet.create({
   flatList:{
     alignSelf: 'center',
-    width: '80%',
+    width: '90%',
   },
   itemContainer: {
     paddingVertical: 10,
@@ -109,7 +110,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 20,
     height: 1,
-    backgroundColor: '#929494'
+    backgroundColor: '#929494',
+    marginVertical: 4
   },
   separatorVertical:{
     width: 1,

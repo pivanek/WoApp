@@ -1,244 +1,243 @@
 [
-    {
-      "name": "Air Squat",
-      "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
-      "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Alternating Dumbbell Curl",
-      "muscleGroups": ["Biceps"],
-      "description": "Targets the biceps muscles of the upper arm.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Alternating Dumbbell Press",
-      "muscleGroups": ["Chest", "Shoulders"],
-      "description": "Targets the chest and shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Alternating Dumbbell Snatch",
-      "muscleGroups": ["Back", "Shoulders"],
-      "description": "Targets the back and shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Alternating Renegade Row",
-      "muscleGroups": ["Back", "Shoulders", "Core"],
-      "description": "Targets the back, shoulder, and core muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Back Extension",
-      "muscleGroups": ["Lower Back", "Glutes", "Hamstrings"],
-      "description": "Targets the lower back, glutes, and hamstrings.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Band External Shoulder Rotation",
-      "muscleGroups": ["Shoulders"],
-      "description": "Targets the shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Band Internal Shoulder Rotation",
-      "muscleGroups": ["Shoulders"],
-      "description": "Targets the shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Band Pull Apart",
-      "muscleGroups": ["Shoulders"],
-      "description": "Targets the shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Banded Side Kicks",
-      "muscleGroups": ["Glutes"],
-      "description": "Targets the glutes.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Bar Dip",
-      "muscleGroups": ["Triceps", "Chest", "Shoulders"],
-      "description": "Targets the triceps, chest, and shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Bar Hang",
-      "muscleGroups": ["Forearms"],
-      "description": "Targets the forearm muscles.",
-      "exerciseType": "Hold"
-    },
-    {
-      "name": "Barbell Curl",
-      "muscleGroups": ["Biceps"],
-      "description": "Targets the biceps muscles of the upper arm.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Barbell Front Raise",
-      "muscleGroups": ["Shoulders"],
-      "description": "Targets the front shoulder muscles.",
-      "exerciseType": "Reps"
-    },
-    {
-      "name": "Barbell Hack Squat",
-      "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
-      "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
-      "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Lunge",
-        "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
-        "description": "Strengthens the lower body, focusing on the quadriceps, glutes, and hamstrings.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Lying Triceps Extension",
-        "muscleGroups": ["Triceps"],
-        "description": "Targets the triceps muscles of the upper arm while lying down on a bench.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Preacher Curl",
-        "muscleGroups": ["Biceps"],
-        "description": "Targets the biceps muscles of the upper arm with a preacher curl bench.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Rear Delt Row",
-        "muscleGroups": ["Shoulders"],
-        "description": "Targets the rear deltoids of the shoulder muscles with a barbell row motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Row",
-        "muscleGroups": ["Back"],
-        "description": "Strengthens the back muscles, including the lats, traps, and rhomboids, with a barbell row motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Shrug",
-        "muscleGroups": ["Shoulders", "Traps"],
-        "description": "Targets the trapezius muscles of the upper back and the shoulder muscles with a shrugging motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Standing Triceps Extension",
-        "muscleGroups": ["Triceps"],
-        "description": "Targets the triceps muscles of the upper arm with a standing triceps extension motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Upright Row",
-        "muscleGroups": ["Shoulders"],
-        "description": "Targets the shoulder muscles, including the deltoids and traps, with an upright row motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Wrist Curl Behind the Back",
-        "muscleGroups": ["Forearms"],
-        "description": "Targets the forearm muscles with a wrist curl motion behind the back.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Wrist Curl",
-        "muscleGroups": ["Forearms"],
-        "description": "Targets the forearm muscles with a wrist curl motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Barbell Wrist Extension",
-        "muscleGroups": ["Forearms"],
-        "description": "Targets the forearm muscles with a wrist extension motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Behind the Neck Press",
-        "muscleGroups": ["Shoulders"],
-        "description": "Targets the shoulder muscles, including the deltoids and triceps, with a press motion behind the neck.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Bench Press",
-        "muscleGroups": ["Chest", "Triceps", "Shoulders"],
-        "description": "Strengthens the chest, triceps, and shoulder muscles with a bench press motion.",
-        "exerciseType": "Reps"
-    },
-    {
-        "name": "Bicycle Crunch",
-        "muscleGroups": ["Abdominals"],
-        "description": "Targets the rectus abdominis and oblique muscles through a twisting motion.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Block Snatch",
-        "muscleGroups": ["Shoulders", "Legs"],
-        "description": "A weightlifting exercise that targets the shoulders, legs, and back.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Body Weight Lunge",
-        "muscleGroups": ["Legs"],
-        "description": "Targets the quadriceps, hamstrings, and glutes.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Box Squat",
-        "muscleGroups": ["Legs"],
-        "description": "A variation of the squat exercise that focuses on the glutes and hamstrings.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Bulgarian Split Squat",
-        "muscleGroups": ["Legs"],
-        "description": "A unilateral exercise that targets the quads, hamstrings, and glutes.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Burpee",
-        "muscleGroups": ["Full Body"],
-        "description": "A full-body exercise that involves a squat, plank, push-up, and jump.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Chest Press",
-        "muscleGroups": ["Chest"],
-        "description": "Targets the chest muscles with resistance provided by a cable machine.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Close Grip Seated Row",
-        "muscleGroups": ["Back", "Biceps"],
-        "description": "Targets the middle and upper back muscles, as well as the biceps.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Crunch",
-        "muscleGroups": ["Abdominals"],
-        "description": "Targets the rectus abdominis muscles through a cable machine.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Curl With Bar",
-        "muscleGroups": ["Biceps"],
-        "description": "Targets the biceps with resistance provided by a cable machine and a bar attachment.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Curl With Rope",
-        "muscleGroups": ["Biceps"],
-        "description": "Targets the biceps with resistance provided by a cable machine and a rope attachment.",
-        "exerciseType": "Reps"
-        },
-        {
-        "name": "Cable Lateral Raise",
-        "muscleGroups": ["Shoulders"],
-        "description": "Targets the medial deltoids with resistance provided by a cable machine.",
-        "exerciseType": "Reps"
-        }
+  {
+  "name": "Air Squat",
+  "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+  "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Alternating Dumbbell Curl",
+  "muscleGroups": ["Biceps"],
+  "description": "Targets the biceps muscles of the upper arm.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Alternating Dumbbell Press",
+  "muscleGroups": ["Chest", "Shoulders"],
+  "description": "Targets the chest and shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Alternating Dumbbell Snatch",
+  "muscleGroups": ["Back", "Shoulders"],
+  "description": "Targets the back and shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Alternating Renegade Row",
+  "muscleGroups": ["Back", "Shoulders", "Core"],
+  "description": "Targets the back, shoulder, and core muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Back Extension",
+  "muscleGroups": ["Lower Back", "Glutes", "Hamstrings"],
+  "description": "Targets the lower back, glutes, and hamstrings.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Band External Shoulder Rotation",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Band Internal Shoulder Rotation",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Band Pull Apart",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Banded Side Kicks",
+  "muscleGroups": ["Glutes"],
+  "description": "Targets the glutes.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Bar Dip",
+  "muscleGroups": ["Triceps", "Chest", "Shoulders"],
+  "description": "Targets the triceps, chest, and shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Bar Hang",
+  "muscleGroups": ["Forearms"],
+  "description": "Targets the forearm muscles.",
+  "exerciseType": "Hold"
+  },
+  {
+  "name": "Barbell Curl",
+  "muscleGroups": ["Biceps"],
+  "description": "Targets the biceps muscles of the upper arm.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Front Raise",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the front shoulder muscles.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Hack Squat",
+  "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+  "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Lunge",
+  "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+  "description": "Strengthens the lower body, focusing on the quadriceps, glutes, and hamstrings.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Lying Triceps Extension",
+  "muscleGroups": ["Triceps"],
+  "description": "Targets the triceps muscles of the upper arm while lying down on a bench.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Preacher Curl",
+  "muscleGroups": ["Biceps"],
+  "description": "Targets the biceps muscles of the upper arm with a preacher curl bench.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Rear Delt Row",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the rear deltoids of the shoulder muscles with a barbell row motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Row",
+  "muscleGroups": ["Back"],
+  "description": "Strengthens the back muscles, including the lats, traps, and rhomboids, with a barbell row motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Shrug",
+  "muscleGroups": ["Shoulders", "Traps"],
+  "description": "Targets the trapezius muscles of the upper back and the shoulder muscles with a shrugging motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Standing Triceps Extension",
+  "muscleGroups": ["Triceps"],
+  "description": "Targets the triceps muscles of the upper arm with a standing triceps extension motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Upright Row",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the shoulder muscles, including the deltoids and traps, with an upright row motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Wrist Curl Behind the Back",
+  "muscleGroups": ["Forearms"],
+  "description": "Targets the forearm muscles with a wrist curl motion behind the back.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Wrist Curl",
+  "muscleGroups": ["Forearms"],
+  "description": "Targets the forearm muscles with a wrist curl motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Barbell Wrist Extension",
+  "muscleGroups": ["Forearms"],
+  "description": "Targets the forearm muscles with a wrist extension motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Behind the Neck Press",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the shoulder muscles, including the deltoids and triceps, with a press motion behind the neck.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Bench Press",
+  "muscleGroups": ["Chest", "Triceps", "Shoulders"],
+  "description": "Strengthens the chest, triceps, and shoulder muscles with a bench press motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Bicycle Crunch",
+  "muscleGroups": ["Abdominals"],
+  "description": "Targets the rectus abdominis and oblique muscles through a twisting motion.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Block Snatch",
+  "muscleGroups": ["Shoulders", "Legs"],
+  "description": "A weightlifting exercise that targets the shoulders, legs, and back.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Body Weight Lunge",
+  "muscleGroups": ["Legs"],
+  "description": "Targets the quadriceps, hamstrings, and glutes.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Box Squat",
+  "muscleGroups": ["Legs"],
+  "description": "A variation of the squat exercise that focuses on the glutes and hamstrings.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Bulgarian Split Squat",
+  "muscleGroups": ["Legs"],
+  "description": "A unilateral exercise that targets the quads, hamstrings, and glutes.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Burpee",
+  "muscleGroups": ["Full Body"],
+  "description": "A full-body exercise that involves a squat, plank, push-up, and jump.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Chest Press",
+  "muscleGroups": ["Chest"],
+  "description": "Targets the chest muscles with resistance provided by a cable machine.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Close Grip Seated Row",
+  "muscleGroups": ["Back", "Biceps"],
+  "description": "Targets the middle and upper back muscles, as well as the biceps.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Crunch",
+  "muscleGroups": ["Abdominals"],
+  "description": "Targets the rectus abdominis muscles through a cable machine.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Curl With Bar",
+  "muscleGroups": ["Biceps"],
+  "description": "Targets the biceps with resistance provided by a cable machine and a bar attachment.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Curl With Rope",
+  "muscleGroups": ["Biceps"],
+  "description": "Targets the biceps with resistance provided by a cable machine and a rope attachment.",
+  "exerciseType": "Reps"
+  },
+  {
+  "name": "Cable Lateral Raise",
+  "muscleGroups": ["Shoulders"],
+  "description": "Targets the medial deltoids with resistance provided by a cable machine.",
+  "exerciseType": "Reps"
+  }
 
 ]
-  

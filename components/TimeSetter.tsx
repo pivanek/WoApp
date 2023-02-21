@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { View, Text, TextInput } from "./Themed";
-import { Exercise } from "../src/Exercise
+import { Exercise } from "../src/Exercise";
 import { useEffect, useState } from "react";
 import { HIITWorkout } from "../src/Workout";
 
