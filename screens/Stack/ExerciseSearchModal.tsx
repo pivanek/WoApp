@@ -5,14 +5,25 @@ import { TextInput, View, Text, Pressable } from "../../components/Themed";
 import { ExerciseName } from "../../src/ExerciseName";
 import { IWorkout, Workout } from '../../src/Workout';
 import { deleteWorkouts } from '../../src';
-import IExercise from '../../src/Exercise';
+import IExercise, { Exercise } from '../../src/Exercise';
 
 export default function ExerciseSearchScreen({ navigation, route } : any){
-    const exercisesData = Object.keys(ExerciseName).filter((v) => isNaN(Number(v)));
-    exercisesData.sort();
-    
+    const exercisesJSON : Object[] = require('../../src/exercises.json');
+    console.log(exercisesJSON);
+    const exercisesData : IExercise[] = parseJSON(exercisesJSON);
+
     const [exercises, setExercises] = useState<IExercise[]>(exercisesData);
     const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
+
+    function parseJSON(exerciseData : Object[]) : IExercise[]{
+        const exercisesHelper : IExercise[] = [];
+
+        exerciseData.forEach(element => {
+            exercisesHelper.push(Exercise.from(element as Exercise));
+        });
+
+        return exercisesHelper;
+    }
 
     function addExercise(exercise: IExercise) {
         if(workout.getExercises().includes(exercise)){
@@ -22,13 +33,13 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
         
     }
 
-    function changeRegex(search : string) : string[] {
+    function changeRegex(search : string) : IExercise[] {
         if(search){
             const regexSearch = new RegExp(search.replace(/_/g, ' '), 'i');
-            let exercisesHelper : string[] = [];
+            const exercisesHelper : IExercise[] = [];
             
             exercisesData.forEach(exercise => {
-                if(regexSearch.test(exercise))
+                if(regexSearch.test(exercise.getName()) || exercise.getMuscleGroups()?.some(muscleGroup => regexSearch.test(muscleGroup)))
                     exercisesHelper.push(exercise);
             });
             
@@ -55,13 +66,13 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     );
 }
 
-function Item ( params: { exercise: IExercise, isAdded: boolean, onAdd: (exercise: string) => void}) {
+function Item ( params: { exercise: IExercise, isAdded: boolean, onAdd: (exercise: IExercise) => void}) {
     const [isAdded, setAdded] = useState(params.isAdded);
 
     return (
       <View style={styles.itemContainer}>
         <Text style={styles.item}>{params.exercise.getName().replace(/_/g, ' ')}</Text>
-        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.exercise.getName()); setAdded(!isAdded)}}>
+        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.exercise); setAdded(!isAdded)}}>
           <Text style={(isAdded)? styles.addedText : styles.addText}>{(isAdded)? 'Added' : 'Add'}</Text>
         </Pressable>
       </View>

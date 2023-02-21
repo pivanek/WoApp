@@ -75,7 +75,7 @@ function ExerciseList ( params: { workout: IWorkout, onDelete: (workout: IWorkou
         <View style={[styles.separatorHorizontal, {height: 2}]}/>
         {
         exercises.map((element : IExercise, index: number) => 
-          <View style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
+          <View key={index} style={{flexDirection: 'row', borderBottomColor: '#929494', borderBottomWidth: 1, alignItems: 'center'}}>
             <Text style={styles.item}>{ element.getName() }</Text>
             <Pressable style={{alignItems: 'center'}} onPress={() => handleDelete(element)}><CrossIcon color='red'/></Pressable>
           </View>

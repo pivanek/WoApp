@@ -7,8 +7,9 @@ enum ExerciseType{
 
 export default interface IExercise{
     getName() : string;
-    getMuscleGroups() : Array<string> | undefined;
-    getDescription() : string | undefined;
+    getMuscleGroups() : Array<string>;
+    getDescription() : string;
+    getExerciseType() : ExerciseType;
 }
 
 export class Exercise implements IExercise{
@@ -48,6 +49,10 @@ export class Exercise implements IExercise{
 
     public getExerciseType() : ExerciseType{
         return this.exerciseType;
+    }
+    
+    public static from(exerciseData : Exercise){
+        return (exerciseData.exerciseType === ExerciseType.Reps) ? new StrengthExercise(exerciseData) : new HoldExercise(exerciseData);
     }
 }
 

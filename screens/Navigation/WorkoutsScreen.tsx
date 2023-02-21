@@ -5,7 +5,7 @@ import { deleteWorkouts, getData } from '../../src';
 import { Button } from '../../components/Button';
 import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
 import { useState, useEffect, useLayoutEffect } from 'react';
-import exercises = require("../../src/exercises.json");
+import IExercise from '../../src/Exercise';
 
 export default function WorkoutsScreen({ navigation } : any) {
   const [workouts, setWorkouts] = useState<IWorkout[]>();
@@ -42,7 +42,7 @@ export default function WorkoutsScreen({ navigation } : any) {
 }
 
 export function Item(params: {data: IWorkout, pressed : string, navigation : any}){
-  const exercises : string[] = params.data.getExercises();
+  const exercises : IExercise[] = params.data.getExercises();
   const name : string = params.data.getName();
 
   function handleDelete() {
@@ -70,7 +70,7 @@ export function Item(params: {data: IWorkout, pressed : string, navigation : any
       { (exercises.length == 0)? null : 
         <>
           <View style={styles.separatorHorizontal} />
-          <FlatList style={styles.flatList} data={exercises} renderItem={({ item }) => <Text style={{color: '#929494', marginVertical: 2}}>{item.replace(/_/g, ' ')}</Text>} />
+          <FlatList style={styles.flatList} data={exercises} renderItem={({ item }) => <Text style={{color: '#929494', marginVertical: 2}}>{item.getName()}</Text>} />
         </>}
       { (params.pressed == name)?
         <>

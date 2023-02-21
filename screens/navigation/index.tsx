@@ -74,6 +74,9 @@ export function TabNavigator() {
           headerTitleStyle: {
             fontSize: 25
           },
+          tabBarStyle: {
+            padding: 8
+          }
         }}
         
       />
