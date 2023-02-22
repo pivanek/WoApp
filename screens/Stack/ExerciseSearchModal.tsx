@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, FlatList, StyleSheet, VirtualizedList } from "react-native";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { TextInput, View, Text, Pressable } from "../../components/Themed";
@@ -6,15 +6,15 @@ import { ExerciseName } from "../../src/ExerciseName";
 import { IWorkout, Workout } from '../../src/Workout';
 import { deleteWorkouts } from '../../src';
 import IExercise, { Exercise } from '../../src/Exercise';
+import { ExerciseItem } from '../../components/ExerciseItem';
 
 export default function ExerciseSearchScreen({ navigation, route } : any){
     const exercisesJSON : Object[] = require('../../src/exercises.json');
-    console.log(exercisesJSON);
     const exercisesData : IExercise[] = parseJSON(exercisesJSON);
 
     const [exercises, setExercises] = useState<IExercise[]>(exercisesData);
     const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
-
+    
     function parseJSON(exerciseData : Object[]) : IExercise[]{
         const exercisesHelper : IExercise[] = [];
 
@@ -26,12 +26,13 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     }
 
     function addExercise(exercise: IExercise) {
-        if(workout.getExercises().includes(exercise)){
-            workout.deleteExercise(exercise);
-        }
+        const isAdded = workout.getExercises().find((e) => e.getName() === exercise.getName());
+
+        if(isAdded)
+                workout.deleteExercise(exercise);
         else workout.addExercise(exercise);
-        
     }
+
 
     function changeRegex(search : string) : IExercise[] {
         if(search){
@@ -59,66 +60,27 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
     
 
     return(
-        <View>
+        <View style={{ width: '90%', alignSelf: 'center'}}>
             <TextInput style={styles.input} onChangeText={search => setExercises(changeRegex(search))} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of exercise'/>
-            <FlatList data={exercises} renderItem={({ item }) => <Item exercise={item} isAdded={workout.getExercises().includes(item)} onAdd={(exercise) => addExercise(exercise)} />} />
+            <FlatList data={exercises} renderItem={({ item }) => 
+                    <>
+                        <ExerciseItem exercise={item} isAdded={ workout.getExercises().some((workoutExercise) => {return workoutExercise.getName() == item.getName()})} onAdd={(exercise) => addExercise(exercise)} />
+                        <View style={{width: '100%', height: 2, backgroundColor: '#929494', marginTop: 2}}/>
+                    </>
+                } 
+            />
         </View>
     );
 }
 
-function Item ( params: { exercise: IExercise, isAdded: boolean, onAdd: (exercise: IExercise) => void}) {
-    const [isAdded, setAdded] = useState(params.isAdded);
-
-    return (
-      <View style={styles.itemContainer}>
-        <Text style={styles.item}>{params.exercise.getName().replace(/_/g, ' ')}</Text>
-        <Pressable style={styles.addButton} onPress={() => {params.onAdd(params.exercise); setAdded(!isAdded)}}>
-          <Text style={(isAdded)? styles.addedText : styles.addText}>{(isAdded)? 'Added' : 'Add'}</Text>
-        </Pressable>
-      </View>
-    );
-}
-
 const styles = StyleSheet.create({
-    itemContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        borderBottomWidth: 2,
-        borderBottomColor: '#929494',
-        marginHorizontal: 20 
-    },
+
     input: {
-        marginBottom:20,
-        alignSelf: 'center',
-        width: '90%',
+        marginVertical:20,
+        width: '100%',
         height: 40,
         fontSize: 16,
-        marginTop: 15,
         borderRadius: 10,
         padding: 10,
     },
-    item: {
-        width: '79%',
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-    },
-    addButton:{
-        width:'21%',
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-    },
-    addText:{
-        textAlign: 'right',
-        textAlignVertical: 'center',
-        color: '#00C5FF',
-        fontSize: 18,
-    },
-    addedText:{
-        textAlign: 'right',
-        textAlignVertical: 'center',
-        color: '#4F5152',
-        fontSize: 18,
-    }
 });

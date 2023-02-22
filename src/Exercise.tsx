@@ -28,10 +28,10 @@ export class Exercise implements IExercise{
             this.exerciseType = exerciseType ?? ExerciseType.Reps;
         }
         else {
-        this.name = exercise.name;
-        this.muscleGroups = exercise.muscleGroups;
-        this.description = exercise.description;
-        this.exerciseType = exercise.exerciseType;
+            this.name = exercise.name;
+            this.muscleGroups = exercise.muscleGroups;
+            this.description = exercise.description;
+            this.exerciseType = exercise.exerciseType;
       }
     }
 
@@ -51,7 +51,7 @@ export class Exercise implements IExercise{
         return this.exerciseType;
     }
     
-    public static from(exerciseData : Exercise){
+    public static from(exerciseData : any){
         return (exerciseData.exerciseType === ExerciseType.Reps) ? new StrengthExercise(exerciseData) : new HoldExercise(exerciseData);
     }
 }

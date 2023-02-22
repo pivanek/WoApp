@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
-import IExercise from "./Exercise";
+import IExercise, { Exercise } from "./Exercise";
 
 export enum WorkoutType{
     Strength,
@@ -12,6 +12,7 @@ export interface IWorkout{
     setName(name : string) : void;
     getType() : WorkoutType;
     getExercises() : IExercise[];
+    setExercises(exercises : IExercise[]) : void;
     addExercise(exercise : IExercise | IExercise[]) : void;
     deleteExercise(name : IExercise) : void;
     save(callback: (success: boolean) => void) : void;
@@ -62,6 +63,10 @@ export class Workout implements IWorkout{
         this.name = name;
     }
 
+    public setExercises(exercises : IExercise[]) : void{
+        this.exercises = exercises;
+    }
+
     public save(callback: (success: boolean) => void) : void{
         getData('Workouts', (workouts) => {
             workouts.set(this.name, this);
@@ -99,7 +104,15 @@ export class Workout implements IWorkout{
     }
 
     public static from(workoutData : any) : IWorkout {
-        return (workoutData.workoutType === WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData);
+        const workoutResult : IWorkout = (workoutData.workoutType === WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
+        const exercisesHelper : IExercise[] = [];
+
+        workoutData.exercises.forEach((exercise: Exercise) => {
+            exercisesHelper.push(Exercise.from(exercise));
+        });
+        workoutResult.setExercises(exercisesHelper);
+
+        return workoutResult;
     }
 
 }
