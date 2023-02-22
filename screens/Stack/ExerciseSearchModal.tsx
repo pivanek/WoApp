@@ -36,7 +36,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
 
     function changeRegex(search : string) : IExercise[] {
         if(search){
-            const regexSearch = new RegExp(search.replace(/_/g, ' '), 'i');
+            const regexSearch = new RegExp(search, 'i');
             const exercisesHelper : IExercise[] = [];
             
             exercisesData.forEach(exercise => {
@@ -63,12 +63,8 @@ export default function ExerciseSearchScreen({ navigation, route } : any){
         <View style={{ width: '90%', alignSelf: 'center'}}>
             <TextInput style={styles.input} onChangeText={search => setExercises(changeRegex(search))} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of exercise'/>
             <FlatList data={exercises} renderItem={({ item }) => 
-                    <>
-                        <ExerciseItem exercise={item} isAdded={ workout.getExercises().some((workoutExercise) => {return workoutExercise.getName() == item.getName()})} onAdd={(exercise) => addExercise(exercise)} />
-                        <View style={{width: '100%', height: 2, backgroundColor: '#929494', marginTop: 2}}/>
-                    </>
-                } 
-            />
+                <ExerciseItem exercise={item} isAdded={ workout.getExercises().some((workoutExercise) => {return workoutExercise.getName() == item.getName()})} onAdd={(exercise) => addExercise(exercise)} />
+            }/>
         </View>
     );
 }

@@ -4,7 +4,7 @@ import IExercise, { Exercise } from "./Exercise";
 
 export enum WorkoutType{
     Strength,
-    HIIT   
+    Interval   
 }
 
 export interface IWorkout{
@@ -104,7 +104,7 @@ export class Workout implements IWorkout{
     }
 
     public static from(workoutData : any) : IWorkout {
-        const workoutResult : IWorkout = (workoutData.workoutType === WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
+        const workoutResult : IWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
         const exercisesHelper : IExercise[] = [];
 
         workoutData.exercises.forEach((exercise: Exercise) => {
@@ -123,17 +123,14 @@ export class HIITWorkout extends Workout implements IWorkout{
     private sets : number = 1;
 
     constructor(name : string);
-    constructor(workout : HIITWorkout);
-    constructor(arg : string | HIITWorkout){
+    constructor(workout : Workout);
+    constructor(arg : string | Workout){
         if (typeof arg === 'string') {
             super(arg);
-            this.workoutType = WorkoutType.HIIT;
+            this.workoutType = WorkoutType.Interval;
         }
         else{
             super(arg);
-            this.workoutTime = arg.workoutTime;
-            this.pauseTime = arg.pauseTime;
-            this.sets = arg.sets;
         }
     }
 
