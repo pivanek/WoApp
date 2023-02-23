@@ -42,6 +42,7 @@ export default function SetUpWorkout( { navigation, route } : any) {
 
   function saveWorkout( navigation : any) : void{
     if(name){
+      if (workout.getExercises().length > 0){
         if(workout.getName() != name){
           workout.delete(success => {
             if(success) {
@@ -51,6 +52,18 @@ export default function SetUpWorkout( { navigation, route } : any) {
             else console.log('Failed to delete workout data')});
         }
         else workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
+      }
+      else{
+        Alert.alert(
+          'Add exercises',
+          'You have to add some exercises',
+          [
+            {
+              text: 'Ok',  
+            },
+          ],
+        );
+      }
     }
     else{
       Alert.alert(

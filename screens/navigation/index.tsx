@@ -9,6 +9,7 @@ import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
 import SetUpWorkout from '../Stack/SetUpWorkout';
+import ExerciseLog from '../Stack/ExerciseLog';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -34,6 +35,10 @@ export function StackNavigator() {
         options={{
           title: "Workout setup"
         }}
+      />
+      <Stack.Screen 
+        name="ExerciseLog" 
+        component={ExerciseLog}
       />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen 
