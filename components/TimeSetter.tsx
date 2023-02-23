@@ -12,14 +12,14 @@ enum inputNames{
 }
 
 export default function TimeSetter(params: {workoutValue : Date, pauseValue : Date, onChangeWorkout : (time : Date) => void, onChangePause : (time : Date) => void}){
-  const workoutValue = typeof params.workoutValue != undefined? params.workoutValue : new Date();
-  const pauseValue = typeof params.pauseValue != undefined? params.pauseValue : new Date();
+  const workoutValue = params?.workoutValue;
+  const pauseValue = params?.pauseValue;
 
-  const [pauseTimeMinutes, setPauseTimeMinutes] = useState<string>(typeof params.pauseValue != undefined? pauseValue.getMinutes().toString() : '0');
-  const [pauseTimeSeconds, setPauseTimeSeconds] = useState<string>(typeof params.pauseValue != undefined? pauseValue.getSeconds().toString() : '0');
+  const [pauseTimeMinutes, setPauseTimeMinutes] = useState<string>(!Number.isNaN(workoutValue.getMinutes())? pauseValue.getMinutes().toString() : '');
+  const [pauseTimeSeconds, setPauseTimeSeconds] = useState<string>(!Number.isNaN(workoutValue.getSeconds())? pauseValue.getSeconds().toString() : '');
   
-  const [workoutTimeMinutes, setWorkoutTimeMinutes] = useState<string>(typeof params.workoutValue != undefined? workoutValue.getSeconds().toString() : '0');
-  const [workoutTimeSeconds, setWorkoutTimeSeconds] = useState<string>(typeof params.workoutValue != undefined? workoutValue.getMinutes().toString() : '0');
+  const [workoutTimeMinutes, setWorkoutTimeMinutes] = useState<string>(!Number.isNaN(workoutValue.getMinutes())? workoutValue.getSeconds().toString() : '');
+  const [workoutTimeSeconds, setWorkoutTimeSeconds] = useState<string>(!Number.isNaN(workoutValue.getMinutes())? workoutValue.getMinutes().toString() : '');
 
   function handleChange(value : string, name : inputNames) : string {
     var finalValue;
@@ -54,7 +54,7 @@ export default function TimeSetter(params: {workoutValue : Date, pauseValue : Da
   }
 
   return(
-      <View style={styles.timerContainer}>
+      <View style={{marginTop: 10}}>
           <View style={styles.timerRow}>
               <Text style={[styles.header, styles.timerItem]}>Break time</Text>
               <Text style={[styles.header, styles.timerItem]}>Workout time</Text>
@@ -84,9 +84,6 @@ const styles = StyleSheet.create({
     timerHeader:{
         flex: 1,
       },
-      timerContainer:{
-        marginTop: 50
-      },
       timerRow:{
         margin: 10,
         flexDirection: 'row',
@@ -101,9 +98,9 @@ const styles = StyleSheet.create({
         height: 55,
         alignSelf: "center",
         textAlign: 'center',
-        borderRadius: 20,
+        borderRadius: 15,
         fontSize: 20,
-        padding: 15,
+        paddingTop: 15
       },
       timerText:{
         color: '#949494',

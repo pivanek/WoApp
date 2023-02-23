@@ -38,8 +38,6 @@ export default function SetUpWorkout( { navigation, route } : any) {
       workoutHelper.setExercises(workout.getExercises());
       setWorkout(workoutHelper); 
     }
-
-    console.log(workout);
   }, [checkedRadio]);
 
   function saveWorkout( navigation : any) : void{
@@ -147,5 +145,6 @@ const styles = StyleSheet.create({
       padding: 10,
       fontSize: 18,
       height: 44,
+      marginBottom: 100
   },
 });

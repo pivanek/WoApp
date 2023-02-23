@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "WoApp",
-    "slug": "WoApp",
+    "slug": "woapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/09ffaf19-2a1a-46e3-99e0-2da65268de75"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -28,6 +29,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "09ffaf19-2a1a-46e3-99e0-2da65268de75"
+      }
+    },
+    "owner": "pivanek",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

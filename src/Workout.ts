@@ -118,8 +118,8 @@ export class Workout implements IWorkout{
 }
 
 export class HIITWorkout extends Workout implements IWorkout{
-    private workoutTime : Date = new Date(0);
-    private pauseTime : Date = new Date(0);
+    private workoutTime : string = new Date(0).toTimeString();
+    private pauseTime : string = new Date(0).toTimeString();
     private sets : number = 1;
 
     constructor(name : string);
@@ -135,11 +135,11 @@ export class HIITWorkout extends Workout implements IWorkout{
     }
 
     public getWorkoutTime() : Date{
-        return this.workoutTime;
+        return new Date(this.workoutTime);
     }
 
     public getPauseTime() : Date{
-        return this.pauseTime;
+        return new Date(this.pauseTime);
     }
 
     public getNumberOfSets(sets : number){
@@ -147,11 +147,11 @@ export class HIITWorkout extends Workout implements IWorkout{
     }
 
     public setWorkoutTime(time : Date){
-        this.workoutTime = time;
+        this.workoutTime = time.toTimeString();
     }
 
     public setPauseTime(time : Date){
-        this.pauseTime = time;
+        this.pauseTime = time.toTimeString();
     }
 
     public setNumberOfSets(sets : number){
