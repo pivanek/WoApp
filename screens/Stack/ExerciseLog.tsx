@@ -1,10 +1,23 @@
 import { StyleSheet } from "react-native";
 import { TextInput, View, Text } from "../../components/Themed";
-import { IWorkout } from "../../src/Workout";
+import { IWorkout, Workout } from "../../src/Workout";
 import { TabRouter } from "@react-navigation/native";
 import { Button } from "../../components/Button";
+import { useLayoutEffect } from "react";
+import IExercise from "../../src/Exercise";
 
-export default function ExerciseLog({ navigation, route } : any, workout : IWorkout) {
+export default function ExerciseLog({ navigation, route } : any) {
+    const exercise : IExercise = Workout.from(route.params.workout).getExercises()[route.params.exercise];
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            header:{
+                title: exercise.getName()
+            }
+        });
+    });
+    
+
     return(
         <View style={{flex: 1}}>
             <View style={styles.row}>
