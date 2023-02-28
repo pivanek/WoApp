@@ -52,11 +52,11 @@ export class Exercise implements IExercise{
     }
     
     public static from(exerciseData : any){
-        return ((exerciseData.exerciseType == "Reps") ? new StrengthExercise(exerciseData) : new HoldExercise(exerciseData));
+        return new Exercise(exerciseData);
     }
 }
 
-class StrengthExercise extends Exercise implements IExercise{
+export class StrengthExercise extends Exercise implements IExercise{
     private reps : Array<number>;
     private weights : Array<number>;
 

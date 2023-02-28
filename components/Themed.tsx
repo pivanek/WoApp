@@ -2,6 +2,7 @@ import { Text as DefaultText, View as DefaultView, Pressable as DefaultPressable
 
 import useColorScheme from '../hooks/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { ClassAttributes } from 'react';
 
 
 // export function useThemeColor(
@@ -42,7 +43,7 @@ type ThemeProps = {
 export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'];
 export type PressableProps = ThemeProps & DefaultPressableProps;
-export type TextInputProps = ThemeProps & DefaultTextInput['props'];
+export type TextInputProps = ThemeProps & DefaultTextInput['props'] & ClassAttributes<DefaultTextInput>;
 
 export function Text(props : TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -66,7 +67,7 @@ export function Pressable(props: TextProps) {
   return <DefaultPressable style={[{ color, backgroundColor}, style]} {...otherProps}/>;
 }
 
-export function TextInput(props: TextInputProps){
+export function TextInput(props: TextInputProps ){
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
   const color = useThemeColor({ light: '#000', dark: '#fff' }, 'text');

@@ -61,14 +61,14 @@ export default function TimeSetter(params: {workoutValue : Date, pauseValue : Da
           </View>
           <View style={styles.timerRow}>
             <View style={[styles.timer, styles.timerItem]}>
-                <TextInput value={pauseTimeMinutes} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeMinutes(handleChange(value, inputNames.pauseTimeMinutes))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
+                <TextInput value={pauseTimeMinutes} onChangeText={(value) => setPauseTimeMinutes(handleChange(value, inputNames.pauseTimeMinutes))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
                 <Text style={styles.timerText}>:</Text>
-                <TextInput value={pauseTimeSeconds} multiline={true} numberOfLines={1} onChangeText={(value) => setPauseTimeSeconds(handleChange(value, inputNames.pauseTimeSeconds))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
+                <TextInput value={pauseTimeSeconds} onChangeText={(value) => setPauseTimeSeconds(handleChange(value, inputNames.pauseTimeSeconds))} placeholder='00' keyboardType='numeric' lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
             </View>
             <View style={[styles.timer, styles.timerItem]}>
-                <TextInput value={workoutTimeMinutes} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeMinutes(handleChange(value, inputNames.workoutTimeMinutes))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
+                <TextInput value={workoutTimeMinutes} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeMinutes(handleChange(value, inputNames.workoutTimeMinutes))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}/>
                 <Text style={styles.timerText}>:</Text>
-                <TextInput value={workoutTimeSeconds} multiline={true} numberOfLines={1} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeSeconds(handleChange(value, inputNames.workoutTimeSeconds))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
+                <TextInput value={workoutTimeSeconds} placeholder='00' keyboardType='numeric' onChangeText={(value) => setWorkoutTimeSeconds(handleChange(value, inputNames.workoutTimeSeconds))} lightColor="#D4D4D3" darkColor="#313131" maxLength={2} style={styles.timerInput}></TextInput>
             </View> 
           </View>
       </View>
@@ -93,14 +93,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
       },
       timerInput:{
-        color: '#949494',
-        width: 55,
         height: 55,
-        alignSelf: "center",
+        width: 55,
+        fontSize: 20,
         textAlign: 'center',
         borderRadius: 15,
-        fontSize: 20,
-        paddingTop: 15
+        padding: 15
       },
       timerText:{
         color: '#949494',

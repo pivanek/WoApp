@@ -11,7 +11,7 @@ export interface IWorkout{
     getName() : string;
     setName(name : string) : void;
     getType() : WorkoutType;
-    getExercises() : IExercise[];
+    getExercises() : Exercise[];
     setExercises(exercises : IExercise[]) : void;
     addExercise(exercise : IExercise | IExercise[]) : void;
     deleteExercise(name : IExercise) : void;
@@ -21,7 +21,7 @@ export interface IWorkout{
 
 export class Workout implements IWorkout{
     name : string;
-    exercises : IExercise[];
+    exercises : Exercise[];
     workoutType : WorkoutType;
     
     constructor(name : string);
@@ -46,16 +46,16 @@ export class Workout implements IWorkout{
         return this.workoutType;
     }
 
-    public getExercises() : IExercise[]{
+    public getExercises() : Exercise[]{
         return this.exercises;
     }
 
-    public addExercise(exercise : IExercise) : void{
+    public addExercise(exercise : Exercise) : void{
         this.exercises.push(exercise);
     }
 
-    public deleteExercise(name: IExercise): void {
-        const index = this.exercises.indexOf(name);
+    public deleteExercise(exercise: Exercise): void {
+        const index = this.exercises.indexOf(exercise);
         this.exercises.splice(index, 1);
     }
 
@@ -63,7 +63,7 @@ export class Workout implements IWorkout{
         this.name = name;
     }
 
-    public setExercises(exercises : IExercise[]) : void{
+    public setExercises(exercises : Exercise[]) : void{
         this.exercises = exercises;
     }
 
