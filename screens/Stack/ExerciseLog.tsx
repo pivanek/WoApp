@@ -15,7 +15,7 @@ export default function ExerciseLog({ navigation, route } : any) {
     const exercise = Workout.from(route.params.workout).getExercises()[route.params.exercise];
     const [reps, setReps] = useState<number[]>([0, 0, 0, 0, 0, 0]);
     const [weight, setWeight] = useState<number[]>([0, 0, 0, 0, 0, 0]);
-    const refs = Array.from({length: 12}, a => useRef(null));
+    const refs = useRef(Array.from({length: 12}, a => useRef(null)));
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -57,10 +57,10 @@ export default function ExerciseLog({ navigation, route } : any) {
     );
 }
 
-function Row(params: {ref : any[],rowNumber : number, editable : boolean, handleChange(value : number, rowNumber : number, valueType : ValueType) : any}) {
+function Row(params: {rowNumber : number, editable : boolean, handleChange(value : number, rowNumber : number, valueType : ValueType) : any}, ref : React.MutableRefObject<React.MutableRefObject<null>[]>) {
     const [weightIsEditable, setWeightEdidtable] = useState<boolean>(false);
 
-    console.log(params.ref.length);
+    console.log(ref);
 
     return (
       <View style={styles.row}>
@@ -78,7 +78,7 @@ function Row(params: {ref : any[],rowNumber : number, editable : boolean, handle
             darkColor={params.editable ? "#313131" : "#232323"}
             lightColor="#D4D4D3"
             placeholder={params.editable ? "00" : ""}
-            // ref={params.ref[params.rowNumber*2].current}
+            ref={ref.current[params.rowNumber*2]}
             // onSubmitEditing={() => params.ref[params.rowNumber*2+1].current.focus()}
           />
         </View>
