@@ -1,6 +1,10 @@
 import { ExerciseName } from "./ExerciseName";
 
-enum ExerciseType{
+type exerciseTypes = {
+
+}
+
+export enum ExerciseType{
     Reps,
     Hold
 }
@@ -66,57 +70,35 @@ export class StrengthExercise extends Exercise implements IExercise{
         this.weights = [0, 0, 0, 0, 0, 0];
     }
 
-    public setReps(reps : number, set : number){
-        if(set <= 6 && set < 0)
-            this.reps[set-1] = reps;
-        else{
-            throw new Error("Wrong number for set, it can be only Integer between 1-6.");
-        }
+    public setReps(reps : number[] ){
+        this.reps = reps;
     }
 
-    public setWeight(weight : number, set : number){
-        if(set <= 6 && set < 0)
-            this.weights[set-1] = weight;
-        else{
-            throw new Error("Wrong number for set, it can be only Integer between 1-6.");
-        }
+    public setWeight(weights : number[] ){
+        this.weights = weights;
     }
 
-    public getReps() : Array<number>{
-        let result = new Array<number>;
-        this.reps.forEach(element => {
-            if(element != 0)
-                result.push(element);
-        });
-        return result;
+    public getReps() : number[]{
+        return this.reps;
     }
 
-    public getWeight() : Array<number>{
-        let result = new Array<number>;
-        this.reps.forEach(element => {
-            if(element != 0)
-                result.push(element);
-        });
-        return result;
+    public getWeight() : number[]{
+        return this.weights;
     }
 }
 
 export class HoldExercise extends Exercise implements IExercise{
-    private time : Array<Date> = [];
+    private times : Array<Date> = [];
     
     constructor(exercise : Exercise){
         super(exercise);
     }
     
-    public setTime(time : Date, set : number){
-        if(set <= 6 && set < 0)
-            this.time[set-1] = time;
-        else{
-            throw new Error("Wrong number for set, it can be only Integer between 1-6.");
-        }
+    public setTimes(times : Date[]){
+        this.times =times
     }
 
     public getTime() : Array<Date>{
-        return this.time;
+        return this.times;
     }
 }

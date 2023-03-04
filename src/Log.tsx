@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
-import IExercise, { Exercise } from "./Exercise";
+import IExercise, { Exercise, HoldExercise, StrengthExercise } from "./Exercise";
 import { WorkoutType, Workout, IWorkout, HIITWorkout } from "./Workout";
 
 export class Log{
     protected name : string;
-    protected exercises : IExercise[] = [];
+    protected exercises : Map<number, StrengthExercise | HoldExercise> = new Map<number, StrengthExercise | HoldExercise>();
     protected workoutTime? : string;
     protected pauseTime? : string;
     protected workoutType : WorkoutType;
@@ -15,7 +15,7 @@ export class Log{
     constructor(workout : HIITWorkout);
     constructor(log : Log);
     constructor(workoutOrLog : HIITWorkout | Workout | Log){
-        if(typeof workoutOrLog == Workout.constructor.name){
+        if(workoutOrLog.constructor == Workout.constructor){
             this.name = workoutOrLog.getName();
             this.workoutType = workoutOrLog.getType();
         }
@@ -27,7 +27,7 @@ export class Log{
         }
         else {
             this.name = workoutOrLog.getName();
-            this.exercises = workoutOrLog.getExercises();
+            this.exercises = (workoutOrLog as Log).getExercises();
             this.workoutType = workoutOrLog.getType();
         }
 
@@ -41,12 +41,12 @@ export class Log{
         return this.workoutType;
     }
 
-    public getExercises() : IExercise[]{
+    public getExercises() : Map<number, StrengthExercise | HoldExercise>{
         return this.exercises;
     }
 
-    public addExercise(exercise : IExercise) : void{
-        this.exercises.push(exercise);
+    public addExercise(index : number, exercise : StrengthExercise | HoldExercise) : void{
+        this.exercises.set(index, exercise);
     }
 
     public save(callback: (success: boolean) => void) : void{
@@ -76,17 +76,4 @@ export class Log{
                 });
         });
     }
-
-    public static from(workoutData : any) : Log {
-        const workoutResult : Log = new Log(workoutData); 
-        const exercisesHelper : IExercise[] = [];
-
-        workoutData.exercises.forEach((exercise: Exercise) => {
-            exercisesHelper.push(Exercise.from(exercise));
-        });
-        workoutResult.exercises = exercisesHelper;
-
-        return workoutResult;
-    }
-
 }
