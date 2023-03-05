@@ -26,15 +26,12 @@ export default function ExerciseLog({ navigation, route } : any) {
     });
 
     useEffect(() => {
-      console.log(log);
-
       if(exerciseLog != undefined){
-        console.log(exerciseLog);
         log.addExercise(route.params.exerciseNumber, exerciseLog);}
     }, [exerciseLog])
 
     function handlePress(){
-      navigation.navigate('ExerciseLog', {workout: workout, exerciseNumber: route.params.exerciseNumber+1});
+      navigation.navigate('ExerciseLog', {workout: workout, log: log, exerciseNumber: route.params.exerciseNumber+1});
     }
 
     return(

@@ -15,17 +15,17 @@ export class Log{
     constructor(workout : HIITWorkout);
     constructor(log : Log);
     constructor(workoutOrLog : HIITWorkout | Workout | Log){
-        if(workoutOrLog.constructor == Workout.constructor){
+        if(workoutOrLog.constructor == Workout){
             this.name = workoutOrLog.getName();
             this.workoutType = workoutOrLog.getType();
         }
-        else if(typeof workoutOrLog == HIITWorkout.constructor.name){
+        else if(workoutOrLog.constructor == HIITWorkout){
             this.name = workoutOrLog.getName();
             this.workoutTime = (workoutOrLog as HIITWorkout).getWorkoutTime().toTimeString();
             this.pauseTime = (workoutOrLog as HIITWorkout).getPauseTime().toTimeString();
             this.workoutType = workoutOrLog.getType();
         }
-        else {
+        else{
             this.name = workoutOrLog.getName();
             this.exercises = (workoutOrLog as Log).getExercises();
             this.workoutType = workoutOrLog.getType();
