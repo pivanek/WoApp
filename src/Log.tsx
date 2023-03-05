@@ -1,15 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
-import IExercise, { Exercise, HoldExercise, StrengthExercise } from "./Exercise";
+import IExercise, { Exercise, ExerciseType, HoldExercise, StrengthExercise } from "./Exercise";
 import { WorkoutType, Workout, IWorkout, HIITWorkout } from "./Workout";
 
 export class Log{
     protected name : string;
-    protected exercises : Map<number, StrengthExercise | HoldExercise> = new Map<number, StrengthExercise | HoldExercise>();
+    protected exercises : Array<StrengthExercise | HoldExercise> = new Array<StrengthExercise | HoldExercise>;
     protected workoutTime? : string;
     protected pauseTime? : string;
     protected workoutType : WorkoutType;
-    
+    protected logTime : Date = new Date();
     
     constructor(workout : Workout);
     constructor(workout : HIITWorkout);
@@ -17,10 +17,16 @@ export class Log{
     constructor(workoutOrLog : HIITWorkout | Workout | Log){
         if(workoutOrLog.constructor == Workout){
             this.name = workoutOrLog.getName();
+            workoutOrLog.getExercises().forEach(element => {
+                this.exercises.push((element.getExerciseType().toString() == "Reps")? new StrengthExercise(element) : new HoldExercise(element));
+            });
             this.workoutType = workoutOrLog.getType();
         }
         else if(workoutOrLog.constructor == HIITWorkout){
             this.name = workoutOrLog.getName();
+            workoutOrLog.getExercises().forEach(element => {
+                this.exercises.push((element.getExerciseType().toString() == "Reps")? new StrengthExercise(element) : new HoldExercise(element));
+            });
             this.workoutTime = (workoutOrLog as HIITWorkout).getWorkoutTime().toTimeString();
             this.pauseTime = (workoutOrLog as HIITWorkout).getPauseTime().toTimeString();
             this.workoutType = workoutOrLog.getType();
@@ -41,12 +47,12 @@ export class Log{
         return this.workoutType;
     }
 
-    public getExercises() : Map<number, StrengthExercise | HoldExercise>{
+    public getExercises() : Array<StrengthExercise | HoldExercise>{
         return this.exercises;
     }
 
     public addExercise(index : number, exercise : StrengthExercise | HoldExercise) : void{
-        this.exercises.set(index, exercise);
+        this.exercises[index] = exercise;
     }
 
     public save(callback: (success: boolean) => void) : void{

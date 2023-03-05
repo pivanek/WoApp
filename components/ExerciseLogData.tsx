@@ -7,7 +7,7 @@ import { IWorkout, Workout } from "../src/Workout";
 import { Exercise, HoldExercise, StrengthExercise } from "../src/Exercise";
 
 export function StrengthExerciseData(params: {exercise : StrengthExercise, handleChange:(exerciseLog : StrengthExercise) => void}) {
-    const exerciseLog = new StrengthExercise(params.exercise);
+    const [exerciseLog, setExerciseLog] = useState<StrengthExercise>(params.exercise);
 
     const [reps, setReps] = useState<number[]>(exerciseLog.getReps());
     const [weight, setWeight] = useState<number[]>(exerciseLog.getWeight());
@@ -34,6 +34,13 @@ export function StrengthExerciseData(params: {exercise : StrengthExercise, handl
 
         params.handleChange(exerciseLog)
     },[reps, weight]);
+
+    useEffect(() => {
+        setExerciseLog(params.exercise)
+         
+        setReps(exerciseLog.getReps());
+        setReps(exerciseLog.getWeight());
+    },[params.exercise]);
 
     return(
         <>
