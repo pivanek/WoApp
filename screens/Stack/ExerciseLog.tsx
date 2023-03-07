@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput as DefaultTextInput, Alert } from "react-native";
+import { StyleSheet, TextInput as DefaultTextInput, Alert, FlatList } from "react-native";
 import { TextInput, View, Text } from "../../components/Themed";
 import { IWorkout, Workout } from "../../src/Workout";
 import { TabRouter, validatePathConfig } from "@react-navigation/native";
@@ -14,25 +14,43 @@ import { HeaderBackButton } from "@react-navigation/elements";
 
 
 export default function ExerciseLog({ navigation, route } : any) {  
-    const log : Log = route.params.log? new Log(route.params.log) : new Log(route.params.workout);
-    const exercises = log.getExercises();
+    const log = new Log(route.params.workout);
     const [exerciseNumber, setExerciseNumber] = useState<number>(0)
-    const [exerciseLog, setExerciseLog] = useState<StrengthExercise | HoldExercise>(log.getExercises()[route.params.exerciseNumber]);       
+    const [exerciseLog, setExerciseLog] = useState<StrengthExercise | HoldExercise>(log.getExercises()[0]);       
 
     useLayoutEffect(() => {
-        navigation.setOptions({
-            title: exerciseLog.getName()
-        });
+      navigation.setOptions({
+        title: exerciseLog.getName(),
+        headerLeft: () => (
+            <HeaderBackButton onPress={() => {
+              if(exerciseNumber == 0)
+                Alert.alert(
+                  'Confirmation',
+                  'Do you want to discard this log ?',
+                  [
+                    {
+                      text: 'Cancel',
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Yes',
+                      onPress: () => {
+                        navigation.goBack();
+                      },
+                    },
+                  ],
+                );
+              else{
+                log.addExercise(exerciseNumber, exerciseLog);
+                setExerciseNumber(exerciseNumber-1);
+              }
+            }}/>
+        ), 
+      });
     });
-
-    useEffect(() => {
-      if(exerciseLog != undefined){
-        log.addExercise(exerciseNumber, exerciseLog);}
-    }, [exerciseLog])
 
     function handleNext(){
       log.addExercise(exerciseNumber, exerciseLog);
-      setExerciseLog(log.getExercises()[exerciseNumber+1]);
       setExerciseNumber(exerciseNumber+1);
     }
 
@@ -40,41 +58,17 @@ export default function ExerciseLog({ navigation, route } : any) {
       log.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
     }
 
-    useEffect(() => {
-      navigation.setOptions({
-          headerLeft: () => (
-              <HeaderBackButton onPress={() => {
-                if(exerciseNumber == 0)
-                  Alert.alert(
-                    'Confirmation',
-                    'Do you want to scratch this log ?',
-                    [
-                      {
-                        text: 'Cancel',
-                        style: 'cancel',
-                      },
-                      {
-                        text: 'Yes',
-                        onPress: () => {
-                          navigation.goBack();
-                        },
-                      },
-                    ],
-                  );
-                else{
-                  log.addExercise(exerciseNumber, exerciseLog);
-                  setExerciseLog(log.getExercises()[exerciseNumber-1]);
-                  setExerciseNumber(exerciseNumber-1);
-                }
-              }}/>
-          ), 
-      });
-    });
+    useEffect(() => setExerciseLog(log.getExercises()[exerciseNumber]), [exerciseNumber]);
 
     return(
         <View style={{flex: 1}}>
-          {(exerciseLog.constructor == StrengthExercise)? <StrengthExerciseData exercise={exerciseLog} handleChange={(exerciseLog) => setExerciseLog(exerciseLog)}/> : <HoldExerciseData exercise={exerciseLog as HoldExercise}/>}
-          <Button style={{width: '50%', alignSelf: "center", marginVertical: 100}} onPress = {() => {(exercises.length-1 != exerciseNumber)? handleNext() : handleSave()}}>{ (exercises.length-1 != exerciseNumber)? 'Next' : 'Save' }</Button>
+          <FlatList style={{flex: 1}} horizontal scrollEnabled data={log.getExercises()} renderItem={({ item }) => 
+              <>
+                {(item.constructor == StrengthExercise)? <StrengthExerciseData exercise={item} onChange={() => setExerciseLog(item)}/> : <HoldExerciseData exercise={item as HoldExercise}/>}
+              </>
+            }
+          />
+          {/* <Button style={{width: '50%', alignSelf: "center", marginVertical: 100}} onPress = {() => {(log.getExercises().length-1 != exerciseNumber)? handleNext() : handleSave()}}>{ (log.getExercises().length-1 != exerciseNumber)? 'Next' : 'Save' }</Button> */}
         </View>
     );
 }

@@ -39,6 +39,9 @@ export function StackNavigator() {
       <Stack.Screen 
         name="ExerciseLog" 
         component={ExerciseLog}
+        options={{
+          title: "Exercise Log"
+        }}
       />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen 

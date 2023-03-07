@@ -46,7 +46,7 @@ export function WorkoutContainer(params: {data: IWorkout, pressed : string, navi
                 <Text style={styles.workoutButtonsText}>Edit</Text>
               </Pressable>
               <View style={styles.separatorVertical}/>
-              <Pressable onPress={() => params.navigation.navigate('ExerciseLog', {workout: params.data, exerciseNumber: 0})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+              <Pressable onPress={() => params.navigation.navigate('ExerciseLog', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
                 <Text style={styles.workoutButtonsText}>Start</Text>
               </Pressable>
             </View>
