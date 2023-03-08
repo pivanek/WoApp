@@ -51,21 +51,24 @@ export default function ExerciseLog({ navigation, route } : any) {
     }
 
     const radioButtons = Array.from({ length: log.getExercises().length }, (radioButton, index) => (
-      <RadioButton value={index} onPress={flatListRef.current?.scrollToIndex({animated: true, index: index})} checked={currentExercise == index} style={{margin: 2}}/>
+      <RadioButton key={index} checked={currentExercise == index} style={{width: 12, height: 12}}/>
     ));
+    
+    console.log(currentExercise);
+    
 
     return(
         <View style={{flex: 1}}>
-          <FlatList ref={flatListRef} pagingEnabled horizontal scrollEnabled style={{flex: 1}} onMomentumScrollEnd={(event) => setCurrentExercise(Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width))} data={log.getExercises()} renderItem={({ index, item }) => 
+          <FlatList showsHorizontalScrollIndicator={false} ref={flatListRef} pagingEnabled horizontal scrollEnabled onMomentumScrollEnd={(event) => setCurrentExercise(Math.floor(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width))} data={log.getExercises()} renderItem={({ index, item }) => 
               <>  
                 {(item.constructor == StrengthExercise)? <StrengthExerciseData index={index} exercise={item} onChange={(exerciseLog) => log.addExercise(index, exerciseLog)}/> : <HoldExerciseData exercise={item as HoldExercise}/>}
               </>
             }
           />
-          <View style={{alignSelf: "center", flexDirection: "row", marginBottom: 10}}>
+          <View style={{alignSelf: "center", flexDirection: "row"}}>
             {radioButtons}
           </View>
-          <Button style={{width: '50%', alignSelf: "center", marginBottom: 20}} onPress = {() => {handleSave()}}>Save</Button>
+          <Button style={{width: '50%', alignSelf: "center", margin: 30}} onPress = {() => {handleSave()}}>Save</Button>
         </View>
     );
 }

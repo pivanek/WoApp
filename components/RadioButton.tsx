@@ -16,8 +16,8 @@ export default function RadioButton(props:{
     styles.container
 
     return(
-        <Pressable style = {[props.style, styles.container]} lightColor="#F2F2EF" darkColor="#000" onPress = {props.onPress}>
-            <View style = {styles.radioButton}>
+        <Pressable style = {[styles.container]} lightColor="#F2F2EF" darkColor="#000" onPress = {props.onPress}>
+            <View style = {[styles.radioButton, props.style]}>
                 <View style= {(props.checked)? styles.radioButtonChecked : {}}/>
             </View>
             <Text style={styles.text}>{ text  }</Text>
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     container:{
         flexDirection:"row",
         justifyContent: "flex-start",
+        overflow: 'visible'
     },
     text:{
         textAlign: "center",
@@ -40,14 +41,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         borderWidth: 1,
         borderRadius: 10,
-        width: 17,
-        height: 17
+        width: '100%',
+        height: '100%'
     },
     radioButtonChecked:{
         alignSelf: "center",
         borderRadius: 9,
-        width: 9,
-        height: 9,
+        width: '55%',
+        height: '55%',
         backgroundColor:'#00B6FF'
     },
 });

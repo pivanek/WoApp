@@ -48,10 +48,10 @@ export function StrengthExerciseData(params: {index : number, exercise : Strengt
             <View style={styles.row}>
                 <Text style={styles.header}>{exerciseLog.getName()}</Text>
             </View>
-            <View style={styles.row}>
-                <Text style={styles.header}>Reps</Text>
+            <View style={[styles.row, {marginTop: 10}]}>
+                <Text style={styles.header2}>Reps</Text>
                     <View style={{flex: 1}}/>
-                <Text style={styles.header}>Weight</Text>
+                <Text style={styles.header2}>Weight</Text>
             </View>
             <StrengthRow repsValue={reps[0]} weightValue={weight[0]} rowIndex={0} editable onChange={(value, rowNumber, valueType) => handleChange(value, rowNumber, valueType)}/>
             <StrengthRow repsValue={reps[1]} weightValue={weight[1]} rowIndex={1} editable={reps[0]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
@@ -99,7 +99,13 @@ const styles = StyleSheet.create({
     },
     header: {
         fontWeight: 'bold',
-        fontSize: 28,
+        fontSize: 26,
+        flex: 2,
+        textAlign: 'center'
+    },
+    header2: {
+        fontWeight: 'bold',
+        fontSize: 20,
         flex: 2,
         textAlign: 'center'
     }

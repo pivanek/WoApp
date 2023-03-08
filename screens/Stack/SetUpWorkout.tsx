@@ -141,7 +141,9 @@ const styles = StyleSheet.create({
   },
   radioButton:{
     margin: 5,
-    marginLeft: 10
+    marginLeft: 10,
+    width: 17,
+    height: 17
   },
   button: {
     width: 150,
