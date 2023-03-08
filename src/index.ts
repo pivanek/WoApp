@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IWorkout } from "./Workout";
+import { Dimensions } from "react-native";
+
+export const vw = (number: number) => Dimensions.get('window').width * (number / 100);
 
 export function getData(key : string, callback: (data: Map<any, any>) => void){
   AsyncStorage.getItem(key)

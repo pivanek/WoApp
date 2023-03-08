@@ -41,7 +41,7 @@ type ThemeProps = {
 };
 
 export type TextProps = ThemeProps & DefaultText['props'];
-export type ViewProps = ThemeProps & DefaultView['props'];
+export type ViewProps = ThemeProps & DefaultView['props'] & ClassAttributes<DefaultView>;
 export type PressableProps = ThemeProps & DefaultPressableProps;
 export type TextInputProps = ThemeProps & DefaultTextInput['props'] & ClassAttributes<DefaultTextInput>;
 

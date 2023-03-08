@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View as DefaultView, ViewPagerAndroidComponent } from "react-native";
 import { Button } from "./Button";
 import { HoldRow, StrengthRow, ValueType } from "./ExerciseLogRow";
 import { View, Text } from "./Themed";
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { IWorkout, Workout } from "../src/Workout";
 import { Exercise, HoldExercise, StrengthExercise } from "../src/Exercise";
+import { vw } from "../src";
 
-export function StrengthExerciseData(params: {exercise : StrengthExercise, onChange:(exerciseLog : StrengthExercise) => void}) {
+export function StrengthExerciseData(params: {index : number, exercise : StrengthExercise, onChange:(exerciseLog : StrengthExercise) => void}) {
     const [exerciseLog, setExerciseLog] = useState<StrengthExercise>(params.exercise);
 
     const [reps, setReps] = useState<number[]>(exerciseLog.getReps());
     const [weight, setWeight] = useState<number[]>(exerciseLog.getWeight());
 
     function handleChange(value: number, index : number, valueType: ValueType) {
-        
         if (valueType === ValueType.Reps) {
             setReps((prevState) => {
               const newState = [...prevState];
@@ -44,7 +44,10 @@ export function StrengthExerciseData(params: {exercise : StrengthExercise, onCha
     },[params.exercise]);
 
     return(
-        <View style = {{width: '100%'}}>
+        <View style = {{width: vw(100)}}>
+            <View style={styles.row}>
+                <Text style={styles.header}>{exerciseLog.getName()}</Text>
+            </View>
             <View style={styles.row}>
                 <Text style={styles.header}>Reps</Text>
                     <View style={{flex: 1}}/>
