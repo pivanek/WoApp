@@ -37,12 +37,16 @@ export default function WorkoutsScreen({ navigation } : any) {
     else{
       return(
         <View style={{marginTop: 10}}>
-            <FlatList ref={workoutList} style={[styles.flatList, {marginTop: 8}]} data={workouts} renderItem={({ item, index }) => 
-              <Pressable style={styles.itemContainer} darkColor="#313131" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
-                <WorkoutContainer data={item} pressed={isPressed} navigation={navigation}/>
-              </Pressable>}
+            <FlatList ref={workoutList} style={[styles.flatList, {marginTop: 8}]} data={workouts} 
+              renderItem={({ item, index }) => 
+                <Pressable style={styles.itemContainer} darkColor="#313131" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
+                  <WorkoutContainer data={item} pressed={isPressed} navigation={navigation}/>
+                </Pressable>
+              }
+              ListFooterComponent={
+                <Button style={styles.buttonAdd} onPress={() => navigation.navigate('SetUpWorkout')}>Add new workout</Button>
+              }
             />
-            <Button style={styles.buttonAdd} onPress={() => navigation.navigate('SetUpWorkout')}>Add new workout</Button>
         </View>
       );
     }
@@ -56,14 +60,15 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   itemContainer: {
+    marginTop: 2,
     paddingVertical: 10,
     borderRadius: 15,
     minHeight: 30,
     marginBottom: 8,
   },
   buttonAdd: {
-    width: '90%',
-    marginTop: 10,
+    width: '100%',
+    marginTop: 2,
     alignSelf: 'center'
   }
 });

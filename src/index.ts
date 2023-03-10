@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IWorkout } from "./Workout";
+import { HIITWorkout, IWorkout, Workout } from "./Workout";
 import { Dimensions } from "react-native";
+import { Log } from "./Log";
 
 export const vw = (number: number) => Dimensions.get('window').width * (number / 100);
 
-export function getData(key : string, callback: (data: Map<any, any>) => void){
+export function getData(key : string, callback: (data: any) => void){
   AsyncStorage.getItem(key)
     .then(result => {
       if (result != null) {
@@ -31,7 +32,25 @@ export function deleteWorkouts(){
         console.log('Error deleting data', error);
     });
 
-  AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(new Map<string, any>())))
+  AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(new Map<string, HIITWorkout | Workout>())))
+    .then(() => {
+      console.log('Data saved successfully');
+    })
+    .catch(error => {
+      console.log('Error saving data', error);
+    });
+}
+
+export function deleteLogs(){
+  AsyncStorage.removeItem('Logs')
+    .then(() => {
+        console.log('Data deleted successfully');
+    })
+    .catch(error => {
+        console.log('Error deleting data', error);
+    });
+
+  AsyncStorage.setItem('Logs', JSON.stringify(new Array<Log>()))
     .then(() => {
       console.log('Data saved successfully');
     })

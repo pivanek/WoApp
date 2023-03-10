@@ -5,11 +5,11 @@ import { WorkoutType, Workout, IWorkout, HIITWorkout } from "./Workout";
 
 export class Log{
     protected name : string;
-    protected exercises : Array<StrengthExercise | HoldExercise> = new Array<StrengthExercise | HoldExercise>;
+    protected exercises : Array<StrengthExercise | HoldExercise> = new Array<StrengthExercise | HoldExercise>();
     protected workoutTime? : string;
     protected pauseTime? : string;
     protected workoutType : WorkoutType;
-    protected logTime : Date = new Date();
+    protected logDate : Date = new Date();
     
     constructor(workout : Workout);
     constructor(workout : HIITWorkout);
@@ -55,11 +55,15 @@ export class Log{
         this.exercises[index] = exercise;
     }
 
+    public setExercises(exercises : Array<StrengthExercise | HoldExercise>){
+        this.exercises = exercises;
+    }
+
     public save(callback: (success: boolean) => void) : void{
-        getData('Logs', (workouts) => {
-            workouts.set(this.name, this);
+        getData('Logs', (logs : Map<string, Log>) => {
+            logs.set(this.logDate.toDateString(), this)
     
-            AsyncStorage.setItem('Logs', JSON.stringify(Array.from(workouts)))
+            AsyncStorage.setItem('Logs', JSON.stringify(logs))
                 .then(() => {
                     callback(true)
                 })
@@ -81,5 +85,9 @@ export class Log{
                     callback(false)
                 });
         });
+    }
+
+    public static from(workoutData : any) : Log {
+        return workoutData;
     }
 }

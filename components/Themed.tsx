@@ -20,13 +20,14 @@ import { ClassAttributes } from 'react';
 //   }
 // }
 
+export const themes = {dark: DarkTheme, light: DefaultTheme}
+
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof DarkTheme.colors & keyof typeof DefaultTheme.colors
 ) {
   const theme = useColorScheme();
   const colorFromProps = props[theme];
-  const themes = {dark: DarkTheme, light: DefaultTheme}
 
   if (colorFromProps) {
     return colorFromProps;
