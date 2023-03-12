@@ -3,7 +3,7 @@ import { Pressable, Text } from "./Themed";
 import IExercise from "../src/Exercise";
 import { IWorkout } from "../src/Workout";
 
-export function WorkoutContainer(params: {data: IWorkout, pressed : string, navigation : any}){
+export function WorkoutContainer(params: {data: IWorkout, pressed? : string, navigation : any}){
     const exercises : IExercise[] = params.data.getExercises();
     const name : string = params.data.getName();
   

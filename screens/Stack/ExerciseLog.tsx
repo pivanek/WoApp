@@ -10,7 +10,7 @@ import { Exercise } from "../../src/Exercise";
 import { StrengthRow, ValueType } from "../../components/ExerciseLogRow";
 import { HoldExerciseData, StrengthExerciseData } from "../../components/ExerciseLogData";
 import { HeaderBackButton } from "@react-navigation/elements";
-import { vw } from "../../src";
+import { deleteLogs, vw } from "../../src";
 import RadioButton from "../../components/RadioButton";
 
 
@@ -18,7 +18,6 @@ import RadioButton from "../../components/RadioButton";
 export default function ExerciseLog({ navigation, route } : any) {  
     const log = new Log(route.params.workout);
     const [currentExercise, setCurrentExercise] = useState<number>(0);
-
     const flatListRef = useRef<FlatList>(null);
 
     useLayoutEffect(() => {
@@ -54,7 +53,6 @@ export default function ExerciseLog({ navigation, route } : any) {
       <RadioButton key={index} checked={currentExercise == index} style={{width: 12, height: 12}}/>
     ));
     
-    console.log(currentExercise);
     
 
     return(

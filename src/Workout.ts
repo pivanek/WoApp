@@ -94,15 +94,7 @@ export class Workout implements IWorkout{
                 });
         });
     }
-
-    public static loadWorkout(name : string, callback: (workout : IWorkout) => void){
-        getData('Workouts', (data) => {
-            const workoutHelper : any = data.get(name);
-            
-            callback(this.from(workoutHelper));
-        });
-    }
-
+    
     public static from(workoutData : any) : IWorkout {
         const workoutResult : IWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
         const exercisesHelper : IExercise[] = [];

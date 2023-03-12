@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Alert, StyleSheet,  TouchableOpacity, FlatList} from 'react-native';
 import {Agenda, DateData, AgendaEntry, AgendaSchedule} from 'react-native-calendars';
-import testIDs from '../testIDs';
 import { deleteLogs, deleteWorkouts, getData } from '../../src';
 import { Log } from '../../src/Log';
+import { Text, View, themes } from '../../components/Themed';
+import { WorkoutContainer } from '../../components/WorkoutItem';
+import Day from 'react-native-calendars/src/calendar/day';
+import BasicDay from 'react-native-calendars/src/calendar/day/basic';
 
 interface State {
   items?: AgendaSchedule;
@@ -14,77 +17,50 @@ export default class CalendarScreen extends Component<State> {
     items: undefined
   };
 
-  // reservationsKeyExtractor = (item, index) => {
-  //   return `${item?.reservation?.day}${index}`;
-  // };
-
   render() {
     return (
       <Agenda
-        testID={testIDs.agenda.CONTAINER}
         items={this.state.items}
         loadItemsForMonth={this.loadItems}
-        selected={new Date().toDateString()}
-        renderItem={this.renderItem}
-        renderEmptyDate={this.renderEmptyDate}
-        rowHasChanged={this.rowHasChanged}
+        renderItem={(reservation) => reservation.log.renderComponent()}
         showClosingKnob={true}
         pagingEnabled
         theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
-        // monthFormat={'yyyy'}
-        //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-        // hideExtraDays={false}
-        // reservationsKeyExtractor={this.reservationsKeyExtractor}
+        renderEmptyDate={this.renderEmptyDate()}
       />
     );
   }
 
   loadItems = (day: DateData) => {
     const items = this.state.items || {};
-    const log = getData("Logs", (data) => console.log(data));
-
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-
-        if (!items[strTime]) {
-          items[strTime] = [];
+    const newItems: AgendaSchedule = {};
+      
+    getData("Logs", (data) => {
+      setTimeout(() => {
+        data.forEach((value : any) => {
+          const log = new Log(value);
+          const strTime = this.timeToString(log.getNoonTimestamp());
           
-          const numItems = Math.floor(Math.random() * 3 + 1);
-          for (let j = 0; j < numItems; j++) {
+          if (!items[strTime]) {
+            items[strTime] = [];
             items[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
+              name: log.getName(),
               height: Math.max(50, Math.floor(Math.random() * 150)),
-              day: strTime
+              day: strTime,
+              log : log
             });
           }
-        }
-      }
-      
-      const newItems: AgendaSchedule = {};
-      Object.keys(items).forEach(key => {
-        newItems[key] = items[key];
-      });
-      this.setState({
-        items: newItems
-      });
-    }, 1000);
-  }
+        });
+        
+        Object.keys(items).forEach(key => {
+          newItems[key] = items[key];
+        });
 
-  renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 16 : 14;
-    const color = isFirst ? 'white' : '#43515c';
-
-    return (
-      <TouchableOpacity
-        testID={testIDs.agenda.ITEM}
-        style={[styles.item, {height: reservation.height}]}
-        onPress={() => Alert.alert(reservation.name)}
-      >
-        <Text style={{fontSize, color}}>{reservation.name}</Text>
-      </TouchableOpacity>
-    );
+        this.setState({
+          items: newItems
+        });
+      }, 1000);
+    });
   }
 
   renderEmptyDate = () => {
@@ -118,5 +94,30 @@ const styles = StyleSheet.create({
     height: 15,
     flex: 1,
     paddingTop: 30
-  }
+  },
+  separatorHorizontal:{
+      marginTop: 5,
+      marginHorizontal: 20,
+      height: 1,
+      backgroundColor: '#929494',
+      marginVertical: 4
+    },
+    separatorVertical:{
+      width: 1,
+      backgroundColor: '#929494'
+    },
+    workoutButtonsText:{
+      color: '#00C5FF',
+      fontSize: 16
+    },
+    flatList:{
+      alignSelf: 'center',
+      width: '90%',
+    },
+    workoutButtons:{
+      flex: 1,
+      padding: 5,
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0)'
+    }
 });

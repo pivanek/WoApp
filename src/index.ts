@@ -5,7 +5,7 @@ import { Log } from "./Log";
 
 export const vw = (number: number) => Dimensions.get('window').width * (number / 100);
 
-export function getData(key : string, callback: (data: any) => void){
+export function getData(key : string, callback: (data: Map<any, any>) => void){
   AsyncStorage.getItem(key)
     .then(result => {
       if (result != null) {
@@ -50,7 +50,7 @@ export function deleteLogs(){
         console.log('Error deleting data', error);
     });
 
-  AsyncStorage.setItem('Logs', JSON.stringify(new Array<Log>()))
+  AsyncStorage.setItem('Logs', JSON.stringify(Array.from(new Map<string, HIITWorkout | Workout>())))
     .then(() => {
       console.log('Data saved successfully');
     })
