@@ -34,9 +34,8 @@ export default class CalendarScreen extends Component<State> {
   loadItems = (day?: DateData) => {
     const items = this.state.items || {};
     const newItems: AgendaSchedule = {};
-      
+
     Log.getLogs((data) => {  
-      console.log(data);
 
       setTimeout(() => {
         for (let i = -15; i < 85; i++) {
@@ -62,6 +61,9 @@ export default class CalendarScreen extends Component<State> {
         this.setState({
           items: newItems
         });
+
+        console.log(items["2023-03-19"][0].log.exercises);
+        
       }, 1000);
     });    
   }

@@ -17,7 +17,7 @@ export default interface IExercise{
   getExerciseType() : ExerciseType;
 }
 
-export class Exercise extends Component implements IExercise{
+export class Exercise implements IExercise{
   protected name : string;
   protected muscleGroups : Array<string>;
   protected description : string;
@@ -26,7 +26,6 @@ export class Exercise extends Component implements IExercise{
   constructor(name: string, muscleGroups: string[], description: string, exerciseType : ExerciseType);
   constructor(exercise: Exercise);
   constructor(exercise: Exercise | string, muscleGroups?: string[], description?: string, exerciseType?: ExerciseType) {
-    super(exercise);
     if (typeof exercise === 'string') {
       this.name = exercise;
       this.muscleGroups = muscleGroups ?? [];
@@ -62,51 +61,41 @@ export class Exercise extends Component implements IExercise{
   }
 }
 
-type StrengthExerciseState = {
-  reps: Array<number>;
-  weight: Array<number>;
-}
-
 export class StrengthExercise extends Exercise{
-  public state : StrengthExerciseState;
+  private reps : number[];
+  private weights : number[];
 
-  constructor(exercise : Exercise){
+  constructor(exercise : Exercise | any){
     super(exercise);
-
-    this.state = {
-      reps: [0, 0, 0, 0, 0, 0],
-      weight: [0, 0, 0, 0, 0, 0]
+    if(exercise.constructor == Exercise)
+      this.reps = [0, 0, 0, 0, 0, 0],
+      this.weights = [0, 0, 0, 0, 0, 0]
+    else{
+      this.reps = exercise.reps;
+      this.weights = exercise.weights;
     }
   }
 
   public setReps(value : number | Array<number>, index? : number){
     if(index && typeof value == 'number')
-      this.setState((prevState : StrengthExerciseState) => {
-        const newReps = [...prevState.reps];
-        newReps[index] = value;
-        return{ reps: newReps };
-      });
+      this.reps[index] = value;
     else if(value.constructor == Array<number>)
-      this.setState({reps: value});
+      this.reps = value;
   }
 
   public setWeight(value : number | Array<number>, index? : number){
     if(index && typeof value == 'number')
-      this.setState((prevState : StrengthExerciseState) => {
-        const newWeights = [...prevState.weight];
-        newWeights[index] = value;
-        return{ weight: newWeights };
-      });
+      this.reps[index] = value;
     else if(value.constructor == Array<number>)
-      this.setState({weight: value });
+      this.weights = value;
   }
 
   public getReps() : number[]{
-      return this.state.reps;
+      return this.reps;
   }
 
   public getWeight() : number[]{
-      return this.state.reps;
+      return this.weights;
   }
 
   public renderLog(){
@@ -115,14 +104,14 @@ export class StrengthExercise extends Exercise{
               <Text darkColor='white'> {this.name}</Text>
               <View style={[{flexDirection: "row", paddingLeft: 10, marginRight: 30}]}>
                   {
-                      this.state.reps.map((value) =>
+                      this.reps.map((value) =>
                           <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
               </View>
               <View style={{flexDirection: "row", paddingLeft: 10, marginRight: 30}}>
                   {
-                      this.state.reps.map((value) =>
+                      this.reps.map((value) =>
                           <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
@@ -131,20 +120,14 @@ export class StrengthExercise extends Exercise{
       );
   }
 
-  public renderExercisePage(){
+  public renderExercisePage(setExercise : (exercise : StrengthExercise) => void){
     const handleChange = (value : number, rowIndex : number, valueType : ValueType) => {
-        if (valueType == ValueType.Reps)
-          this.setState((prevState: StrengthExerciseState) =>{
-            const newReps = [...prevState.reps];
-            newReps[rowIndex] = value;
-            return({reps: newReps})
-          });
-        else
-          this.setState((prevState: StrengthExerciseState) =>{
-            const newReps = [...prevState.reps];
-            newReps[rowIndex] = value;
-            return({reps: newReps})
-          });
+      if (valueType == ValueType.Reps)
+        this.reps[rowIndex] = value;
+      else
+        this.weights[rowIndex] = value;
+
+      setExercise(this);
     }
 
     const styles = StyleSheet.create({
@@ -177,12 +160,12 @@ export class StrengthExercise extends Exercise{
                   <View style={{flex: 1}}/>
               <Text style={styles.header2}>Weight</Text>
           </View>
-          <StrengthRow repsValue={this.state.reps[0]} weightValue={this.state.weight[0]} rowIndex={0} editable onChange={() => handleChange}/>
-          <StrengthRow repsValue={this.state.reps[1]} weightValue={this.state.weight[1]} rowIndex={1} editable={this.state.reps[0]!=0} onChange={() => handleChange}/>
-          <StrengthRow repsValue={this.state.reps[2]} weightValue={this.state.weight[2]} rowIndex={2} editable={this.state.reps[1]!=0} onChange={() => handleChange}/>
-          <StrengthRow repsValue={this.state.reps[3]} weightValue={this.state.weight[3]} rowIndex={3} editable={this.state.reps[2]!=0} onChange={() => handleChange}/>
-          <StrengthRow repsValue={this.state.reps[4]} weightValue={this.state.weight[4]} rowIndex={4} editable={this.state.reps[3]!=0} onChange={() => handleChange}/>
-          <StrengthRow repsValue={this.state.reps[5]} weightValue={this.state.weight[5]} rowIndex={5} editable={this.state.reps[4]!=0} onChange={() => handleChange}/>
+          <StrengthRow repsValue={this.reps[0]} weightValue={this.weights[0]} rowIndex={0} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow repsValue={this.reps[1]} weightValue={this.weights[1]} rowIndex={1} editable={this.reps[0]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow repsValue={this.reps[2]} weightValue={this.weights[2]} rowIndex={2} editable={this.reps[1]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow repsValue={this.reps[3]} weightValue={this.weights[3]} rowIndex={3} editable={this.reps[2]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow repsValue={this.reps[4]} weightValue={this.weights[4]} rowIndex={4} editable={this.reps[3]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow repsValue={this.reps[5]} weightValue={this.weights[5]} rowIndex={5} editable={this.reps[4]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
       </View>
     );
   }

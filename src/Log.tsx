@@ -90,18 +90,24 @@ export class Log {
       <RadioButton key={index} checked={currentExercise == index} style={{width: 12, height: 12}}/>
     ));
 
+    const handleChange = (exercise: StrengthExercise | HoldExercise, index: number) => {
+      this.exercises[index] = exercise;
+      console.log(this.exercises);
+      
+    }
+
     return(
       <View style={{flex: 1}}>
         <FlatList showsHorizontalScrollIndicator={false} pagingEnabled horizontal scrollEnabled
         onMomentumScrollEnd={(event) => setCurrentExercise(Math.floor(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width))}
         data={this.exercises} renderItem={({ index, item }) => 
-            item.renderExercisePage()
+            item.renderExercisePage((exercise) => handleChange(exercise, index))
           }
         />
         <View style={{alignSelf: "center", flexDirection: "row"}}>
           {radioButtons}
         </View>
-        <Button style={{width: '50%', alignSelf: "center", margin: 30}} onPress = {() => this.save((success) => success? console.log(this.exercises[0]) : console.log("Failed to save Data"))}>Save</Button>
+        <Button style={{width: '50%', alignSelf: "center", margin: 30}} onPress = {() => this.save((success) => success? navigation.goBack() : console.log("Failed to save Data"))}>Save</Button>
       </View>
     );
   }
