@@ -14,34 +14,24 @@ export function StrengthExerciseData(params: {index : number, exercise : Strengt
     const [weight, setWeight] = useState<number[]>(exerciseLog.getWeight());
 
     function handleChange(value: number, index : number, valueType: ValueType) {
-        if (valueType === ValueType.Reps) {
+        if(valueType == ValueType.Reps){
             setReps((prevState) => {
-              const newState = [...prevState];
-              newState[index] = value;
-              return newState;
-            });
-        } else if (valueType === ValueType.Weight) {
-          setWeight((prevState) => {
-            const newState = [...prevState];
-            newState[index] = value;
-            return newState;
-          });
+                const newState = [...prevState];
+                newState[index] = value;
+                return newState;
+              });
         }
+        else{
+            setWeight((prevState) => {
+                const newState = [...prevState];
+                newState[index] = value;
+                return newState;
+              });
+        }
+
+        exerciseLog.setReps(value, index);
+        exerciseLog.setWeight(value, index)
     }
-    
-    useEffect(() => {
-        exerciseLog.setReps(reps);
-        exerciseLog.setWeight(weight);
-
-        params.onChange(exerciseLog)
-    },[reps, weight]);
-
-    useEffect(() => {
-        setExerciseLog(params.exercise)
-         
-        setReps(exerciseLog.getReps());
-        setReps(exerciseLog.getWeight());
-    },[params.exercise]);
 
     return(
         <View style = {{width: vw(100)}}>

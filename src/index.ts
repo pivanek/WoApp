@@ -41,20 +41,12 @@ export function deleteWorkouts(){
     });
 }
 
-export function deleteLogs(){
-  AsyncStorage.removeItem('Logs')
+export function deleteEvents(){
+  AsyncStorage.removeItem('Events')
     .then(() => {
         console.log('Data deleted successfully');
     })
     .catch(error => {
         console.log('Error deleting data', error);
-    });
-
-  AsyncStorage.setItem('Logs', JSON.stringify(Array.from(new Map<string, HIITWorkout | Workout>())))
-    .then(() => {
-      console.log('Data saved successfully');
-    })
-    .catch(error => {
-      console.log('Error saving data', error);
     });
 }

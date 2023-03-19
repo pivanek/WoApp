@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Alert, StyleSheet,  TouchableOpacity, FlatList} from 'react-native';
+import {Alert, StyleSheet,  TouchableOpacity, FlatList, RefreshControl} from 'react-native';
 import {Agenda, DateData, AgendaEntry, AgendaSchedule} from 'react-native-calendars';
-import { deleteLogs, deleteWorkouts, getData } from '../../src';
+import { deleteEvents, deleteWorkouts, getData } from '../../src';
 import { Log } from '../../src/Log';
 import { Text, View, themes } from '../../components/Themed';
 import { WorkoutContainer } from '../../components/WorkoutItem';
 import Day from 'react-native-calendars/src/calendar/day';
 import BasicDay from 'react-native-calendars/src/calendar/day/basic';
+import { todayString } from 'react-native-calendars/src/expandableCalendar/commons';
 
 interface State {
   items?: AgendaSchedule;
@@ -22,53 +23,47 @@ export default class CalendarScreen extends Component<State> {
       <Agenda
         items={this.state.items}
         loadItemsForMonth={this.loadItems}
-        renderItem={(reservation) => reservation.log.renderComponent()}
+        renderItem={(reservation) => reservation.log.renderEvent()}
         showClosingKnob={true}
         pagingEnabled
         theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
-        renderEmptyDate={this.renderEmptyDate()}
       />
     );
   }
 
-  loadItems = (day: DateData) => {
+  loadItems = (day?: DateData) => {
     const items = this.state.items || {};
     const newItems: AgendaSchedule = {};
       
-    getData("Logs", (data) => {
+    Log.getLogs((data) => {  
+      console.log(data);
+
       setTimeout(() => {
-        data.forEach((value : any) => {
-          const log = new Log(value);
-          const strTime = this.timeToString(log.getNoonTimestamp());
+        for (let i = -15; i < 85; i++) {
+          const time = day? day.timestamp + i * 24 * 60 * 60 * 1000 : Date.now();
+          const strTime = this.timeToString(time);
           
-          if (!items[strTime]) {
-            items[strTime] = [];
-            items[strTime].push({
-              name: log.getName(),
-              height: Math.max(50, Math.floor(Math.random() * 150)),
-              day: strTime,
-              log : log
-            });
+
+          if (!items[strTime]){
+            items[strTime] = []; 
+            data[strTime]?.forEach((element : any) => {
+              const log = new Log(element);
+
+              items[strTime].push({
+                name: log.getName(),
+                log : log,
+                day: strTime,
+              });
+            });              
           }
-        });
-        
-        Object.keys(items).forEach(key => {
-          newItems[key] = items[key];
-        });
+        }
+        Object.keys(items).forEach(key => {newItems[key] = items[key];});
 
         this.setState({
           items: newItems
         });
       }, 1000);
-    });
-  }
-
-  renderEmptyDate = () => {
-    return (
-      <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
-      </View>
-    );
+    });    
   }
 
   rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => {

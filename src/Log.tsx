@@ -7,9 +7,12 @@ import IExercise, {
   StrengthExercise,
 } from "./Exercise";
 import { WorkoutType, Workout, HIITWorkout } from "./Workout";
-import { Component } from "react";
+import { Component, useState } from "react";
 import { FlatList, LogBoxStatic, StyleSheet } from "react-native";
 import { View, Text, Pressable } from "../components/Themed";
+import { AgendaSchedule } from "react-native-calendars/src/types";
+import RadioButton from "../components/RadioButton";
+import { Button } from "../components/Button";
 
 type LogProps = {
   renderLog : Log,
@@ -27,7 +30,7 @@ export class Log {
   constructor(workout: Workout);
   constructor(workout: HIITWorkout);
   constructor(log: any);
-  constructor(workoutOrLog: HIITWorkout | Workout | any, props? : LogProps) {
+  constructor(workoutOrLog: HIITWorkout | Workout | any) {
     if (workoutOrLog.constructor == Workout) {
       this.name = workoutOrLog.getName();
       workoutOrLog.getExercises().forEach((element) => {
@@ -47,33 +50,60 @@ export class Log {
             : new HoldExercise(element)
         );
       });
-      this.workoutTime = (workoutOrLog as HIITWorkout)
-        .getWorkoutTime()
-        .toTimeString();
-      this.pauseTime = (workoutOrLog as HIITWorkout)
-        .getPauseTime()
-        .toTimeString();
+      this.workoutTime = (workoutOrLog as HIITWorkout).getWorkoutTime().toTimeString();
+      this.pauseTime = (workoutOrLog as HIITWorkout).getPauseTime().toTimeString();
       this.workoutType = workoutOrLog.getType();
     }
     else {
       this.name = workoutOrLog.name;
-      this.exercises = workoutOrLog.exercises;
+      workoutOrLog.exercises.forEach((element : any) => {
+        this.exercises.push(
+          element.exerciseType == "Reps"
+            ? new StrengthExercise(element)
+            : new HoldExercise(element)
+        );
+      });
       this.workoutType = workoutOrLog.workoutType;
     }
   }
 
-  public renderComponent(){
+  public renderEvent(){
       return (
-        <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 30}}>
+        <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
           <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>{this.name}</Text>
           { (this.exercises.length == 0)? null : 
             <>
               <View style={styles.separatorHorizontal} />
-              <FlatList style={styles.flatList} data={this.exercises} renderItem={({item}) => <Text style={{color: '#929494', margin: 1, marginLeft: 8}}>{ item.name }</Text>} />
+              <FlatList style={styles.flatList} data={this.exercises} renderItem={({item}) => 
+                item.renderLog()
+              }
+              />
             </>
           }
         </View>
       );
+  }
+
+  public renderLogForm(navigation : any){
+    const [currentExercise, setCurrentExercise] = useState<number>(0);
+    const radioButtons = Array.from({ length: this.exercises.length }, (radioButton, index) => (
+      <RadioButton key={index} checked={currentExercise == index} style={{width: 12, height: 12}}/>
+    ));
+
+    return(
+      <View style={{flex: 1}}>
+        <FlatList showsHorizontalScrollIndicator={false} pagingEnabled horizontal scrollEnabled
+        onMomentumScrollEnd={(event) => setCurrentExercise(Math.floor(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width))}
+        data={this.exercises} renderItem={({ index, item }) => 
+            item.renderExercisePage()
+          }
+        />
+        <View style={{alignSelf: "center", flexDirection: "row"}}>
+          {radioButtons}
+        </View>
+        <Button style={{width: '50%', alignSelf: "center", margin: 30}} onPress = {() => this.save((success) => success? console.log(this.exercises[0]) : console.log("Failed to save Data"))}>Save</Button>
+      </View>
+    );
   }
 
   public getNoonTimestamp(): number {
@@ -94,36 +124,42 @@ export class Log {
     return this.exercises;
   }
 
-  public addExercise(
-    index: number,
-    exercise: StrengthExercise | HoldExercise
-  ): void {
+  public setExercise(index: number, exercise: StrengthExercise | HoldExercise): void {
     this.exercises[index] = exercise;
   }
 
-  public setExercises(exercises: Array<StrengthExercise | HoldExercise>) {
-    this.exercises = exercises;
-  }
+  public save(callback: (success: boolean) => void): void { 
+    AsyncStorage.getItem('Events')
+    .then(result => {
+      const items =  (result == null)? {} : JSON.parse(result);
+      const newItems: AgendaSchedule = {};
+      const date = new Date(this.timestamp).toISOString().split('T')[0];
 
-  public save(callback: (success: boolean) => void): void {
-      getData('Logs', (workouts) => {
-        workouts.set(this.timestamp, this);
+      if (!items[date])
+        items[date] = [];
 
-        AsyncStorage.setItem('Logs', JSON.stringify(Array.from(workouts)))
+      items[date].push(this);
+      Object.keys(items).forEach(key => {newItems[key] = items[key];});
+
+      AsyncStorage.setItem('Events', JSON.stringify(newItems))
             .then(() => {
                 callback(true)
             })
             .catch(error => {
                 callback(false)
             });
+    })
+    .catch(error => {
+      console.log('Error saving data');
+      console.error(error);
     });
   }
 
   public delete(callback: (success: boolean) => void): void {
-    getData("Logs", (workouts) => {
+    getData("Events", (workouts) => {
       workouts.delete(this.name);
 
-      AsyncStorage.setItem("Logs", JSON.stringify(Array.from(workouts)))
+      AsyncStorage.setItem("Events", JSON.stringify(Array.from(workouts)))
         .then(() => {
           callback(true);
         })
@@ -131,6 +167,22 @@ export class Log {
           callback(false);
         });
     });
+  }
+
+  public static getLogs(callback: (logs : any) => void){
+    AsyncStorage.getItem("Events")
+    .then(result => {
+      if (result != null) {
+        const data = JSON.parse(result);
+        callback(data);
+      } else {
+        callback({});
+      }
+    })
+    .catch(error => {
+      console.log('Error saving data');
+      console.error(error);
+    }); 
   }
 }
 
@@ -153,7 +205,7 @@ const styles = StyleSheet.create({
     },
     flatList:{
       alignSelf: 'center',
-      width: '90%',
+      width: '85%',
     },
     workoutButtons:{
       flex: 1,

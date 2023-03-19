@@ -14,9 +14,6 @@ export function StrengthRow(params: {repsValue : number, weightValue : number, r
     const [reps, setReps] = useState<number>(params.repsValue);
     const [weight, setWeight] = useState<number>(params.weightValue);
     
-    useEffect(() => setReps(params.repsValue), [params.repsValue]);
-    useEffect(() => setWeight(params.weightValue), [params.weightValue]);
-    
     function handleChange(stringValue : string, valueType : ValueType){
       const numberValue = Number(stringValue);
       const correctedValue : number = (isNaN(numberValue))? 0 : numberValue;
