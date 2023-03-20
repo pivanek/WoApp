@@ -1,15 +1,17 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { LogsIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
+import { LogsIcon, ProfileIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
 import WorkoutsScreen from './WorkoutsScreen';
 import CalendarScreen from './CalendarScreen';
 import StatsScreen from './StatsScreen';
-import SettingsScreen from './SettingsScreen';
+import SettingsScreen from './ProfileScreen';
 import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
 import SetUpWorkout from '../Stack/SetUpWorkout';
 import ExerciseLog from '../Stack/ExerciseLog';
+import ProfileScreen from './ProfileScreen';
+import RegistrationScreen from '../Stack/RegistrationScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -43,6 +45,13 @@ export function StackNavigator() {
           title: "Exercise Log"
         }}
       />
+      <Stack.Screen 
+        name="RegistrationScreen" 
+        component={RegistrationScreen}
+        options={{
+          title: "Registration"
+        }}
+      />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen 
             name='ExerciseSearch' 
@@ -63,11 +72,11 @@ export function TabNavigator() {
         tabBarActiveTintColor: '#00C5FF',
     }}>
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          title: 'Settings',
-          tabBarIcon: ({color}) => <SettingsIcon color={color}/>,
+          title: 'Profile',
+          tabBarIcon: ({color}) => <ProfileIcon color={color}/>,
           headerTitleStyle: {
             fontSize: 25
           },
@@ -106,7 +115,7 @@ export function TabNavigator() {
           title: 'Stats',
           tabBarIcon: ({color}) => <StatsIcon color={color}/>,
           headerTitleStyle: {
-            fontSize: 25
+            fontSize: 25,
           },
         }}
       />

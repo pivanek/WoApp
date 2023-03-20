@@ -60,10 +60,7 @@ export default class CalendarScreen extends Component<State> {
 
         this.setState({
           items: newItems
-        });
-
-        console.log(items["2023-03-19"][0].log.exercises);
-        
+        });        
       }, 1000);
     });    
   }

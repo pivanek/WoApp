@@ -43,12 +43,12 @@ export function StrengthExerciseData(params: {index : number, exercise : Strengt
                     <View style={{flex: 1}}/>
                 <Text style={styles.header2}>Weight</Text>
             </View>
-            <StrengthRow repsValue={reps[0]} weightValue={weight[0]} rowIndex={0} editable onChange={(value, rowNumber, valueType) => handleChange(value, rowNumber, valueType)}/>
-            <StrengthRow repsValue={reps[1]} weightValue={weight[1]} rowIndex={1} editable={reps[0]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-            <StrengthRow repsValue={reps[2]} weightValue={weight[2]} rowIndex={2} editable={reps[1]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-            <StrengthRow repsValue={reps[3]} weightValue={weight[3]} rowIndex={3} editable={reps[2]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-            <StrengthRow repsValue={reps[4]} weightValue={weight[4]} rowIndex={4} editable={reps[3]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-            <StrengthRow repsValue={reps[5]} weightValue={weight[5]} rowIndex={5} editable={reps[4]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+            <StrengthRow rowIndex={0} editable onChange={(value, rowNumber, valueType) => handleChange(value, rowNumber, valueType)}/>
+            <StrengthRow rowIndex={1} editable={reps[0]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+            <StrengthRow rowIndex={2} editable={reps[1]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+            <StrengthRow rowIndex={3} editable={reps[2]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+            <StrengthRow rowIndex={4} editable={reps[3]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+            <StrengthRow rowIndex={5} editable={reps[4]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
         </View>
     );
 }

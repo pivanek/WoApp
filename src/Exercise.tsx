@@ -103,15 +103,17 @@ export class StrengthExercise extends Exercise{
           <View>
               <Text darkColor='white'> {this.name}</Text>
               <View style={[{flexDirection: "row", paddingLeft: 10, marginRight: 30}]}>
-                  {
+                <Text style={{width: 60}}>Reps: </Text>
+                  { 
                       this.reps.map((value) =>
                           <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
               </View>
               <View style={{flexDirection: "row", paddingLeft: 10, marginRight: 30}}>
+                  <Text style={{width: 60}}>Weights: </Text>
                   {
-                      this.reps.map((value) =>
+                      this.weights.map((value) =>
                           <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
@@ -125,8 +127,7 @@ export class StrengthExercise extends Exercise{
       if (valueType == ValueType.Reps)
         this.reps[rowIndex] = value;
       else
-        this.weights[rowIndex] = value;
-
+        this.weights[rowIndex] = value;      
       setExercise(this);
     }
 
@@ -160,12 +161,12 @@ export class StrengthExercise extends Exercise{
                   <View style={{flex: 1}}/>
               <Text style={styles.header2}>Weight</Text>
           </View>
-          <StrengthRow repsValue={this.reps[0]} weightValue={this.weights[0]} rowIndex={0} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <StrengthRow repsValue={this.reps[1]} weightValue={this.weights[1]} rowIndex={1} editable={this.reps[0]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <StrengthRow repsValue={this.reps[2]} weightValue={this.weights[2]} rowIndex={2} editable={this.reps[1]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <StrengthRow repsValue={this.reps[3]} weightValue={this.weights[3]} rowIndex={3} editable={this.reps[2]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <StrengthRow repsValue={this.reps[4]} weightValue={this.weights[4]} rowIndex={4} editable={this.reps[3]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <StrengthRow repsValue={this.reps[5]} weightValue={this.weights[5]} rowIndex={5} editable={this.reps[4]!=0} onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={0} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={1} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={2} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={3} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={4} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <StrengthRow rowIndex={5} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
       </View>
     );
   }

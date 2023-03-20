@@ -84,16 +84,15 @@ export class Log {
       );
   }
 
-  public renderLogForm(navigation : any){
+  public renderLogForm(navigation : any, setLog: (log : Log) => void){
     const [currentExercise, setCurrentExercise] = useState<number>(0);
     const radioButtons = Array.from({ length: this.exercises.length }, (radioButton, index) => (
       <RadioButton key={index} checked={currentExercise == index} style={{width: 12, height: 12}}/>
     ));
 
     const handleChange = (exercise: StrengthExercise | HoldExercise, index: number) => {
-      this.exercises[index] = exercise;
-      console.log(this.exercises);
-      
+      this.setExercise(index, exercise);
+      setLog(this);
     }
 
     return(

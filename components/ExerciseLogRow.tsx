@@ -9,10 +9,10 @@ export enum ValueType {
     'Weight'
 }
   
-export function StrengthRow(params: {repsValue : number, weightValue : number, rowIndex : number, editable : boolean, onChange(value : number, rowIndex : number, valueType : ValueType) : any}) {
+export function StrengthRow(params: {rowIndex : number, editable : boolean, onChange(value : number, rowIndex : number, valueType : ValueType) : any}) {
     const [weightIsEditable, setWeightEdidtable] = useState<boolean>(false);    
-    const [reps, setReps] = useState<number>(params.repsValue);
-    const [weight, setWeight] = useState<number>(params.weightValue);
+    const [reps, setReps] = useState<number>(0);
+    const [weight, setWeight] = useState<number>(0);
     
     function handleChange(stringValue : string, valueType : ValueType){
       const numberValue = Number(stringValue);

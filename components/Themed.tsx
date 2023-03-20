@@ -1,4 +1,4 @@
-import { Text as DefaultText, View as DefaultView, Pressable as DefaultPressable, TextInput as DefaultTextInput, PressableProps as DefaultPressableProps } from 'react-native';
+import { Text as DefaultText, View as DefaultView, Pressable as DefaultPressable, TextInput as DefaultTextInput, PressableProps as DefaultPressableProps, TouchableOpacity as DefaultTouchableOpacity, TouchableOpacityProps as DefaultTouchableOpacityProps } from 'react-native';
 
 import useColorScheme from '../hooks/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
@@ -45,6 +45,7 @@ export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'] & ClassAttributes<DefaultView>;
 export type PressableProps = ThemeProps & DefaultPressableProps;
 export type TextInputProps = ThemeProps & DefaultTextInput['props'] & ClassAttributes<DefaultTextInput>;
+export type TouchableOpacityProps = ThemeProps & DefaultTouchableOpacityProps;
 
 export function Text(props : TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -60,12 +61,18 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps}/>;
 }
 
-export function Pressable(props: TextProps) {
+export function Pressable(props: PressableProps) {
+  const { lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+
+  return <DefaultPressable style={[{ backgroundColor}]} {...otherProps}/>;
+}
+
+export function TouchableOpacity(props: TouchableOpacityProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
-  const color = "blue";
 
-  return <DefaultPressable style={[{ color, backgroundColor}, style]} {...otherProps}/>;
+  return <DefaultTouchableOpacity style={[{ backgroundColor}, style]} {...otherProps}/>;
 }
 
 export function TextInput(props: TextInputProps ){

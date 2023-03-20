@@ -16,8 +16,7 @@ import RadioButton from "../../components/RadioButton";
 
 
 export default function ExerciseLog({ navigation, route } : any) {  
-    const log = new Log(route.params.workout);
-    const [currentExercise, setCurrentExercise] = useState<number>(0);
+    const [log, setLog] = useState(new Log(route.params.workout));
 
     useLayoutEffect(() => {
       navigation.setOptions({
@@ -44,11 +43,8 @@ export default function ExerciseLog({ navigation, route } : any) {
       });
     });
 
-    function handleSave(){
-      log.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
-    }
-
+    
     return(
-      log.renderLogForm(navigation)
+      log.renderLogForm(navigation, (log) => setLog(log))
     );
 }

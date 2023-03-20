@@ -14,6 +14,27 @@ export function SettingsIcon(props:{
     return <SvgXml xml={settingsXml} height="30px" fill={props.color}/>
 }
 
+export function ProfileIcon(props: { color : string}){
+    const profileXML = `
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="128.000000pt" height="128.000000pt" viewBox="0 0 128.000000 128.000000" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)" fill="${props.color}" stroke="none">
+        <path d="M501 1154 c-84 -22 -170 -73 -236 -139 -208 -208 -208 -542 0 -750
+        208 -208 542 -208 750 0 208 208 208 542 0 750 -67 67 -153 117 -240 140 -73
+        19 -202 18 -274 -1z m254 -49 c256 -67 415 -329 350 -580 -17 -65 -67 -165
+        -95 -190 -18 -16 -20 -15 -40 25 -29 57 -104 131 -162 159 l-47 23 34 35 c89
+        92 69 248 -41 323 -55 37 -153 40 -214 8 -65 -35 -103 -93 -108 -167 -5 -74 9
+        -119 53 -164 l34 -35 -47 -23 c-58 -28 -133 -102 -162 -159 -20 -40 -22 -41
+        -40 -25 -28 25 -78 125 -95 190 -89 343 237 669 580 580z m-52 -239 c103 -43
+        128 -177 48 -257 -65 -65 -157 -65 -222 0 -124 123 13 325 174 257z m64 -386
+        c59 -26 132 -97 160 -155 l23 -50 -22 -19 c-65 -53 -194 -96 -288 -96 -94 0
+        -223 43 -288 96 l-22 19 23 50 c25 53 93 122 147 150 73 38 187 40 267 5z"/>
+        </g>
+    </svg>
+    `
+
+    return <SvgXml xml={profileXML} height={40}/>
+}
+
 export function WorkoutIcon(props:{
     color : string
 }){
