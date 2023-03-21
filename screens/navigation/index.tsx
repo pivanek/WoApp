@@ -4,7 +4,6 @@ import { LogsIcon, ProfileIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../
 import WorkoutsScreen from './WorkoutsScreen';
 import CalendarScreen from './CalendarScreen';
 import StatsScreen from './StatsScreen';
-import SettingsScreen from './ProfileScreen';
 import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
@@ -12,8 +11,26 @@ import SetUpWorkout from '../Stack/SetUpWorkout';
 import ExerciseLog from '../Stack/ExerciseLog';
 import ProfileScreen from './ProfileScreen';
 import RegistrationScreen from '../Stack/RegistrationScreen';
+import LoginScreen from '../Stack/LoginScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+
+export default function HomeScreen({ colorScheme }: { colorScheme: ColorSchemeName }){  
+  useEffect(() => {
+    
+  })
+
+  return(
+    <SafeAreaProvider>
+      <Navigation colorScheme={colorScheme} />
+      <StatusBar />
+    </SafeAreaProvider>
+  );
+} 
+
+function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <StackNavigator/>
@@ -43,6 +60,13 @@ export function StackNavigator() {
         component={ExerciseLog}
         options={{
           title: "Exercise Log"
+        }}
+      />
+      <Stack.Screen 
+        name="LoginScreen" 
+        component={LoginScreen}
+        options={{
+          title: "Login"
         }}
       />
       <Stack.Screen 

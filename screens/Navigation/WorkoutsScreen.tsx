@@ -39,7 +39,7 @@ export default function WorkoutsScreen({ navigation } : any) {
         <View style={{marginTop: 10}}>
             <FlatList showsVerticalScrollIndicator={false} ref={workoutList} style={[styles.flatList, {marginTop: 8}]} disableScrollViewPanResponder data={workouts} 
               renderItem={({ item, index }) => 
-                <Pressable style={styles.itemContainer} darkColor="#313131" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
+                <Pressable style={styles.itemContainer} darkColor="#313130" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
                   <WorkoutContainer data={item} pressed={isPressed} navigation={navigation}/>
                 </Pressable>
               }
