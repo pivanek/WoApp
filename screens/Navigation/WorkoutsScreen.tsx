@@ -7,25 +7,28 @@ import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import IExercise, { Exercise } from '../../src/Exercise';
 import { WorkoutContainer } from '../../components/WorkoutItem';
+import { collection, onSnapshot, query } from 'firebase/firestore';
+import auth, { database } from '../../src/auth';
 
 export default function WorkoutsScreen({ navigation } : any) {
   const [workouts, setWorkouts] = useState<IWorkout[]>();
   const [isPressed, setPressed] = useState('');
 
   const workoutList = useRef<FlatList>(null);
+  const userEmail = auth.currentUser?.email;
   
-  useEffect(() => {
-    getData('Workouts', (data : Map<string, IWorkout>) => {
-      const workoutsData : Array<IWorkout> = Array.from(data.values());
-      const workoutsHelper : IWorkout[] = Array<IWorkout>();
-      
-      workoutsData.forEach((element : any) => {
-        workoutsHelper.push(Workout.from(element));
+  if(userEmail){
+    const q = query(collection(database, "users", userEmail, 'workouts'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const workoutsHelper : Workout[] = [];
+      querySnapshot.forEach((doc : any) => {
+        workoutsHelper.push(new Workout(doc));
       });
 
+      console.log(workoutsHelper);
       setWorkouts(workoutsHelper);
     });
-  });
+  }
 
   if(workouts?.length == 0 || workouts == undefined){
       return (

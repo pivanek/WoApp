@@ -1,5 +1,6 @@
 import { getApp, initializeApp} from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { CACHE_SIZE_UNLIMITED, getFirestore, initializeFirestore } from "firebase/firestore"
 
 
 const firebaseConfig = {
@@ -12,7 +13,8 @@ const firebaseConfig = {
   measurementId: "G-R079BK8KFW"
 };
 
-
-
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+export const database = getFirestore(app);
+
+export default auth;

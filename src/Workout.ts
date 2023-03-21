@@ -1,6 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
 import IExercise, { Exercise } from "./Exercise";
+import { doc, setDoc } from "firebase/firestore";
+import auth, { database } from "./auth";
+import { Alert } from "react-native";
 
 export enum WorkoutType{
     Strength,
@@ -26,15 +29,24 @@ export class Workout implements IWorkout{
     
     constructor(name : string);
     constructor(workout : Workout);
-    constructor(arg : string | Workout){
+    constructor(arg : string | Workout | any){
         if (typeof arg === 'string') {
             this.name = arg;
             this.exercises = [];
             this.workoutType = WorkoutType.Strength;
+        } else if (arg.constructor == Workout){
+          this.name = arg.name;
+          this.exercises = arg.exercises;
+          this.workoutType = arg.workoutType;
         } else {
-            this.name = arg.name;
-            this.exercises = arg.exercises;
-            this.workoutType = arg.workoutType;
+          const exercisesHelper : Exercise[] = [];
+          arg.exercises?.forEach((exercise : any) => {
+            exercisesHelper.push(new Exercise(exercise))
+          });
+
+          this.name = arg.name;
+          this.exercises = exercisesHelper;
+          this.workoutType = arg.workoutType;
         }
     }
 
@@ -67,18 +79,27 @@ export class Workout implements IWorkout{
         this.exercises = exercises;
     }
 
-    public save(callback: (success: boolean) => void) : void{
-        getData('Workouts', (workouts) => {
-            workouts.set(this.name, this);
-    
-            AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(workouts)))
-                .then(() => {
-                    callback(true)
-                })
-                .catch(error => {
-                    callback(false)
-                });
-        });
+    private toFirebase(){
+      return({
+        name: this.name,
+        exercises: this.exercises.map((value) => value.toFireBase()),
+        workoutType: this.workoutType
+      });
+    }
+
+    public async save(callback: (success: boolean) => void){
+      const userEmail =  auth.currentUser?.email
+      if (userEmail) {
+        const workoutsRef = doc(database, 'users', userEmail, 'workouts', this.name);
+        setDoc(workoutsRef, this.toFirebase(), { merge: true })
+          .then(() => callback(true))
+          .catch((error : Error) => {
+            const errorMessage : string = error.message;
+
+            Alert.alert('Error saving data', errorMessage)
+            callback(false)
+          });
+      }
     } 
 
     public delete(callback: (success: boolean) => void) : void{

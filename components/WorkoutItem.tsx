@@ -1,5 +1,5 @@
 import { Alert, FlatList, StyleSheet, View } from "react-native";
-import { Pressable, Text } from "./Themed";
+import { Pressable, Text, TouchableOpacity } from "./Themed";
 import IExercise from "../src/Exercise";
 import { IWorkout } from "../src/Workout";
 
@@ -38,17 +38,17 @@ export function WorkoutContainer(params: {data: IWorkout, pressed? : string, nav
           <>
             <View style={styles.separatorHorizontal}/>
             <View style={{marginTop: 5, flexDirection: 'row', backgroundColor: 'rgba(0, 0, 0, 0)'}}>
-              <Pressable darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons} onPress={() => handleDelete()}>
+              <TouchableOpacity darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons} onPress={() => handleDelete()}>
                 <Text style={[styles.workoutButtonsText, {color: 'red'}]}>Delete</Text>
-              </Pressable>
+              </TouchableOpacity>
               <View style={styles.separatorVertical}/>
-              <Pressable onPress={() => params.navigation.navigate('SetUpWorkout', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+              <TouchableOpacity onPress={() => params.navigation.navigate('SetUpWorkout', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
                 <Text style={styles.workoutButtonsText}>Edit</Text>
-              </Pressable>
+              </TouchableOpacity>
               <View style={styles.separatorVertical}/>
-              <Pressable onPress={() => params.navigation.navigate('ExerciseLog', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+              <TouchableOpacity onPress={() => params.navigation.navigate('ExerciseLog', {workout: params.data})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
                 <Text style={styles.workoutButtonsText}>Start</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </>
           : null 

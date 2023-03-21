@@ -15,13 +15,10 @@ import LoginScreen from '../Stack/LoginScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import PasswordResetScreen from '../Stack/PasswordResetScreen';
 
 
-export default function HomeScreen({ colorScheme }: { colorScheme: ColorSchemeName }){  
-  useEffect(() => {
-    
-  })
-
+export default function HomeScreen({ colorScheme }: { colorScheme: ColorSchemeName }){
   return(
     <SafeAreaProvider>
       <Navigation colorScheme={colorScheme} />
@@ -40,7 +37,37 @@ function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 
 const Stack = createStackNavigator();
 
-export function StackNavigator() {
+export function LoginStack({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  return(
+    <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="LoginScreen" 
+          component={LoginScreen}
+          options={{
+            title: "Login"
+          }}
+        />
+        <Stack.Screen 
+          name="RegistrationScreen" 
+          component={RegistrationScreen}
+          options={{
+            title: "Registration"
+          }}
+        />
+        <Stack.Screen 
+          name="PasswordReset" 
+          component={PasswordResetScreen}
+          options={{
+            title: "Registration"
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -62,20 +89,6 @@ export function StackNavigator() {
           title: "Exercise Log"
         }}
       />
-      <Stack.Screen 
-        name="LoginScreen" 
-        component={LoginScreen}
-        options={{
-          title: "Login"
-        }}
-      />
-      <Stack.Screen 
-        name="RegistrationScreen" 
-        component={RegistrationScreen}
-        options={{
-          title: "Registration"
-        }}
-      />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen 
             name='ExerciseSearch' 
@@ -86,9 +99,11 @@ export function StackNavigator() {
   );
 }
 
+
+
 const Tab = createBottomTabNavigator();
 
-export function TabNavigator() {
+function TabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Workouts"

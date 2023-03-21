@@ -59,6 +59,15 @@ export class Exercise implements IExercise{
   public static from(exerciseData : any){
       return new Exercise(exerciseData);
   }
+
+  public toFireBase(){
+    return({
+     name: this.name,
+     muscleGroups: this.muscleGroups,
+     description: this.description,
+     exerciseType: this.exerciseType
+    });
+  }
 }
 
 export class StrengthExercise extends Exercise{
@@ -121,6 +130,15 @@ export class StrengthExercise extends Exercise{
           </View>
       );
   }
+  
+  public toFirebase(){
+    return({
+      name: this.name,
+      reps: this.reps,
+      weights: this.weights,
+      exerciseType: this.exerciseType
+    });
+  }
 
   public renderExercisePage(setExercise : (exercise : StrengthExercise) => void){
     const handleChange = (value : number, rowIndex : number, valueType : ValueType) => {
@@ -150,6 +168,7 @@ export class StrengthExercise extends Exercise{
           textAlign: 'center'
       }
     });
+
 
     return(
       <View style = {{width: vw(100)}}>

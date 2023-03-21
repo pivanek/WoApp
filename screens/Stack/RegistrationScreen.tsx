@@ -2,11 +2,12 @@ import { Alert, StyleSheet } from 'react-native';
 
 import { TextInput, View, Text, TouchableOpacity } from '../../components/Themed';
 import { useState } from 'react';
-import { auth } from '../../src/auth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import auth, { database } from '../../src/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 
-export default function ProfileScreen({navigation} : any) {
+export default function RegistrationScreen({navigation} : any) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<string>('');
@@ -19,12 +20,7 @@ export default function ProfileScreen({navigation} : any) {
     if(!valid)
       Alert.alert(
         'Email',
-        'Invalid E-mail address',
-        [
-          {
-            text: 'Ok',
-          },
-        ],
+        'Invalid E-mail address'
       );
 
     return valid;
@@ -55,18 +51,36 @@ export default function ProfileScreen({navigation} : any) {
     return false;
   }
 
+  function createUserInDatabase() {
+    const cityRef = doc(database, 'users', email);
+    setDoc(cityRef, { email: email }, { merge: true })
+      .then()
+      .catch((error : Error) => {
+        const errorMessage : string = error.message;
+
+        Alert.alert('Database wasnt created properly', errorMessage)
+      });
+  }
+
   function singUp() {
     if (validateEmail() && validatePassword()) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-        const user = userCredential.user;
-        navigation.goBack();
+          const user = userCredential.user;
+          sendEmailVerification(user)
+            .then(() => console.log('Email verification was send'))
+            .catch((error : Error) => {
+              const errorMessage : string = error.message;
+    
+              Alert.alert('Email verification erron: ', errorMessage.substring(5))
+            });
+          createUserInDatabase();
+          navigation.goBack();
         })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+        .catch((error : Error) => {
+          const errorMessage : string = error.message;
 
-          Alert.alert('Registration failed', errorMessage)
+          Alert.alert('Registration failed',errorMessage.substring(5))
         });
     }
   }

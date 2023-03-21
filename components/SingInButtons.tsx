@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React from 'react';
 import { Button } from 'react-native';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '../src/auth';
+import auth from '../src/auth';
 
 GoogleSignin.configure({
   webClientId: '74787447481-tho16kk7sqlh6ks1q12o4r95f9g5ul8o.apps.googleusercontent.com',
@@ -22,12 +22,3 @@ async function onGoogleButtonPress() {
         const credential = GoogleAuthProvider.credentialFromError(error);
     });
 }
-
-export function GoogleSignIn() {
-    return (
-      <Button
-        title="Sign-In with google"
-        onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
-      />
-    );
-  }
