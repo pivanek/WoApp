@@ -53,14 +53,14 @@ export default function LoginScreen({ navigation } : any) {
   function logIn(){
     if(validateEmail() && validatePassword()){
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-            })
-            .catch((error) => {
-              const errorCode : string = error.code;
-    
-              Alert.alert('Registration failed', errorCode.substring(5))
-            });
+          .then((userCredential) => {
+              const user = userCredential.user;
+          })
+          .catch((error) => {
+            const errorCode : string = error.toString();
+  
+            Alert.alert('Login failed', errorCode)
+          });
     }
   }
 
