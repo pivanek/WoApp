@@ -51,15 +51,20 @@ export default function RegistrationScreen({navigation} : any) {
     return false;
   }
 
-  function createUserInDatabase() {
-    const cityRef = doc(database, 'users', email);
-    setDoc(cityRef, { email: email }, { merge: true })
-      .then()
-      .catch((error : Error) => {
-        const errorMessage : string = error.message;
+  function createUserInDatabase(callback : (success : boolean) => void) {
+    const userEmail =  auth.currentUser?.email;
 
-        Alert.alert('Database wasnt created properly', errorMessage)
-      });
+    if(userEmail){
+      const cityRef = doc(database, 'users', userEmail);
+      setDoc(cityRef, { email: userEmail }, { merge: true })
+        .then(() => callback(true))
+        .catch((error : Error) => {
+          const errorMessage : string = error.message;
+
+          Alert.alert('Error saving data', errorMessage)
+          callback(false)
+        });
+    }
   }
 
   function singUp() {
@@ -74,8 +79,7 @@ export default function RegistrationScreen({navigation} : any) {
     
               Alert.alert('Email verification erron: ', errorMessage.substring(5))
             });
-          createUserInDatabase();
-          navigation.goBack();
+          createUserInDatabase(success => success? navigation.goBack() : console.log("Error saving data."));
         })
         .catch((error : Error) => {
           const errorMessage : string = error.message;

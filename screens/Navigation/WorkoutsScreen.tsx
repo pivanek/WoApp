@@ -17,18 +17,18 @@ export default function WorkoutsScreen({ navigation } : any) {
   const workoutList = useRef<FlatList>(null);
   const userEmail = auth.currentUser?.email;
   
-  if(userEmail){
-    const q = query(collection(database, "users", userEmail, 'workouts'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const workoutsHelper : Workout[] = [];
-      querySnapshot.forEach((doc : any) => {
-        workoutsHelper.push(new Workout(doc));
-      });
+  // if(userEmail){
+  //   const q = query(collection(database, "users", userEmail, 'workouts'));
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     const workoutsHelper : Workout[] = [];
+  //     querySnapshot.forEach((doc : any) => {
+  //       workoutsHelper.push(new Workout(doc));
+  //     });
 
-      console.log(workoutsHelper);
-      setWorkouts(workoutsHelper);
-    });
-  }
+  //     console.log(workoutsHelper);
+  //     setWorkouts(workoutsHelper);
+  //   });
+  // }
 
   if(workouts?.length == 0 || workouts == undefined){
       return (
