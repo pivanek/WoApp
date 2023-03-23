@@ -23,6 +23,7 @@ export default function ProfileScreen({navigation} : any) {
     }
   }
 
+
   return (
     <View style={styles.container}>
       <TouchableOpacity 
