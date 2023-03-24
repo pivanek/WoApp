@@ -22,6 +22,7 @@ export default function ProfileScreen({ navigation }: any) {
     else return "";
   }
 
+
   return (
     <View style={styles.container}>
       <View

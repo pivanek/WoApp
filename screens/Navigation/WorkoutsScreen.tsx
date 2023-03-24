@@ -1,56 +1,81 @@
-import { Alert, FlatList, ScrollView, StyleSheet } from 'react-native';
+import { Alert, FlatList, RefreshControl, ScrollView, StyleSheet } from 'react-native';
 import { View, Text, Pressable } from '../../components/Themed';
 import { AddNew_Empty } from '../../components/Add';
-import { deleteWorkouts, getData } from '../../src';
 import { Button } from '../../components/Button';
 import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import IExercise, { Exercise } from '../../src/Exercise';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { WorkoutContainer } from '../../components/WorkoutItem';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 import auth, { database } from '../../src/auth';
 
 export default function WorkoutsScreen({ navigation } : any) {
   const [workouts, setWorkouts] = useState<IWorkout[]>();
   const [isPressed, setPressed] = useState('');
+  
+  const [refreshing, setRefreshing] = useState(false);
 
   const workoutList = useRef<FlatList>(null);
   const userEmail = auth.currentUser?.email;
-  
-  // if(userEmail){
-  //   const q = query(collection(database, "users", userEmail, 'workouts'));
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     const workoutsHelper : Workout[] = [];
-  //     querySnapshot.forEach((doc : any) => {
-  //       workoutsHelper.push(new Workout(doc));
-  //     });
 
-  //     console.log(workoutsHelper);
-  //     setWorkouts(workoutsHelper);
-  //   });
-  // }
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+  }, []);
+
+  const loadData = async () => {
+    if(userEmail){
+      setRefreshing(false);
+      const q = query(collection(database, "users", userEmail , 'workouts'));
+
+      const data = await getDocs(q);
+      const workoutHelper : Workout[] = [];
+
+      data.forEach((doc : any) => {
+        console.log(doc.id, " => ", doc.data());
+
+        const workout = new Workout(doc.data());
+        workoutHelper.push(workout);
+      });
+      setWorkouts(workoutHelper);
+    }
+  }
+
+  if (refreshing)
+    setTimeout(() => {
+      loadData();
+    }, 1000);
+    
+
 
   if(workouts?.length == 0 || workouts == undefined){
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ScrollView style={{flex: 1}} 
+          contentContainerStyle={{alignItems: 'center', height: '100%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <AddNew_Empty text="Add new workout" onPress={() => navigation.navigate('SetUpWorkout')}/>
-        </View>
+        </ScrollView>
       );
     }
     else{
       return(
-        <View style={{marginTop: 10}}>
-            <FlatList showsVerticalScrollIndicator={false} ref={workoutList} style={[styles.flatList, {marginTop: 8}]} disableScrollViewPanResponder data={workouts} 
-              renderItem={({ item, index }) => 
-                <Pressable style={styles.itemContainer} darkColor="#313130" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
-                  <WorkoutContainer data={item} pressed={isPressed} navigation={navigation}/>
-                </Pressable>
-              }
-              ListFooterComponent={
-                <Button style={styles.buttonAdd} onPress={() => navigation.navigate('SetUpWorkout')}>Add new workout</Button>
-              }
-            />
-        </View>
+          <FlatList 
+            showsVerticalScrollIndicator={false} 
+            style={[styles.flatList, {marginTop: 18}]}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            ref={workoutList}
+            data={workouts} renderItem={({ item, index }) => 
+              <Pressable style={styles.itemContainer} darkColor="#313130" lightColor="#D4D4D3" onPress={() => {setPressed((item.getName() == isPressed)? '' : item.getName()); workoutList.current?.scrollToIndex({ index: index, animated: true });}}>
+                <WorkoutContainer data={item} pressed={isPressed} navigation={navigation}/>
+              </Pressable>
+            }
+            ListFooterComponent={
+              <Button style={styles.buttonAdd} onPress={() => navigation.navigate('SetUpWorkout')}>Add new workout</Button>
+            }
+          />
       );
     }
 }
