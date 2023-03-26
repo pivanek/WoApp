@@ -1,21 +1,20 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { LogsIcon, ProfileIcon, SettingsIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
-import WorkoutsScreen from './WorkoutsScreen';
-import CalendarScreen from './CalendarScreen';
-import StatsScreen from './StatsScreen';
-import { ColorSchemeName } from 'react-native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
-import SetUpWorkout from '../Stack/SetUpWorkout';
-import ExerciseLog from '../Stack/ExerciseLog';
-import ProfileScreen from './ProfileScreen';
-import RegistrationScreen from '../Stack/RegistrationScreen';
-import LoginScreen from '../Stack/LoginScreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { ColorSchemeName } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { LogsIcon, ProfileIcon, StatsIcon, WorkoutIcon } from '../../components/Icons';
+import ExerciseLog from '../Stack/ExerciseLog';
+import ExerciseSearchModal from '../Stack/ExerciseSearchModal';
+import LoginScreen from '../Stack/LoginScreen';
 import PasswordResetScreen from '../Stack/PasswordResetScreen';
+import RegistrationScreen from '../Stack/RegistrationScreen';
+import SetUpWorkout from '../Stack/SetUpWorkout';
+import CalendarScreen from './CalendarScreen';
+import ProfileScreen from './ProfileScreen';
+import StatsScreen from './StatsScreen';
+import WorkoutsScreen from './WorkoutsScreen';
 
 
 export default function HomeScreen({ colorScheme }: { colorScheme: ColorSchemeName }){
@@ -71,7 +70,7 @@ function StackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="BottomTabNavigator"
+        name="HomeScreen"
         component={TabNavigator}
         options={{ headerShown: false }}
       />

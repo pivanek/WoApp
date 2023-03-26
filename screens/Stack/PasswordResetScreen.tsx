@@ -3,7 +3,7 @@ import { Alert, StyleSheet } from 'react-native';
 import { TextInput, View, Text, TouchableOpacity } from '../../components/Themed';
 import { useState } from 'react';
 import auth from '../../src/auth';
-import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 
 export default function PasswordResetScreen({ navigation } : any) {

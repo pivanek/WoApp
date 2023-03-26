@@ -1,7 +1,7 @@
 import { ExerciseName } from "./ExerciseName";
-import { Text } from "../components/Themed";
+import { Pressable, Text } from "../components/Themed";
 import { Component, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { StrengthRow, ValueType } from "../components/ExerciseLogRow";
 import { vw } from ".";
 
@@ -18,10 +18,10 @@ export default interface IExercise{
 }
 
 export class Exercise implements IExercise{
-  protected name : string;
-  protected muscleGroups : Array<string>;
-  protected description : string;
-  protected exerciseType : ExerciseType;
+  readonly name : string;
+  readonly muscleGroups : Array<string>;
+  readonly description : string;
+  readonly exerciseType : ExerciseType;
 
   constructor(name: string, muscleGroups: string[], description: string, exerciseType : ExerciseType);
   constructor(exercise: Exercise);
@@ -59,6 +59,51 @@ export class Exercise implements IExercise{
   public static from(exerciseData : any){
       return new Exercise(exerciseData);
   }
+
+  public renderExerciseAdd(onAdd : (exercise : Exercise) => void, isAdded : boolean) {
+    const [isAddedState, setAdded] = useState(isAdded);
+
+    function handleAdd(exercise : Exercise){
+      onAdd(exercise);
+      setAdded(!isAddedState);
+    }
+
+    const styles = StyleSheet.create({
+      addButton:{
+          width:'21%',
+          fontSize: 18,
+      },
+      addText:{
+          textAlign: 'right',
+          textAlignVertical: 'center',
+          color: '#00C5FF',
+          fontSize: 18,
+          height: 36,
+          paddingRight: 4,
+          paddingTop: 6
+      },
+      addedText:{
+          textAlign: 'right',
+          textAlignVertical: 'center',
+          color: '#4F5152',
+          fontSize: 18,
+          height: 40,
+          paddingRight: 4
+      }
+    });
+
+    return(
+      <View style={{ marginLeft: 12, margin: 1, flexDirection: 'row'}}>
+        <View style={{width: '79%', height: 40}}>
+            <Text style={{fontSize: 18}}>{this.name}</Text>
+            <Text style={{color: '#929494'}}>{ this.muscleGroups.join(' | ') }</Text>
+        </View>
+        <Pressable style={styles.addButton} onPress={() => handleAdd(this)}>
+            <Text style={(isAdded) ? styles.addedText : styles.addText}>{(isAdded) ? 'Added' : 'Add'}</Text>
+        </Pressable>
+      </View>
+    );
+}
 
   public toFireBase(){
     return({

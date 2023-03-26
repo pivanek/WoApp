@@ -2,8 +2,9 @@ import { Alert, FlatList, StyleSheet, View } from "react-native";
 import { Pressable, Text, TouchableOpacity } from "./Themed";
 import IExercise from "../src/Exercise";
 import { IWorkout } from "../src/Workout";
+import { useState } from "react";
 
-export function WorkoutContainer(params: {data: IWorkout, pressed? : string, navigation : any}){
+export function WorkoutContainer(params: {data: IWorkout, pressed? : string, navigation : any, refresh : (refresh : boolean) => void}){
     const exercises : IExercise[] = params.data.getExercises();
     const name : string = params.data.getName();
   
@@ -19,7 +20,7 @@ export function WorkoutContainer(params: {data: IWorkout, pressed? : string, nav
           {
             text: 'Yes',
             onPress: () => {
-              params.data.delete((success) => console.log(success? 'Data deleted successfully' : 'Failed to delete successfully'));
+              params.data.delete((success) => success? params.refresh(true) : console.log('Failed to delete successfully'));
             },
           },
         ],

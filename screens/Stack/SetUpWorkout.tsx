@@ -1,25 +1,38 @@
-import { Alert, FlatList, GestureResponderEvent, RefreshControl, ScrollView, StyleProp, StyleSheet, ViewStyle, VirtualizedList } from 'react-native';
+import { HeaderBackButton } from "@react-navigation/elements";
+import { Alert, FlatList, StyleSheet } from 'react-native';
 
-import { Text, View, TextInput, Pressable } from '../../components/Themed';
-import RadioButton from '../../components/RadioButton';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Button } from '../../components/Button';
-import TimeSetter from '../../components/TimeSetter';
-import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { CrossIcon } from '../../components/Icons';
-import IExercise from '../../src/Exercise';
 import { ExerciseItem } from '../../components/ExerciseItem';
+import RadioButton from '../../components/RadioButton';
+import { Pressable, Text, TextInput, TouchableOpacity, View } from '../../components/Themed';
+import TimeSetter from '../../components/TimeSetter';
+import IExercise, { Exercise } from '../../src/Exercise';
+import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function SetUpWorkout( { navigation, route } : any) {
-  const [workout, setWorkout] = useState<IWorkout>((route.params?.workout !== undefined)? route.params?.workout : new Workout(''));
+  const [workout, setWorkout] = useState<Workout | HIITWorkout>((route.params?.workout !== undefined)? route.params.workout : new Workout(''));
 
   const [checkedRadio, setChecked] = useState<WorkoutType>(workout.getType());
   const [name, setName] = useState<string>(workout.getName());
 
   const [pauseTime, setPauseTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getPauseTime() : new Date(0));
   const [workoutTime, setWorkoutTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getWorkoutTime() : new Date(0));
+
+  const isFocused = useIsFocused();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
+    });
+  });
 
   useEffect(() => {
     if(checkedRadio == WorkoutType.Interval){
@@ -40,8 +53,20 @@ export default function SetUpWorkout( { navigation, route } : any) {
     }
   }, [checkedRadio]);
 
+  useEffect(() => {
+    if(route.params?.exercises && isFocused){      
+      const workoutHelper = (workout.constructor == Workout)? new Workout(workout) : new HIITWorkout(workout);
+
+      workoutHelper.setExercises(route.params.exercises);
+      setWorkout(workoutHelper);
+    }
+     
+  }, [isFocused])
+
   function saveWorkout( navigation : any) : void{
     if(name){
+      if(workout.getName() === '')
+        workout.setName(name);
       if (workout.getExercises().length > 0){
         if(workout.getName() != name){
           workout.delete(success => {
@@ -51,7 +76,9 @@ export default function SetUpWorkout( { navigation, route } : any) {
             }
             else console.log('Failed to delete workout data')});
         }
-        else workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
+        else {
+          workout.save(success => (success)? navigation.goBack() : console.log('Failed to save workout data'));
+        }
       }
       else{
         Alert.alert(
@@ -78,7 +105,7 @@ export default function SetUpWorkout( { navigation, route } : any) {
     }
   }
 
-  function handleDelete(exercise : IExercise){
+  function handleDelete(exercise : Exercise){
     const updatedWorkout =  Workout.from(workout);
     updatedWorkout.deleteExercise(exercise);
 
@@ -103,11 +130,17 @@ export default function SetUpWorkout( { navigation, route } : any) {
             <View style={[styles.separatorHorizontal, {height: 2}]}/>
             <FlatList
               data={workout.getExercises()}
-              renderItem={({ item }) => <ExerciseItem exercise={item} onDelete={(exercise) => {handleDelete(exercise); console.log(item)}}/>}
+              renderItem={({ item }) => <ExerciseItem exercise={item} onDelete={(exercise) => handleDelete(exercise) }/>}
+              ItemSeparatorComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
+              ListFooterComponent={
+                <>
+                  <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>
+                  <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch', {prevScreen: route.name, exercises: workout.getExercises()})}>
+                    <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
+                  </TouchableOpacity>
+                </>
+              }
             />
-            <Pressable style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch' as never, {workout: workout } as never)}>
-              <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
-            </Pressable>
           </View>
           <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 50}}>
             <Button style={styles.button} onPress={() => navigation.goBack()}>Cancel</Button>

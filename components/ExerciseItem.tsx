@@ -1,21 +1,31 @@
 import { useState } from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { View, Pressable, Text } from "./Themed";
-import IExercise from "../src/Exercise";
+import IExercise, { Exercise } from "../src/Exercise";
 
-export function ExerciseItem ( params: { exercise: IExercise, style? : StyleProp<ViewStyle>, isAdded?: boolean, onAdd?: (exercise: IExercise) => void, onDelete?: (exercise: IExercise) => void}) {
+export type ExerciseProps = {
+  exercise: Exercise;
+  style?: StyleProp<ViewStyle>;
+  isAdded?: boolean;
+  onAdd?: (exercise: IExercise) => void;
+  onDelete?: (exercise: IExercise) => void;
+};
+
+export function ExerciseItem ( params: { exercise: Exercise, style? : StyleProp<ViewStyle>, isAdded?: boolean, onAdd?: (exercise: IExercise) => void, onDelete?: (exercise: Exercise) => void}) {
+
+    
     const [isAdded, setAdded] = useState(params?.isAdded);
     const exercise = params.exercise;
 
 
-    function handleAdd(exercise : IExercise){
+    function handleAdd(exercise : Exercise){
         if(params.onAdd){
             params.onAdd(exercise);
             setAdded(!isAdded);
         }
     }
 
-    function handleDelete(exercise: IExercise): void {
+    function handleDelete(exercise: Exercise): void {
         if(params.onDelete){
             params.onDelete(exercise);
         }
@@ -27,7 +37,7 @@ export function ExerciseItem ( params: { exercise: IExercise, style? : StyleProp
             <View style={{flexDirection: 'row',}}>
                 <View style={{width: '79%', height: 40}}>
                     <Text style={{fontSize: 18}}>{exercise.getName()}</Text>
-                    <Text style={{color: '#929494'}}>{ exercise.getMuscleGroups().map((item, index) => item +  (exercise.getMuscleGroups().length-1 != index?  ' | ' : ''))  }</Text>
+                    <Text style={{color: '#929494'}}>{ exercise.getMuscleGroups().join(' | ') }</Text>
                 </View>
                 {
                     params.onAdd &&(
@@ -45,7 +55,6 @@ export function ExerciseItem ( params: { exercise: IExercise, style? : StyleProp
                 }
             </View>
         </View>
-        <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>
     </>);
 }
 

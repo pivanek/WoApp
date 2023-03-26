@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
 import IExercise, { Exercise } from "./Exercise";
-import { doc, setDoc } from "firebase/firestore";
+import { DocumentData, DocumentReference, deleteDoc, doc, setDoc } from "firebase/firestore";
 import auth, { database } from "./auth";
 import { Alert } from "react-native";
 
@@ -89,36 +89,43 @@ export class Workout implements IWorkout{
 
     public async save(callback: (success: boolean) => void){
       const userEmail =  auth.currentUser?.email
+      
       if (userEmail) {
-        const workoutsRef = doc(database, 'users', userEmail, 'workouts', this.name);
-        setDoc(workoutsRef, this.toFirebase(), { merge: true })
-          .then(() => callback(true))
+        const workoutDoc = doc(database, 'users', userEmail, 'workouts', this.name);
+
+        setDoc(workoutDoc, this.toFirebase())
           .catch((error : Error) => {
             const errorMessage : string = error.message;
 
             Alert.alert('Error saving data', errorMessage)
             callback(false)
           });
+
+        callback(true);
       }
     } 
 
     public delete(callback: (success: boolean) => void) : void{
-        getData('Workouts', (workouts) => {
-            workouts.delete(this.name);
-    
-            AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(workouts)))
-                .then(() => {
-                    callback(true)
-                })
-                .catch(error => {
+        const userEmail =  auth.currentUser?.email
+
+        if (userEmail) {
+            const workoutDoc = doc(database, 'users', userEmail, 'workouts', this.name);
+
+            deleteDoc(workoutDoc)
+                .catch((error : Error) => {
+                    const errorMessage : string = error.message;
+        
+                    Alert.alert('Error deleting data', errorMessage)
                     callback(false)
                 });
-        });
+                
+                callback(true)
+        }
     }
     
-    public static from(workoutData : any) : IWorkout {
-        const workoutResult : IWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
-        const exercisesHelper : IExercise[] = [];
+    public static from(workoutData : any) : Workout | HIITWorkout {
+        const workoutResult : Workout | HIITWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
+        const exercisesHelper : Exercise[] = [];
 
         workoutData.exercises.forEach((exercise: Exercise) => {
             exercisesHelper.push(Exercise.from(exercise));

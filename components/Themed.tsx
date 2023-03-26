@@ -62,7 +62,7 @@ export function View(props: ViewProps) {
 }
 
 export function Pressable(props: PressableProps) {
-  const { style ,lightColor, darkColor, ...otherProps } = props;
+  const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <DefaultPressable style={[{ backgroundColor }, style]} {...otherProps}/>;

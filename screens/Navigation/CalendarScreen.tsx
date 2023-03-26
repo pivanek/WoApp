@@ -1,13 +1,7 @@
-import React, {Component} from 'react';
-import {Alert, StyleSheet,  TouchableOpacity, FlatList, RefreshControl} from 'react-native';
-import {Agenda, DateData, AgendaEntry, AgendaSchedule} from 'react-native-calendars';
-import { deleteEvents, deleteWorkouts, getData } from '../../src';
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { Agenda, AgendaEntry, AgendaSchedule, DateData } from 'react-native-calendars';
 import { Log } from '../../src/Log';
-import { Text, View, themes } from '../../components/Themed';
-import { WorkoutContainer } from '../../components/WorkoutItem';
-import Day from 'react-native-calendars/src/calendar/day';
-import BasicDay from 'react-native-calendars/src/calendar/day/basic';
-import { todayString } from 'react-native-calendars/src/expandableCalendar/commons';
 
 interface State {
   items?: AgendaSchedule;

@@ -1,82 +1,112 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, StyleSheet, VirtualizedList } from "react-native";
 import { HeaderBackButton } from "@react-navigation/elements";
-import { TextInput, View, Text, Pressable } from "../../components/Themed";
-import { ExerciseName } from "../../src/ExerciseName";
-import { IWorkout, Workout } from '../../src/Workout';
-import { deleteWorkouts } from '../../src';
-import IExercise, { Exercise } from '../../src/Exercise';
-import { ExerciseItem } from '../../components/ExerciseItem';
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, StyleSheet } from "react-native";
+import { TextInput, TouchableOpacity, View, Text } from "../../components/Themed";
+import { Exercise } from "../../src/Exercise";
+import { PR } from "../../src/User";
 
-export default function ExerciseSearchScreen({ navigation, route } : any){
-    const exercisesJSON : Object[] = require('../../src/exercises.json');
-    const exercisesData : IExercise[] = parseJSON(exercisesJSON);
+export default function ExerciseSearchScreen({ navigation, route } : any) {
+  const exercisesJSON: Object[] = require("../../src/exercises.json");
+  const exercisesData: Exercise[] = parseJSON(exercisesJSON);
 
-    const [exercises, setExercises] = useState<IExercise[]>(exercisesData);
-    const [workout, setWorkout] = useState<IWorkout>(route.params.workout);
-    
-    function parseJSON(exerciseData : Object[]) : IExercise[]{
-        const exercisesHelper : IExercise[] = [];
+  const [exercises, setExercises] = useState<Exercise[]>(exercisesData);
+  const [addedExercises, setAddedExercises] = useState<Exercise[] | PR[]>(route.params.exercises? route.params.exercises : []);  
 
-        exerciseData.forEach(element => {
-            exercisesHelper.push(Exercise.from(element as Exercise));
-        });
-
-        return exercisesHelper;
-    }
-
-    function addExercise(exercise: IExercise) {
-        const isAdded = workout.getExercises().find((e) => e.getName() === exercise.getName());
-
-        if(isAdded)
-                workout.deleteExercise(exercise);
-        else workout.addExercise(exercise);
-    }
-
-
-    function changeRegex(search : string) : IExercise[] {
-        if(search){
-            const regexSearch = new RegExp(search, 'i');
-            const exercisesHelper : IExercise[] = [];
-            
-            exercisesData.forEach(exercise => {
-                if(regexSearch.test(exercise.getName()) || exercise.getMuscleGroups()?.some(muscleGroup => regexSearch.test(muscleGroup)))
-                    exercisesHelper.push(exercise);
-            });
-            
-            return exercisesHelper;
-        }
-        else
-            return(exercisesData);
-    } 
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerLeft: () => (
-                <HeaderBackButton onPress={() => {navigation.navigate('SetUpWorkout' ,{workout: workout});}}/>
-            ), 
-        });
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton
+          onPress={() => {
+            navigation.navigate(route.params.prevScreen, { exercises: addedExercises });
+          }}
+        />
+      ),
     });
-    
+  });
 
-    return(
-        <View style={{ width: '90%', alignSelf: 'center'}}>
-            <TextInput style={styles.input} onChangeText={search => setExercises(changeRegex(search))} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of exercise'/>
-            <FlatList data={exercises} renderItem={({ item }) => 
-                <ExerciseItem exercise={item} isAdded={ workout.getExercises().some((workoutExercise) => {return workoutExercise.getName() == item.getName()})} onAdd={(exercise) => addExercise(exercise)} />
-            }/>
-        </View>
-    );
+  function parseJSON(exerciseData: Object[]): Exercise[] {
+    const exercisesHelper: Exercise[] = [];
+
+    exerciseData.forEach((element) => {
+      exercisesHelper.push(Exercise.from(element as Exercise));
+    });
+
+    return exercisesHelper;
+  }
+
+  function addExercise(exercise: Exercise) {
+    const isAdded = addedExercises.some(addedExercise => exercise.getName() == addedExercise.name);
+    const addedExercisesHelper = [...addedExercises];
+
+    if (route.params.prevScreen === 'SetUpWorkout') {
+      if(isAdded) addedExercisesHelper.splice(addedExercises.indexOf(exercise));
+      else addedExercisesHelper.push(exercise);
+    }
+    else if (route.params.prevScreen === 'Profile') {
+      const pr : PR = {
+        name: exercise.name
+      }
+
+      if(isAdded) addedExercisesHelper.splice(addedExercises.indexOf(pr));
+      else addedExercisesHelper.push(pr);
+    }
+      
+    setAddedExercises(addedExercisesHelper);
+  }
+
+  function changeRegex(search: string): Exercise[] {
+    if (search) {
+      const regexSearch = new RegExp(search, "i");
+      const exercisesHelper: Exercise[] = [];
+
+      exercisesData.forEach((exercise) => {
+        if (
+          regexSearch.test(exercise.getName()) ||
+          exercise
+            .getMuscleGroups()
+            ?.some((muscleGroup) => regexSearch.test(muscleGroup))
+        )
+          exercisesHelper.push(exercise);
+      });
+
+      return exercisesHelper;
+    } else return exercisesData;
+  }
+
+  const RenderItem = memo((props : {item : Exercise}) =>{
+    return props.item.renderExerciseAdd((exercise) => addExercise(exercise), addedExercises.some(addedExercise => props.item.getName() == addedExercise.name));
+  });
+
+  return (
+    <View style={{ width: "90%", alignSelf: "center" }}>
+      <TextInput
+        style={styles.input}
+        onChangeText={(search) => setExercises(changeRegex(search))}
+        darkColor="#313131"
+        lightColor="#D4D4D3"
+        placeholder="Type name of exercise"
+      />
+      <FlatList
+        maxToRenderPerBatch={35}
+        data={exercises}
+        renderItem={({ item }) => (
+          <RenderItem
+            item={ item }
+          />
+        )}
+        ItemSeparatorComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-
-    input: {
-        marginVertical:20,
-        width: '100%',
-        height: 40,
-        fontSize: 16,
-        borderRadius: 10,
-        padding: 10,
-    },
+  input: {
+    marginVertical: 20,
+    width: "100%",
+    height: 40,
+    fontSize: 16,
+    borderRadius: 10,
+    padding: 10,
+  },
 });
