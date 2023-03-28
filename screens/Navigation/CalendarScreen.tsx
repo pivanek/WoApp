@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet  } from 'react-native';
 import { Agenda, AgendaEntry, AgendaSchedule, DateData } from 'react-native-calendars';
 import { Log } from '../../src/Log';
+import { PR } from '../../src/User';
+import { View, Text } from '../../components/Themed';
 
 interface State {
   items?: AgendaSchedule;
@@ -17,7 +19,7 @@ export default class CalendarScreen extends Component<State> {
       <Agenda
         items={this.state.items}
         loadItemsForMonth={this.loadItems}
-        renderItem={(reservation) => reservation.log.renderEvent()}
+        // renderItem={(reservation) => reservation.log.renderEvent()}
         showClosingKnob={true}
         pagingEnabled
         theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
@@ -25,33 +27,38 @@ export default class CalendarScreen extends Component<State> {
     );
   }
 
+  renderEvent(reservation : AgendaEntry){
+    console.log(reservation);
+    
+    // if(reservation.log) return reservation.log.renderEvent();
+    // else if(reservation.weight)
+    //   return (
+    //     <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
+    //       <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>{reservation.weight}</Text>
+    //     </View>
+    //   );
+  }
+
   loadItems = (day?: DateData) => {
     const items = this.state.items || {};
     const newItems: AgendaSchedule = {};
 
     Log.getLogs((data) => {  
-
       setTimeout(() => {
         for (let i = -15; i < 85; i++) {
           const time = day? day.timestamp + i * 24 * 60 * 60 * 1000 : Date.now();
-          const strTime = this.timeToString(time);
-          
+          const strTime = this.timeToString(time);          
 
           if (!items[strTime]){
-            items[strTime] = []; 
-            data[strTime]?.forEach((element : any) => {
-              const log = new Log(element);
-
-              items[strTime].push({
-                name: log.getName(),
-                log : log,
-                day: strTime,
-              });
-            });              
+              items[strTime] = []
+              if (data[strTime])
+                items[strTime] = data[strTime];
           }
         }
         Object.keys(items).forEach(key => {newItems[key] = items[key];});
-
+        
+        console.log(items['2023-03-26']);
+        
         this.setState({
           items: newItems
         });        
@@ -60,7 +67,7 @@ export default class CalendarScreen extends Component<State> {
   }
 
   rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => {
-    return r1.name !== r2.name;
+    return r1.day !== r2.day;
   }
 
   timeToString(time: number) {

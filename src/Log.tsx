@@ -8,15 +8,28 @@ import IExercise, {
 } from "./Exercise";
 import { WorkoutType, Workout, HIITWorkout } from "./Workout";
 import { Component, useState } from "react";
-import { FlatList, LogBoxStatic, StyleSheet } from "react-native";
+import { Alert, FlatList, LogBoxStatic, StyleSheet } from "react-native";
 import { View, Text, Pressable } from "../components/Themed";
-import { AgendaSchedule } from "react-native-calendars/src/types";
+import { AgendaEntry, AgendaSchedule } from "react-native-calendars/src/types";
 import RadioButton from "../components/RadioButton";
 import { Button } from "../components/Button";
+import auth, { database } from "./auth";
+import { collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { PR, Weight } from "./User";
 
 type LogProps = {
   renderLog : Log,
   style? : StyleSheet,
+}
+
+type Event = {
+  weight? : Weight;
+  PRs? : PR[];
+  log? : Log;
+}
+
+type EventSchedule = {
+  [date : string]: Event
 }
 
 export class Log {
@@ -133,61 +146,69 @@ export class Log {
     this.exercises[index] = exercise;
   }
 
-  public save(callback: (success: boolean) => void): void { 
-    AsyncStorage.getItem('Events')
-    .then(result => {
-      const items =  (result == null)? {} : JSON.parse(result);
-      const newItems: AgendaSchedule = {};
-      const date = new Date(this.timestamp).toISOString().split('T')[0];
+  public save(callback: (success: boolean) => void): void {
+    const email = auth.currentUser?.email;
 
-      if (!items[date])
-        items[date] = [];
+    if(email){
+      const eventDocPath = doc(database, "users", email, 'events', new Date(this.timestamp).toISOString().split('T')[0]);
 
-      items[date].push(this);
-      Object.keys(items).forEach(key => {newItems[key] = items[key];});
-
-      AsyncStorage.setItem('Events', JSON.stringify(newItems))
-            .then(() => {
-                callback(true)
-            })
-            .catch(error => {
-                callback(false)
-            });
-    })
-    .catch(error => {
-      console.log('Error saving data');
-      console.error(error);
-    });
+      setDoc(eventDocPath, {log: this.toFirebase() }, {merge: true}).catch((error) => {
+        Alert.alert("Error: ", error.message);
+        callback(false);
+      });
+    }
   }
 
   public delete(callback: (success: boolean) => void): void {
-    getData("Events", (workouts) => {
-      workouts.delete(this.name);
+    const email = auth.currentUser?.email;
+    if(email){
+      const eventDocPath = doc(database, "users", email, 'events', new Date(this.timestamp).toISOString().split('T')[0]);
 
-      AsyncStorage.setItem("Events", JSON.stringify(Array.from(workouts)))
-        .then(() => {
-          callback(true);
-        })
-        .catch((error) => {
-          callback(false);
-        });
-    });
+      setDoc(eventDocPath, {log: deleteField()}, {merge: true});
+    }
   }
 
-  public static getLogs(callback: (logs : any) => void){
-    AsyncStorage.getItem("Events")
-    .then(result => {
-      if (result != null) {
-        const data = JSON.parse(result);
-        callback(data);
-      } else {
-        callback({});
-      }
-    })
-    .catch(error => {
-      console.log('Error saving data');
-      console.error(error);
-    }); 
+  public toFirebase(){
+    if(this.workoutTime && this.pauseTime)
+      return{
+        name: this.name,
+        exercises: this.exercises.map(value => value.toFirebase()),
+        workoutTime: this.workoutTime,
+        pauseTime: this.pauseTime,
+        workoutType: WorkoutType
+      };
+    else
+      return{
+        name: this.name,
+        exercises: this.exercises.map(value => value.toFirebase()),
+        workoutType: WorkoutType
+      };
+  }
+
+  public static async getLogs(callback: (logs : any) => void){
+    const email = auth.currentUser?.email;
+    if(email){
+      const q = query(collection(database, "users", email, 'events'));
+
+      const data = await getDocs(q);
+      const logHelper : AgendaSchedule = {};
+
+      if(data)
+        data.forEach((doc) => {
+          logHelper[doc.id] =[]
+          const docData  = doc.data();
+
+          if (docData.PRs)
+            logHelper[doc.id].push({ PRs: docData.PRs });
+          
+          if (docData.log)
+            logHelper[doc.id].push(docData);
+
+          if (docData.weight)
+            logHelper[doc.id].push(docData);
+        });
+      callback(logHelper);
+    }
   }
 }
 

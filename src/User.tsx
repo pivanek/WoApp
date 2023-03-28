@@ -19,7 +19,7 @@ export type PR = {
   weight?: number;
   timestamp?: number;
 }
-type Weight = {
+export type Weight = {
   weight: number;
   timestamp: number;
 }
@@ -58,9 +58,9 @@ export class User {
     }
     else{
       this.email = user.email;
-      this.weight = user.weight? user.weight : 0;
-      this.height = user.height? user.height : 0;
-      this.PRs = user.PRs? user.PRs : [];
+      this.weight = user.weight??0;
+      this.height = user.height??0;
+      this.PRs = user.PRs??[];
     }
     this.userDocPath = doc(database, "users", this.email);
   }
@@ -84,9 +84,6 @@ export class User {
   }
 
   public setPRs(prs : PR[]){
-    console.log(prs);
-    console.log(this.PRs);
-    
     prs.forEach((element, index) => {
       if(!this.PRs.some(item => item.name == element.name))
         this.changes.PRs.push(index);

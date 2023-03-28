@@ -251,6 +251,14 @@ export class HoldExercise extends Exercise implements IExercise{
       return this.times;
   }
 
+  public toFirebase(){
+    return({
+      name: this.name,
+      times: this.times,
+      exerciseType: this.exerciseType
+    });
+  }
+
   public renderLog(){
       return(
           <View style={{flex: 1}}>

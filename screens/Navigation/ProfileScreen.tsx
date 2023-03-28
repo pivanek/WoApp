@@ -23,10 +23,12 @@ export default function ProfileScreen({ navigation, route }: any) {
   const [weight, setWeight] = useState<string>();
   const [height, setHeight] = useState<string>();
   const [exercises, setExercises] = useState<PR[]>(user.getPRs());
-  const [PRWeights, setPRWeights] = useState(exercises.map(value => {return value.weight}))
-
+  
   const [refreshing, setRefreshing] = useState(true);
   const isFocused = useIsFocused();
+
+  console.log(exercises);
+  
 
   function handleNumberChange(value: string) {
     if (!Number.isNaN(Number.parseInt(value))) return value;
@@ -39,7 +41,7 @@ export default function ProfileScreen({ navigation, route }: any) {
     userHelper.setPRValue(index, value)
 
     setUser(userHelper);
-    setExercises(userHelper.getPRs()) 
+    setExercises(userHelper.getPRs());
   }
 
   function handleSave(){
@@ -65,7 +67,16 @@ export default function ProfileScreen({ navigation, route }: any) {
     }
   }
 
-  const RenderItem = (props : { index : number, item : PR, value : number, onChange : (index : number,value : string) => void}) => {
+  const RenderItem = (props : { index : number, item : PR, value : string, onChange : (index : number,value : string) => void}) => {
+    const [value, setValue] = useState<string>(props.value);
+    
+    function handleChange(){
+      const valueHelper = (value == '0')? '' : value;
+      
+      setValue(valueHelper);
+      props.onChange(props.index, value)
+    }
+    
     return(
       <View style={{ marginLeft: 12, marginVertical: 5, flexDirection: 'row'}}>
         <View style={{width: '79%', height: 40}}>
@@ -75,18 +86,21 @@ export default function ProfileScreen({ navigation, route }: any) {
             keyboardType="numeric"
             darkColor="#292929"
             style={styles.input}
-            onChangeText={(value) => props.onChange(props.index, handleNumberChange(value))}
+            onChangeText={value => setValue(handleNumberChange(value))}
             placeholder="000"
-            value={(props.value == 0)? '' :  props.value.toString()}
+            value={value == '0'? '' : value}
+            onEndEditing={() => handleChange()}
           />
       </View>
     );
   }
 
   useEffect(() => {
-    isFocused && setRefreshing(true)
     if (route.params?.exercises && isFocused) 
       setExercises(route.params.exercises);
+    else
+      isFocused && setRefreshing(true);
+
   } ,[isFocused])
 
   useEffect(() => {
@@ -177,7 +191,7 @@ export default function ProfileScreen({ navigation, route }: any) {
       <FlatList
         ListHeaderComponent={<><Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Personal Records: </Text><View style = {{height: 2, backgroundColor: '#929494'}}/></>}
         data={exercises}
-        renderItem={({ item, index }) => <RenderItem index={index} item={item} value={(!item.weight)? 0 : item.weight} onChange={(index, value) => handlePRChange(index, Number(value))}/> }
+        renderItem={({ item, index }) => <RenderItem index={index} item={item} value={item.weight?.toString()??''} onChange={(index, value) => handlePRChange(index, Number(value))}/> }
         ItemSeparatorComponent={ () => <View style = {{height: 2, backgroundColor: '#929494'}}/> }
         ListFooterComponent={
           <>

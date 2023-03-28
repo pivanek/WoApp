@@ -44,7 +44,8 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
     }
     else if (route.params.prevScreen === 'Profile') {
       const pr : PR = {
-        name: exercise.name
+        name: exercise.name,
+        weight: 0
       }
 
       if(isAdded) addedExercisesHelper.splice(addedExercises.indexOf(pr));
