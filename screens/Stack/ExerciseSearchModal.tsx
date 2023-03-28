@@ -48,7 +48,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
         weight: 0
       }
 
-      if(isAdded) addedExercisesHelper.splice(addedExercises.indexOf(pr));
+      if(isAdded) addedExercisesHelper.splice((addedExercises as PR[]).indexOf(pr));
       else addedExercisesHelper.push(pr);
     }
       

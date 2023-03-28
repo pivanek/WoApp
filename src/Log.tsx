@@ -16,6 +16,7 @@ import { Button } from "../components/Button";
 import auth, { database } from "./auth";
 import { collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { PR, Weight } from "./User";
+import { Agenda } from "react-native-calendars";
 
 type LogProps = {
   renderLog : Log,
@@ -29,7 +30,7 @@ type Event = {
 }
 
 type EventSchedule = {
-  [date : string]: Event
+  [date : string]: Event[]
 }
 
 export class Log {
@@ -87,8 +88,8 @@ export class Log {
           { (this.exercises.length == 0)? null : 
             <>
               <View style={styles.separatorHorizontal} />
-              <FlatList style={styles.flatList} data={this.exercises} renderItem={({item}) => 
-                item.renderLog()
+              <FlatList style={styles.flatList} data={this.exercises} renderItem={({item, index}) => 
+                item.renderLog(index)
               }
               />
             </>
@@ -156,6 +157,8 @@ export class Log {
         Alert.alert("Error: ", error.message);
         callback(false);
       });
+
+      callback(true);
     }
   }
 
@@ -192,6 +195,7 @@ export class Log {
 
       const data = await getDocs(q);
       const logHelper : AgendaSchedule = {};
+      
 
       if(data)
         data.forEach((doc) => {
@@ -199,13 +203,13 @@ export class Log {
           const docData  = doc.data();
 
           if (docData.PRs)
-            logHelper[doc.id].push({ PRs: docData.PRs });
+            logHelper[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
           
           if (docData.log)
-            logHelper[doc.id].push(docData);
+            logHelper[doc.id].push({ log: docData.log, name: docData.log.name });
 
           if (docData.weight)
-            logHelper[doc.id].push(docData);
+            logHelper[doc.id].push({ weight: docData.weight, name: docData.weight});
         });
       callback(logHelper);
     }

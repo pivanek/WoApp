@@ -152,15 +152,15 @@ export class StrengthExercise extends Exercise{
       return this.weights;
   }
 
-  public renderLog(){
+  public renderLog(index : number){
       return(
-          <View>
-              <Text darkColor='white'> {this.name}</Text>
+          <View key={index}>
+              <Text darkColor='white' style={{fontSize: 16}}> {this.name}</Text>
               <View style={[{flexDirection: "row", paddingLeft: 10, marginRight: 30}]}>
-                <Text style={{width: 60}}>Reps: </Text>
+                <Text style={{width: 60, fontSize: 14}}>Reps: </Text>
                   { 
                       this.reps.map((value) =>
-                          <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
+                          <Text style={[{flex: 1, alignContent: "center", fontSize: 14}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
               </View>
@@ -168,7 +168,7 @@ export class StrengthExercise extends Exercise{
                   <Text style={{width: 60}}>Weights: </Text>
                   {
                       this.weights.map((value) =>
-                          <Text style={[{flex: 1, alignContent: "center"}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
+                          <Text style={[{flex: 1, alignContent: "center", fontSize: 14}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{value}</Text>
                       )
                   }
               </View>
