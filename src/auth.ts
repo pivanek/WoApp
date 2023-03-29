@@ -20,9 +20,4 @@ export const database = initializeFirestore(app, {
   cacheSizeBytes: CACHE_SIZE_UNLIMITED
 });
 
-enableIndexedDbPersistence(database)
-  .catch((error) => {
-    console.log(error);
-  });
-
 export default auth;

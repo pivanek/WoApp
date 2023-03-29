@@ -78,6 +78,10 @@ export class User {
     return this.height;
   }
 
+  public getPRs(){
+    return this.PRs;
+  }
+
   public setHeight(height: number) {
     this.height = height;
     this.changes.height = true;
@@ -95,10 +99,6 @@ export class User {
     this.PRs[index].weight = value;
     if(!this.changes.PRs.includes(index))
       this.changes.PRs.push(index)
-  }
-
-  public getPRs(){
-    return this.PRs;
   }
 
   public saveChanges(callback: (success: boolean) => void) {
@@ -148,9 +148,4 @@ export class User {
       })
     };
   }
-
-  public updateUserPRs() {
-    console.log("undefined");
-  }
-
 }

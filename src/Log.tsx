@@ -16,21 +16,10 @@ import { Button } from "../components/Button";
 import auth, { database } from "./auth";
 import { collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { PR, Weight } from "./User";
-import { Agenda } from "react-native-calendars";
 
 type LogProps = {
   renderLog : Log,
   style? : StyleSheet,
-}
-
-type Event = {
-  weight? : Weight;
-  PRs? : PR[];
-  log? : Log;
-}
-
-type EventSchedule = {
-  [date : string]: Event[]
 }
 
 export class Log {
