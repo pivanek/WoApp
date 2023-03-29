@@ -1,6 +1,6 @@
 import { Alert, FlatList, RefreshControl, StyleSheet } from "react-native";
 
-import { signOut } from "firebase/auth";
+import { sendEmailVerification, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { UserProfileIcon } from "../../components/Icons";
 import {
@@ -120,6 +120,7 @@ export default function ProfileScreen({ navigation, route }: any) {
 
   if(refreshing)
     loadData();
+
 
   return (
     <View style={styles.container}>

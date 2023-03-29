@@ -1,92 +1,113 @@
-import { StyleSheet } from 'react-native';
+import { Alert, FlatList, RefreshControl, StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
-import { LineChart } from 'react-native-chart-kit';
+// import { LineChart } from 'react-native-chart-kit';
 import { vw } from '../../src';
 import { AbstractChartConfig } from 'react-native-chart-kit/dist/AbstractChart';
-import { LineChartData } from 'react-native-chart-kit/dist/line-chart/LineChart';
-import { Component } from 'react';
-import auth, { database } from '../../src/auth';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { LineChart } from 'react-native-charts-wrapper';
+import auth from '../../src/auth';
+import { PR } from '../../src/User';
+import { Log } from '../../src/Log';
 
-type StatData {
-  [name : string]: LineChartData
-}
+// type StatData = {
+//   [name : string] : LineChartData
+// }
 
-const logHelper : StatData = {};
+export default function CalendarScreen() {
+  const [stats, setStats] = useState<StatData>({});
+  const [refreshing, setRefreshing] = useState<boolean>(true);
 
-interface State {
-  stats?: StatData;
-}
-
-export default class CalendarScreen extends Component<State> {
-  state: State = {
-    items: undefined
-  };
-
-  public static async getLogs(callback: (logs : any) => void){
-    const email = auth.currentUser?.email;
-    if(email){
-      const q = query(collection(database, "users", email, 'events'));
-
-      const data = await getDocs(q);
-      const logHelper : AgendaSchedule = {};
-      
-
-      if(data)
-        data.forEach((doc) => {
-          logHelper[doc.id] =[]
-          const docData  = doc.data();
-
-          if (docData.PRs)
-            logHelper[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
-          
-          if (docData.log)
-            logHelper[doc.id].push({ log: docData.log, name: docData.log.name });
-
-          if (docData.weight)
-            logHelper[doc.id].push({ weight: docData.weight, name: docData.weight});
-        });
-      callback(logHelper);
-    }
-  }
-
-  chartConfig : AbstractChartConfig = {
+  const chartConfig : AbstractChartConfig = {
     backgroundGradientFromOpacity: 0,
     backgroundGradientToOpacity: 0,
     color: (opacity = 1) => `rgba(45, 197, 252, ${opacity})`,
     barPercentage: 0.5,
     labelColor: (opacity = 1) => `rgba(240, 240, 240, ${opacity})`
   };
-  
-  data : LineChartData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-      }
-    ],
-    legend: ["Rainy Days"],
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <LineChart
-          data={this.data}
-          width={vw(95)}
-          height={220}
-          chartConfig={this.chartConfig}
-          style={{ backgroundColor: "#313130", borderRadius: 15}}
-        />
+
+  async function getStats(){
+    const email = auth.currentUser?.email;
+
+    // if(email){
+    //   Log.getLogs((data) =>{
+    //     const items = stats || {};
+    //     const newStats : StatData = {};
+
+    //     data.forEach((doc) => {
+    //       const docData = doc.data();
+
+    //       if (docData.PRs){
+    //         docData.PRs.forEach((element : PR) => {
+    //           if(!newStats[element.name])
+    //             newStats[element.name] = {
+    //               labels: [],
+    //               datasets: [{ data: [] }],
+    //               legend: [ element.name ],
+    //             };
+    //           if (element.weight) {
+    //             newStats[element.name].labels.push(doc.id);
+    //             newStats[element.name].datasets[0].data.push(element.weight);
+    //           }
+    //         });
+    //       } 
+
+    //       if (docData.weight){
+    //         if(!newStats['weight'])
+    //           newStats['weight'] = {
+    //             labels: [],
+    //             datasets: [{ data: [] }],
+    //             legend: ['Weight'],
+    //           };
+
+    //           newStats['weight'].labels.push(doc.id);
+    //           newStats['weight'].datasets[0].data.push(docData.weight);
+    //       }
+    //     });
+
+    //     Object.keys(items).forEach(key => {newStats[key] = items[key]});
+    //     console.log(newStats);
         
-      </View>
-    );
+                
+    //     setStats(newStats)
+    //   }).then().catch(err => Alert.alert('Error', err.message));
+    // }
+
+    setRefreshing(false);
   }
+
+  useEffect(() => {
+    if(refreshing)
+      setTimeout(() => {
+        getStats();
+      }, 1000);
+  }, [refreshing])
+  
+  return (
+    // <FlatList style={{ alignSelf: 'center', marginVertical: 20 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(true)}/>} data={Object.values(stats)} renderItem={({ item }) =>
+    //   <LineChart
+    //     data={item}
+    //     width={vw(95)}
+    //     height={220}
+    //     chartConfig={chartConfig}
+    //     style={{backgroundColor: "#313130", borderRadius: 15, marginTop: 10}}
+    //     withVerticalLabels
+    //   />
+    // }/>
+  <View style={{flex: 1}}>
+      <LineChart style={styles.chart}
+        data={{dataSets:[{label: "demo", values: [{y: 1}, {y: 2}, {y: 1}]}]}}
+      />
+  </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: '#F5FCFF'
+  },
+  chart: {
+    flex: 1
   }
 });

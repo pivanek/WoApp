@@ -14,7 +14,7 @@ import { AgendaEntry, AgendaSchedule } from "react-native-calendars/src/types";
 import RadioButton from "../components/RadioButton";
 import { Button } from "../components/Button";
 import auth, { database } from "./auth";
-import { collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { DocumentData, QuerySnapshot, collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { PR, Weight } from "./User";
 
 type LogProps = {
@@ -72,7 +72,7 @@ export class Log {
 
   public renderEvent(){
       return (
-        <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
+        <View key={this.timestamp.toString()} style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
           <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>{this.name}</Text>
           { (this.exercises.length == 0)? null : 
             <>
@@ -177,30 +177,14 @@ export class Log {
       };
   }
 
-  public static async getLogs(callback: (logs : any) => void){
+  public static async getLogs(callback: (logs : QuerySnapshot<DocumentData>) => void){
     const email = auth.currentUser?.email;
     if(email){
       const q = query(collection(database, "users", email, 'events'));
 
       const data = await getDocs(q);
-      const logHelper : AgendaSchedule = {};
-      
 
-      if(data)
-        data.forEach((doc) => {
-          logHelper[doc.id] =[]
-          const docData  = doc.data();
-
-          if (docData.PRs)
-            logHelper[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
-          
-          if (docData.log)
-            logHelper[doc.id].push({ log: docData.log, name: docData.log.name });
-
-          if (docData.weight)
-            logHelper[doc.id].push({ weight: docData.weight, name: docData.weight});
-        });
-      callback(logHelper);
+      callback(data);
     }
   }
 }

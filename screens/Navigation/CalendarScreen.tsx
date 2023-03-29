@@ -20,7 +20,7 @@ export default class CalendarScreen extends Component<State> {
         items={this.state.items}
 
         loadItemsForMonth={this.loadItems}
-        renderItem={(reservation) => this.renderEvent(reservation)}
+        renderItem={(reservation, index) => this.renderEvent(reservation)}
         showClosingKnob={true}
         pagingEnabled
         theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
@@ -29,8 +29,6 @@ export default class CalendarScreen extends Component<State> {
   }
 
   renderEvent(reservation : AgendaEntry) : JSX.Element{
-    console.log(reservation);
-
     if(reservation.log){
       const log = new Log(reservation.log);
 
@@ -38,13 +36,13 @@ export default class CalendarScreen extends Component<State> {
     }
     else if(reservation.weight)
       return (
-        <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
+        <View key={reservation.name} style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
           <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>Weight: {reservation.weight}</Text>
         </View>
       );
     else
       return (
-        <View style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
+        <View key={reservation.name} style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
            <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>Your PRs</Text>
           <View style={styles.separatorHorizontal} />
           <FlatList data={reservation.PRs} renderItem={({item}) => <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 16}}>{item.name}: {item.weight}</Text>}/>
@@ -56,16 +54,33 @@ export default class CalendarScreen extends Component<State> {
     const items = this.state.items || {};
     const newItems: AgendaSchedule = {};
 
-    Log.getLogs((data) => {  
+    Log.getLogs((data) => { 
       setTimeout(() => {
+        const parsedData : AgendaSchedule = {};
+      
+        if(data)
+          data.forEach((doc) => {
+            parsedData[doc.id] =[]
+            const docData  = doc.data();
+  
+            if (docData.PRs)
+              parsedData[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
+            
+            if (docData.log)
+              parsedData[doc.id].push({ log: docData.log, name: docData.log.name });
+  
+            if (docData.weight)
+              parsedData[doc.id].push({ weight: docData.weight, name: docData.weight});
+          });
+
         for (let i = -15; i < 85; i++) {
           const time = day? day.timestamp + i * 24 * 60 * 60 * 1000 : Date.now();
           const strTime = this.timeToString(time);          
 
           if (!items[strTime]){
               items[strTime] = []
-              if (data[strTime])
-                items[strTime] = data[strTime];
+              if (parsedData[strTime])
+                items[strTime] = parsedData[strTime];
           }
         }
         Object.keys(items).forEach(key => {newItems[key] = items[key];});
