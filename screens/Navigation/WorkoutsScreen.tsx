@@ -1,10 +1,10 @@
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, getDocsFromCache, query } from 'firebase/firestore';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, RefreshControl, ScrollView, StyleSheet } from 'react-native';
 import { AddNew_Empty } from '../../components/Add';
 import { Button } from '../../components/Button';
 import { Pressable } from '../../components/Themed';
-import { WorkoutContainer } from '../../components/WorkoutItem';
+import WorkoutContainer from '../../components/WorkoutItem';
 import { IWorkout, Workout } from '../../src/Workout';
 import auth, { database } from '../../src/auth';
 import { useIsFocused } from '@react-navigation/native';
@@ -24,11 +24,10 @@ export default function WorkoutsScreen({ navigation } : any) {
   }, []);
 
   const loadData = async () => {
-    setRefreshing(false);
     if(userEmail){
       const q = query(collection(database, "users", userEmail , 'workouts'));
-
       const data = await getDocs(q);
+
       const workoutHelper : Workout[] = [];
 
       data.forEach((doc : any) => {
@@ -36,6 +35,7 @@ export default function WorkoutsScreen({ navigation } : any) {
         workoutHelper.push(workout);
       });
 
+      setRefreshing(false);
       setWorkouts(workoutHelper);
     }
   }

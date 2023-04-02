@@ -1,34 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { FlatList, StyleSheet  } from 'react-native';
 import { Agenda, AgendaEntry, AgendaSchedule, DateData } from 'react-native-calendars';
-import { Log } from '../../src/Log';
-import { PR } from '../../src/User';
-import { View, Text } from '../../components/Themed';
+import { Event, Log } from '../../src/Log';
+import { View, Text, TouchableOpacity } from '../../components/Themed';
+import { Rutine } from '../../src/User';
+import { Workout } from '../../src/Workout';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { database } from '../../src/auth';
+import WorkoutItem from '../../components/WorkoutItem';
+import { RutineDay } from '../../components/RutineDay';
 
 interface State {
   items?: AgendaSchedule;
 }
 
-export default class CalendarScreen extends Component<State> {
-  state: State = {
-    items: undefined
-  };
+interface Workouts {
+  [workoutName : string] : Workout;
+}
 
-  render() {
-    return (
-      <Agenda
-        items={this.state.items}
+export default function CalendarScreen({ navigation } : any) {
+  const [items, setItems] = useState<AgendaSchedule>({});
 
-        loadItemsForMonth={this.loadItems}
-        renderItem={(reservation, index) => this.renderEvent(reservation)}
-        showClosingKnob={true}
-        pagingEnabled
-        theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
-      />
-    );
-  }
-
-  renderEvent(reservation : AgendaEntry) : JSX.Element{
+  function renderEvent(reservation : AgendaEntry) : JSX.Element{
     if(reservation.log){
       const log = new Log(reservation.log);
 
@@ -40,6 +33,31 @@ export default class CalendarScreen extends Component<State> {
           <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>Weight: {reservation.weight}</Text>
         </View>
       );
+    else if(reservation.rutineDay){
+      const workout = new Workout(reservation.rutineDay);
+
+      return (
+        <View style={{backgroundColor: '#313130', borderRadius: 15, marginRight: 20, marginTop: 10, paddingVertical: 10,}}>
+          <Text darkColor='#fff' lightColor='#000' style={{paddingHorizontal: 30, fontSize: 18}}>{reservation.name}</Text>
+          {(workout.getExercises().length == 0)? null : 
+            <>
+              <View style={styles.separatorHorizontal} />
+              <FlatList style={styles.flatList} data={workout.getExercises()} renderItem={({item}) => <Text style={{color: '#929494', margin: 1, marginLeft: 8}}>{ item.getName() }</Text>} />
+            </>
+          }
+          { reservation.day == timeToString(Date.now())?
+            <>
+              <View style={styles.separatorHorizontal}/>
+              <View style={{marginTop: 5, flexDirection: 'row', backgroundColor: 'rgba(0, 0, 0, 0)'}}>
+                <TouchableOpacity onPress={() => navigation.navigate('ExerciseLog', {workout: workout})} darkColor='#313131' lightColor="#D4D4D3" style={styles.workoutButtons}>
+                  <Text style={styles.workoutButtonsText}>Start</Text>
+                </TouchableOpacity>
+              </View>
+            </> : null
+          }
+      </View>
+      );
+    }
     else
       return (
         <View key={reservation.name} style={{backgroundColor: '#313130', paddingVertical: 10, borderRadius: 15, marginRight: 20, marginTop: 10}}>
@@ -50,57 +68,154 @@ export default class CalendarScreen extends Component<State> {
       );
   }
 
-  loadItems = (day?: DateData) => {
-    const items = this.state.items || {};
+  const loadItems = (day?: DateData) => {
+    const parsedData = items || {};
     const newItems: AgendaSchedule = {};
+
+    let workouts : Workout[];
+    Workout.load(data => workouts = data)
 
     Log.getLogs((data) => { 
       setTimeout(() => {
-        const parsedData : AgendaSchedule = {};
-      
+        let rutineData : Rutine | undefined;
+
+
         if(data)
           data.forEach((doc) => {
-            parsedData[doc.id] =[]
-            const docData  = doc.data();
-  
-            if (docData.PRs)
-              parsedData[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
-            
-            if (docData.log)
-              parsedData[doc.id].push({ log: docData.log, name: docData.log.name });
-  
-            if (docData.weight)
-              parsedData[doc.id].push({ weight: docData.weight, name: docData.weight});
+            if(doc.id != 'rutine'){
+              parsedData[doc.id] =[]
+              const docData = doc.data() as Event;
+              
+
+              if (docData.PRs)
+                parsedData[doc.id].push({ PRs: docData.PRs, name: 'PRs'});
+              
+              if (docData.log)
+                parsedData[doc.id].push({ log: docData.log, name: docData.log.name });
+    
+              if (docData.weight)
+                parsedData[doc.id].push({ weight: docData.weight, name: docData.weight.toString()});
+            }
+            else{
+              rutineData = doc.data() as Rutine;
+            }
           });
 
         for (let i = -15; i < 85; i++) {
           const time = day? day.timestamp + i * 24 * 60 * 60 * 1000 : Date.now();
-          const strTime = this.timeToString(time);          
+          const strTime = timeToString(time);
 
-          if (!items[strTime]){
-              items[strTime] = []
-              if (parsedData[strTime])
-                items[strTime] = parsedData[strTime];
+          if(!parsedData[strTime]){
+            parsedData[strTime] = []
+
+            if(time >= Date.now()-24 * 60 * 60 * 1000){
+              if(rutineData){
+                switch (new Date(strTime).getDay()) {
+                  case 0:
+                    const sundayWorkout = workouts.find(workout => workout.getName() === rutineData?.Sunday);
+                    if (sundayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: sundayWorkout,
+                        name: rutineData.Sunday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 1:
+                    const mondayWorkout = workouts.find(workout => workout.getName() === rutineData?.Monday);
+                    if (mondayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: mondayWorkout,
+                        name: rutineData.Monday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 2:
+                    const tuesdayWorkout = workouts.find(workout => workout.getName() === rutineData?.Tuesday);
+                    
+                    if (tuesdayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: tuesdayWorkout,
+                        name: rutineData.Tuesday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 3:
+                    const wednesdayWorkout = workouts.find(workout => workout.getName() === rutineData?.Wednesday);
+                    if (wednesdayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: wednesdayWorkout,
+                        name: rutineData.Wednesday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 4:
+                    const thursdayWorkout = workouts.find(workout => workout.getName() === rutineData?.Thursday);
+                    if (thursdayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: thursdayWorkout,
+                        name: rutineData.Thursday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 5:
+                    const fridayWorkout = workouts.find(workout => workout.getName() === rutineData?.Friday);
+                    if (fridayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: fridayWorkout,
+                        name: rutineData.Friday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                  case 6:
+                    const saturdayWorkout = workouts.find(workout => workout.getName() === rutineData?.Saturday);
+                    if (saturdayWorkout) {
+                      parsedData[strTime].push({
+                        rutineDay: saturdayWorkout,
+                        name: rutineData.Saturday,
+                        day: strTime
+                      });
+                    }
+                    break;
+                } 
+              }
+            }
           }
         }
-        Object.keys(items).forEach(key => {newItems[key] = items[key];});
-                
-
-        this.setState({
-          items: newItems
-        }); 
+          
+        Object.keys(parsedData).forEach(key => {newItems[key] = parsedData[key];});
+                        
+        setItems(newItems);
       }, 1000);
     });    
   }
 
-  rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => {
+  
+
+  const rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => {
     return r1.name !== r2.name;
   }
 
-  timeToString(time: number) {
+  function timeToString(time: number) {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
+
+  return (
+    <Agenda
+      items={items}
+      loadItemsForMonth={loadItems}
+      renderItem={(reservation, index) => renderEvent(reservation)}
+      showClosingKnob={true}
+      pagingEnabled
+      theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

@@ -1,18 +1,18 @@
 import { Alert, FlatList, RefreshControl, StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
-// import { LineChart } from 'react-native-chart-kit';
+import { LineChart } from 'react-native-chart-kit';
 import { vw } from '../../src';
 import { AbstractChartConfig } from 'react-native-chart-kit/dist/AbstractChart';
 import { useEffect, useState } from 'react';
-import { LineChart } from 'react-native-charts-wrapper';
 import auth from '../../src/auth';
 import { PR } from '../../src/User';
 import { Log } from '../../src/Log';
+import { LineChartData } from 'react-native-chart-kit/dist/line-chart/LineChart';
 
-// type StatData = {
-//   [name : string] : LineChartData
-// }
+type StatData = {
+  [name : string] : LineChartData
+}
 
 export default function CalendarScreen() {
   const [stats, setStats] = useState<StatData>({});
@@ -29,49 +29,47 @@ export default function CalendarScreen() {
   async function getStats(){
     const email = auth.currentUser?.email;
 
-    // if(email){
-    //   Log.getLogs((data) =>{
-    //     const items = stats || {};
-    //     const newStats : StatData = {};
+    if(email){
+      Log.getLogs((data) =>{
+        const items = stats || {};
+        const newStats : StatData = {};
 
-    //     data.forEach((doc) => {
-    //       const docData = doc.data();
+        data.forEach((doc) => {
+          const docData = doc.data();
 
-    //       if (docData.PRs){
-    //         docData.PRs.forEach((element : PR) => {
-    //           if(!newStats[element.name])
-    //             newStats[element.name] = {
-    //               labels: [],
-    //               datasets: [{ data: [] }],
-    //               legend: [ element.name ],
-    //             };
-    //           if (element.weight) {
-    //             newStats[element.name].labels.push(doc.id);
-    //             newStats[element.name].datasets[0].data.push(element.weight);
-    //           }
-    //         });
-    //       } 
+          if (docData.PRs){
+            docData.PRs.forEach((element : PR) => {
+              if(!newStats[element.name])
+                newStats[element.name] = {
+                  labels: [],
+                  datasets: [{ data: [] }],
+                  legend: [ element.name ],
+                };
+              if (element.weight) {
+                newStats[element.name].labels.push(doc.id);
+                newStats[element.name].datasets[0].data.push(element.weight);
+              }
+            });
+          } 
 
-    //       if (docData.weight){
-    //         if(!newStats['weight'])
-    //           newStats['weight'] = {
-    //             labels: [],
-    //             datasets: [{ data: [] }],
-    //             legend: ['Weight'],
-    //           };
+          if (docData.weight){
+            if(!newStats['weight'])
+              newStats['weight'] = {
+                labels: [],
+                datasets: [{ data: [] }],
+                legend: ['Weight'],
+              };
 
-    //           newStats['weight'].labels.push(doc.id);
-    //           newStats['weight'].datasets[0].data.push(docData.weight);
-    //       }
-    //     });
+              newStats['weight'].labels.push(doc.id);
+              newStats['weight'].datasets[0].data.push(docData.weight);
+          }
+        });
 
-    //     Object.keys(items).forEach(key => {newStats[key] = items[key]});
-    //     console.log(newStats);
+        Object.keys(items).forEach(key => {newStats[key] = items[key]});
         
-                
-    //     setStats(newStats)
-    //   }).then().catch(err => Alert.alert('Error', err.message));
-    // }
+        setStats(newStats)
+      }).then().catch(err => Alert.alert('Error', err.message));
+    }
 
     setRefreshing(false);
   }
@@ -84,21 +82,16 @@ export default function CalendarScreen() {
   }, [refreshing])
   
   return (
-    // <FlatList style={{ alignSelf: 'center', marginVertical: 20 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(true)}/>} data={Object.values(stats)} renderItem={({ item }) =>
-    //   <LineChart
-    //     data={item}
-    //     width={vw(95)}
-    //     height={220}
-    //     chartConfig={chartConfig}
-    //     style={{backgroundColor: "#313130", borderRadius: 15, marginTop: 10}}
-    //     withVerticalLabels
-    //   />
-    // }/>
-  <View style={{flex: 1}}>
-      <LineChart style={styles.chart}
-        data={{dataSets:[{label: "demo", values: [{y: 1}, {y: 2}, {y: 1}]}]}}
+    <FlatList style={{ alignSelf: 'center', marginVertical: 20 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => setRefreshing(true)}/>} data={Object.values(stats)} renderItem={({ item }) =>
+      <LineChart
+        data={item}
+        width={vw(95)}
+        height={220}
+        chartConfig={chartConfig}
+        style={{backgroundColor: "#313130", borderRadius: 15, marginTop: 10}}
+        withVerticalLabels
       />
-  </View>
+    }/>
   );
 }
 

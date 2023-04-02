@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from ".";
 import IExercise, { Exercise } from "./Exercise";
-import { DocumentData, DocumentReference, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { DocumentData, DocumentReference, collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import auth, { database } from "./auth";
 import { Alert } from "react-native";
 
@@ -9,6 +9,8 @@ export enum WorkoutType{
     Strength,
     Interval   
 }
+
+
 
 export interface IWorkout{
     getName() : string;
@@ -23,9 +25,9 @@ export interface IWorkout{
 }
 
 export class Workout implements IWorkout{
-    name : string;
-    exercises : Exercise[];
-    workoutType : WorkoutType;
+    protected name : string;
+    protected exercises : Exercise[];
+    protected workoutType : WorkoutType;
     
     constructor(name : string);
     constructor(workout : Workout);
@@ -133,6 +135,22 @@ export class Workout implements IWorkout{
         workoutResult.setExercises(exercisesHelper);
 
         return workoutResult;
+    }
+    
+    public static async load(callback : (workouts : Workout[]) => void) {
+        if(auth.currentUser?.email){
+            const q = query(collection(database, "users", auth.currentUser?.email , 'workouts'));
+            const data = await getDocs(q);
+
+            const workoutHelper : Workout[] = [];
+
+            data.forEach((doc : any) => {
+                const workout = new Workout(doc.data());
+                workoutHelper.push(workout);
+            });
+
+            callback(workoutHelper);
+        }
     }
 
 }

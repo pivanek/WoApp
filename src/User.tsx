@@ -14,6 +14,9 @@ import { Alert } from "react-native";
 import { err } from "react-native-svg/lib/typescript/xml";
 import { Exercise } from "./Exercise";
 
+export type DaysOfWeek = 'Monday'|'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'| 'Saturday'| 'Sunday';
+
+
 export type PR = {
   name: string;
   weight?: number;
@@ -27,7 +30,18 @@ export type Weight = {
 type Changes = {
   weight : boolean,
   height : boolean,
-  PRs : number[]
+  PRs : number[],
+  rutine : boolean
+}
+
+export type Rutine = {
+  Monday: string;
+  Tuesday: string;
+  Wednesday: string;
+  Thursday: string;
+  Friday: string;
+  Saturday: string;
+  Sunday: string;
 }
 
 export class User {
@@ -35,11 +49,13 @@ export class User {
   private weight?: number;
   private height?: number;
   private PRs: PR[];
+  private rutine : Rutine;
   private changes : Changes = {
     weight: false,
     height: false,
-    PRs: []
-  };
+    PRs: [],
+    rutine : false
+  };  
   readonly userDocPath: DocumentReference<DocumentData>;
 
   constructor(email: string);
@@ -49,11 +65,21 @@ export class User {
     if (typeof user === "string") {
       this.email = user;
       this.PRs = [];
+      this.rutine = {
+        Monday: 'Rest',
+        Tuesday: 'Rest',
+        Wednesday: 'Rest',
+        Thursday: 'Rest',
+        Friday: 'Rest',
+        Saturday: 'Rest',
+        Sunday: 'Rest'
+      };
     } else if(user.constructor == User){
       this.email = user.email;
       this.weight = user.weight? user.weight : 0;
       this.height = user.height? user.height : 0;
       this.PRs = user.PRs;
+      this.rutine = user.rutine?? undefined;
       this.changes = user.changes;
     }
     else{
@@ -61,6 +87,7 @@ export class User {
       this.weight = user.weight??0;
       this.height = user.height??0;
       this.PRs = user.PRs??[];
+      this.rutine = user.rutine?? undefined;
     }
     this.userDocPath = doc(database, "users", this.email);
   }
@@ -82,6 +109,10 @@ export class User {
     return this.PRs;
   }
 
+  public getRutine(){
+    return this.rutine;
+  }
+
   public setHeight(height: number) {
     this.height = height;
     this.changes.height = true;
@@ -101,37 +132,72 @@ export class User {
       this.changes.PRs.push(index)
   }
 
+  public setRutineValue(day : DaysOfWeek, workoutName : string) {
+    if (!this.rutine)
+      this.rutine = {
+        Monday: 'Rest',
+        Tuesday: 'Rest',
+        Wednesday: 'Rest',
+        Thursday: 'Rest',
+        Friday: 'Rest',
+        Saturday: 'Rest',
+        Sunday: 'Rest'
+      }
+
+    this.rutine[day] = workoutName;
+    this.changes.rutine = true;
+  }
+
   public saveChanges(callback: (success: boolean) => void) {
     const eventDocUpdate = doc(database, "users", this.email, 'events', new Date().toISOString().split('T')[0]);
 
-    if (this.changes.weight && this.weight) {
-      const weightHelper : Weight = {
-        weight: this.weight,
-        timestamp: new Date().getTime()
-      }
+    // if (this.changes.weight && this.weight) {
+    //   const weightHelper : Weight = {
+    //     weight: this.weight,
+    //     timestamp: new Date().getTime()
+    //   }
 
-      setDoc(eventDocUpdate, {weight: weightHelper}, {merge: true}).catch((error) => {
-          Alert.alert("Error: ", error.message);
-          callback(false);
-        });
-      this.changes.weight = false;
-    }
+    //   setDoc(eventDocUpdate, {weight: weightHelper}, {merge: true}).catch((error) => {
+    //       Alert.alert("Error: ", error.message);
+    //       callback(false);
+    //     });
+    //   this.changes.weight = false;
+    // }
     
-    if (this.changes.PRs.length > 0) {
-      const firestoreArray : PR[] =  this.PRs.map((value) => {return {name: value.name, weight: (value.weight)? value.weight : 0};});
+    // if (this.changes.PRs.length > 0) {
+    //   const firestoreArray : PR[] =  this.PRs.map((value) => {return {name: value.name, weight: (value.weight)? value.weight : 0};});
 
-      setDoc(eventDocUpdate, {PRs: firestoreArray}, {merge: true}).catch((error) => {
+    //   setDoc(eventDocUpdate, {PRs: firestoreArray}, {merge: true}).catch((error) => {
+    //     Alert.alert("Error: ", error.message);
+    //     callback(false);
+    //   });
+
+    //   this.changes.PRs = [];
+    // }
+
+    if (this.changes.rutine && this.rutine) {
+      const rutineDocUpdate = doc(database, "users", this.email, 'events', 'rutine');
+      const rutineReferencedDoc = {
+        Monday: this.rutine.Monday,
+        Tuesday: this.rutine.Tuesday,
+        Wednesday: this.rutine.Wednesday,
+        Thursday: this.rutine.Thursday,
+        Friday: this.rutine.Friday,
+        Saturday: this.rutine.Saturday,
+        Sunday: this.rutine.Sunday
+      }
+      
+      setDoc(rutineDocUpdate, rutineReferencedDoc).catch((error) => {
         Alert.alert("Error: ", error.message);
         callback(false);
       });
-
-      this.changes.PRs = [];
     }
 
     setDoc(this.userDocPath, this.userDataToFirebase()).catch((error) => {
         Alert.alert("Error: ", error.message);
         callback(false);
       });
+
     callback(true);
   }
 

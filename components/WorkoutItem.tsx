@@ -4,7 +4,7 @@ import IExercise from "../src/Exercise";
 import { IWorkout } from "../src/Workout";
 import { useState } from "react";
 
-export function WorkoutContainer(params: {data: IWorkout, pressed? : string, navigation : any, refresh : (refresh : boolean) => void}){
+export default function WorkoutContainer(params: {data: IWorkout, pressed? : string, navigation : any, refresh : (refresh : boolean) => void}){
     const exercises : IExercise[] = params.data.getExercises();
     const name : string = params.data.getName();
   

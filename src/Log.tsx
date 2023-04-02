@@ -14,12 +14,17 @@ import { AgendaEntry, AgendaSchedule } from "react-native-calendars/src/types";
 import RadioButton from "../components/RadioButton";
 import { Button } from "../components/Button";
 import auth, { database } from "./auth";
-import { DocumentData, QuerySnapshot, collection, deleteDoc, deleteField, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { DocumentData, QuerySnapshot, collection, deleteDoc, deleteField, doc, getDocs, getDocsFromCache, query, setDoc } from "firebase/firestore";
 import { PR, Weight } from "./User";
 
-type LogProps = {
-  renderLog : Log,
-  style? : StyleSheet,
+export type Event = {
+  PRs? : PR[];
+  log? : {
+    name : string;
+    exercises : Exercise[];
+    workoutType : WorkoutType;
+  };
+  weight? : number;
 }
 
 export class Log {
@@ -138,6 +143,8 @@ export class Log {
 
   public save(callback: (success: boolean) => void): void {
     const email = auth.currentUser?.email;
+    console.log('Sending query');
+    
 
     if(email){
       const eventDocPath = doc(database, "users", email, 'events', new Date(this.timestamp).toISOString().split('T')[0]);
@@ -181,9 +188,8 @@ export class Log {
     const email = auth.currentUser?.email;
     if(email){
       const q = query(collection(database, "users", email, 'events'));
-
       const data = await getDocs(q);
-
+      
       callback(data);
     }
   }

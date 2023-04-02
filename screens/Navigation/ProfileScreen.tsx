@@ -1,4 +1,4 @@
-import { Alert, FlatList, RefreshControl, StyleSheet } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 
 import { sendEmailVerification, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
   View,
 } from "../../components/Themed";
-import auth from "../../src/auth";
-import { ExerciseItem } from "../../components/ExerciseItem";
-import { PR, User } from "../../src/User";
-import { Button } from "../../components/Button";
-import { getDoc } from "firebase/firestore";
+import auth, { database } from "../../src/auth";
+import { DaysOfWeek, PR, Rutine, User } from "../../src/User";
+import { DocumentReference, collection, doc, getDoc, getDocs, query } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
+import SelectDropdown from "react-native-select-dropdown";
 import { Log } from "../../src/Log";
+import { Workout } from "../../src/Workout";
+import { RutineDay } from "../../components/RutineDay";
+
 
 export default function ProfileScreen({ navigation, route }: any) {
   const [user, setUser] = useState<User>(auth.currentUser?.email? new User(auth.currentUser?.email) : navigation.navigate('LoginScreen'));
@@ -25,9 +27,10 @@ export default function ProfileScreen({ navigation, route }: any) {
   const [exercises, setExercises] = useState<PR[]>(user.getPRs());
   
   const [refreshing, setRefreshing] = useState(true);
+  const [workoutNames, setWorkoutNames] = useState<string[]>([]);
+  const [rutine, setRutine] = useState<Rutine>()
   const isFocused = useIsFocused();
 
-  console.log(exercises);
   
 
   function handleNumberChange(value: string) {
@@ -55,17 +58,45 @@ export default function ProfileScreen({ navigation, route }: any) {
     setRefreshing(false);
 
     if(user.email){
+      const rutineDoc = doc(database, 'users', user.email, 'events', 'rutine');
+
+      const rutineData = await getDoc(rutineDoc);
       const data = await getDoc(user.userDocPath);
-      const userHelper = data.data();      
-      
+
+      const q = query(collection(database, 'users', user.email, 'workouts'));
+      const workoutsData = await getDocs(q);
+      const userHelper = data.data();
+
       if(userHelper){
         setUser(new User(userHelper));
         setWeight(userHelper.weight? userHelper.weight.toString() : '');
         setHeight(userHelper.height? userHelper.height.toString() : '');
         setExercises(userHelper.PRs? userHelper.PRs : []);
       }
+      if(workoutsData){
+        const docHelper : string[] = [];
+        docHelper.push('Rest');
+
+        workoutsData.forEach((doc) =>
+          docHelper.push(doc.data().name)
+        )
+        setWorkoutNames(docHelper);
+      }
+      if(rutineData)
+        setRutine(rutineData.data() as Rutine);
     }
   }
+
+  function handleRutineChange(day : DaysOfWeek, workoutName : string){
+    const userHelper = new User(user);
+
+    userHelper.setRutineValue(day, workoutName)
+
+    setUser(userHelper);
+    setRutine(userHelper.getRutine());
+  }
+
+  
 
   const RenderItem = (props : { index : number, item : PR, value : string, onChange : (index : number,value : string) => void}) => {
     const [value, setValue] = useState<string>(props.value);
@@ -123,7 +154,7 @@ export default function ProfileScreen({ navigation, route }: any) {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View
         style={{
           borderRadius: 10,
@@ -189,20 +220,34 @@ export default function ProfileScreen({ navigation, route }: any) {
           />
         </View>
       </View>
-      <FlatList
-        ListHeaderComponent={<><Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Personal Records: </Text><View style = {{height: 2, backgroundColor: '#929494'}}/></>}
-        data={exercises}
-        renderItem={({ item, index }) => <RenderItem index={index} item={item} value={item.weight?.toString()??''} onChange={(index, value) => handlePRChange(index, Number(value))}/> }
-        ItemSeparatorComponent={ () => <View style = {{height: 2, backgroundColor: '#929494'}}/> }
-        ListFooterComponent={
-          <>
-            <View style = {{height: 2, backgroundColor: '#929494'}}/>
-            <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch', { prevScreen: route.name, exercises: exercises})}>
-              <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
-            </TouchableOpacity>
-          </>
+      <View>
+        <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Current Maximums: </Text>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        {
+          exercises.map((item, index) => <RenderItem index={index} item={item} value={item.weight?.toString()??''} onChange={(index, value) => handlePRChange(index, Number(value))}/>)
         }
-      />
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch', { prevScreen: route.name, exercises: exercises})}>
+          <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Rutine: </Text>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Monday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Monday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Tuesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Tuesday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Wednesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Wednesday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Thursday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Thursday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Friday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Friday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Saturday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Saturday : ''}/>
+        <View style = {{height: 2, backgroundColor: '#929494'}}/>
+        <RutineDay day='Sunday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Sunday : ''}/>
+      </View>
       <TouchableOpacity
         darkColor="#252525"
         lightColor="#D4D4D3"
@@ -211,7 +256,7 @@ export default function ProfileScreen({ navigation, route }: any) {
       >
         <Text style={[styles.buttonText, { height: 50}]}>Save changes</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
