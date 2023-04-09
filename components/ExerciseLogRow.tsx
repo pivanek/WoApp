@@ -59,24 +59,53 @@ export function StrengthRow(params: {rowIndex : number, editable : boolean, onCh
     );
 }
 
-export function HoldRow(params: {timeValue : Date, rowNumber : number, editable : boolean, handleChange(value : number, rowNumber : number, valueType : ValueType) : any}) {
-  const [weightIsEditable, setWeightEdidtable] = useState<boolean>(false);
+export function HoldRow(params: {timeValue : Date, rowIndex : number, editable : boolean, onChange(value : number, rowNumber : number, valueType : ValueType) : any}) {
+  const [weightIsEditable, setWeightEdidtable] = useState<boolean>(false);    
+    const [reps, setReps] = useState<number>(0);
+    const [weight, setWeight] = useState<number>(0);
+    
+    function handleChange(stringValue : string, valueType : ValueType){
+      const numberValue = Number(stringValue);
+      const correctedValue : number = (isNaN(numberValue))? 0 : numberValue;
 
-  return (
-    <View style={styles.row}>
-      <Text style={styles.setText}>Set {params.rowNumber + 1}</Text>
-      <View style={styles.column}>
-        <TextInput
-          editable={weightIsEditable}
-          onChangeText={(value) => params.handleChange(Number.parseInt(value), params.rowNumber, ValueType.Weight)}
-          style={styles.weightInput}
-          keyboardType="numeric"
-          darkColor={weightIsEditable ? "#313131" : "#232323"}
-          lightColor="#D4D4D3"
-          placeholder={weightIsEditable ? "00" : ""}
-        />
+      if (valueType == ValueType.Reps){
+        setReps(correctedValue);
+        setWeightEdidtable(correctedValue != 0);
+      }
+      else if(valueType == ValueType.Weight)
+        setWeight(correctedValue);
+          
+      params.onChange(correctedValue, params.rowIndex, valueType);
+    }
+
+    return (
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <TextInput
+            editable={params.editable}
+            onChangeText={(value) => {handleChange(value, ValueType.Reps)}}
+            style={styles.repsInput}
+            keyboardType="numeric"
+            darkColor={params.editable ? "#313131" : "#232323"}
+            lightColor="#D4D4D3"
+            placeholder={params.editable ? "00" : ""}
+            value = {reps == 0? '' : reps.toString()}
+          />
+        </View>
+        <Text style={styles.setText}>Set {params.rowIndex + 1}</Text>
+        <View style={styles.column}>
+          <TextInput
+            editable={weightIsEditable}
+            onChangeText={(value) => {handleChange(value, ValueType.Weight)}}
+            style={styles.weightInput}
+            keyboardType="numeric"
+            darkColor={weightIsEditable ? "#313131" : "#232323"}
+            lightColor="#D4D4D3"
+            placeholder={weightIsEditable ? "00" : ""}
+            value = {weight == 0? '' : weight.toString()}
+          />
+        </View>
       </View>
-    </View>
   );
 }
 

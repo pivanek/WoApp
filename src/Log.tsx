@@ -6,7 +6,7 @@ import IExercise, {
   HoldExercise,
   StrengthExercise,
 } from "./Exercise";
-import { WorkoutType, Workout, HIITWorkout } from "./Workout";
+import { WorkoutType, Workout } from "./Workout";
 import { Component, useState } from "react";
 import { Alert, FlatList, LogBoxStatic, StyleSheet } from "react-native";
 import { View, Text, Pressable } from "../components/Themed";
@@ -32,13 +32,13 @@ export class Log {
   protected exercises: Array<StrengthExercise | HoldExercise> = new Array<StrengthExercise | HoldExercise>();
   protected workoutTime?: string;
   protected pauseTime?: string;
-  protected workoutType: WorkoutType;
+  // protected workoutType: WorkoutType;
   protected timestamp = new Date();
 
   constructor(workout: Workout);
-  constructor(workout: HIITWorkout);
+  // constructor(workout: HIITWorkout);
   constructor(log: any);
-  constructor(workoutOrLog: HIITWorkout | Workout | any) {
+  constructor(workoutOrLog: Workout | any) {
     if (workoutOrLog.constructor == Workout) {
       this.name = workoutOrLog.getName();
       workoutOrLog.getExercises().forEach((element) => {
@@ -48,20 +48,21 @@ export class Log {
             : new HoldExercise(element)
         );
       });
-      this.workoutType = workoutOrLog.getType();
-    } else if (workoutOrLog.constructor == HIITWorkout) {
-      this.name = workoutOrLog.getName();
-      workoutOrLog.getExercises().forEach((element) => {
-        this.exercises.push(
-          element.getExerciseType().toString() == "Reps"
-            ? new StrengthExercise(element)
-            : new HoldExercise(element)
-        );
-      });
-      this.workoutTime = (workoutOrLog as HIITWorkout).getWorkoutTime().toTimeString();
-      this.pauseTime = (workoutOrLog as HIITWorkout).getPauseTime().toTimeString();
-      this.workoutType = workoutOrLog.getType();
-    }
+      // this.workoutType = workoutOrLog.getType();
+    } 
+    // else if (workoutOrLog.constructor == HIITWorkout) {
+    //   this.name = workoutOrLog.getName();
+    //   workoutOrLog.getExercises().forEach((element) => {
+    //     this.exercises.push(
+    //       element.getExerciseType().toString() == "Reps"
+    //         ? new StrengthExercise(element)
+    //         : new HoldExercise(element)
+    //     );
+    //   });
+    //   this.workoutTime = (workoutOrLog as HIITWorkout).getWorkoutTime().toTimeString();
+    //   this.pauseTime = (workoutOrLog as HIITWorkout).getPauseTime().toTimeString();
+    //   this.workoutType = workoutOrLog.getType();
+    // }
     else {
       this.name = workoutOrLog.name;
       workoutOrLog.exercises.forEach((element : any) => {
@@ -71,7 +72,7 @@ export class Log {
             : new HoldExercise(element)
         );
       });
-      this.workoutType = workoutOrLog.workoutType;
+      // this.workoutType = workoutOrLog.workoutType;
     }
   }
 
@@ -129,9 +130,9 @@ export class Log {
     return this.name;
   }
 
-  public getType() {
-    return this.workoutType;
-  }
+  // public getType() {
+  //   return this.workoutType;
+  // }
 
   public getExercises(): Array<StrengthExercise | HoldExercise> {
     return this.exercises;

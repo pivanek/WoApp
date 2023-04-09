@@ -89,7 +89,6 @@ export default function CalendarScreen() {
         height={220}
         chartConfig={chartConfig}
         style={{backgroundColor: "#313130", borderRadius: 15, marginTop: 10}}
-        withVerticalLabels
       />
     }/>
   );

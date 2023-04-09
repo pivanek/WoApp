@@ -17,6 +17,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { Log } from "../../src/Log";
 import { Workout } from "../../src/Workout";
 import { RutineDay } from "../../components/RutineDay";
+import UserVerificationAlert from "../../components/UserVerification";
 
 
 export default function ProfileScreen({ navigation, route }: any) {
@@ -114,14 +115,14 @@ export default function ProfileScreen({ navigation, route }: any) {
           <Text style={{fontSize: 18, textAlignVertical: "center", height: 40}}>{props.item.name}</Text>
         </View>
         <TextInput
-            keyboardType="numeric"
-            darkColor="#292929"
-            style={styles.input}
-            onChangeText={value => setValue(handleNumberChange(value))}
-            placeholder="000"
-            value={value == '0'? '' : value}
-            onEndEditing={() => handleChange()}
-          />
+          keyboardType="numeric"
+          darkColor="#292929"
+          style={styles.input}
+          onChangeText={value => setValue(handleNumberChange(value))}
+          placeholder="000"
+          value={value == '0'? '' : value}
+          onEndEditing={() => handleChange()}
+        />
       </View>
     );
   }
@@ -155,6 +156,7 @@ export default function ProfileScreen({ navigation, route }: any) {
 
   return (
     <ScrollView style={styles.container}>
+      {auth.currentUser?.emailVerified? null : <UserVerificationAlert/>}
       <View
         style={{
           borderRadius: 10,

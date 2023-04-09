@@ -5,10 +5,7 @@ import { Event, Log } from '../../src/Log';
 import { View, Text, TouchableOpacity } from '../../components/Themed';
 import { Rutine } from '../../src/User';
 import { Workout } from '../../src/Workout';
-import { collection, getDocs, query } from 'firebase/firestore';
-import { database } from '../../src/auth';
-import WorkoutItem from '../../components/WorkoutItem';
-import { RutineDay } from '../../components/RutineDay';
+import { MarkedDatesType } from 'react-native-calendars/src/calendar';
 
 interface State {
   items?: AgendaSchedule;
@@ -210,8 +207,7 @@ export default function CalendarScreen({ navigation } : any) {
     <Agenda
       items={items}
       loadItemsForMonth={loadItems}
-      renderItem={(reservation, index) => renderEvent(reservation)}
-      showClosingKnob={true}
+      renderItem={(reservation) => renderEvent(reservation)}
       pagingEnabled
       theme={{ backgroundColor: '#010101', calendarBackground: '#010101', dayTextColor: 'white', selectedDotColor: '#2DC5FC', monthTextColor: 'white', agendaKnobColor: '#8F9492', todayDotColor: '#2DC5FC'}}
     />
@@ -250,6 +246,7 @@ const styles = StyleSheet.create({
     flatList:{
       alignSelf: 'center',
       width: '90%',
+      flex: 1
     },
     workoutButtons:{
       flex: 1,

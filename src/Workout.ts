@@ -7,39 +7,39 @@ import { Alert } from "react-native";
 
 export enum WorkoutType{
     Strength,
-    Interval   
+    Interval
 }
 
 
 
-export interface IWorkout{
-    getName() : string;
-    setName(name : string) : void;
-    getType() : WorkoutType;
-    getExercises() : Exercise[];
-    setExercises(exercises : IExercise[]) : void;
-    addExercise(exercise : IExercise | IExercise[]) : void;
-    deleteExercise(name : IExercise) : void;
-    save(callback: (success: boolean) => void) : void;
-    delete(callback: (success: boolean) => void) : void;
-}
+// export interface IWorkout{
+//     getName() : string;
+//     setName(name : string) : void;
+//     getType() : WorkoutType;
+//     getExercises() : Exercise[];
+//     setExercises(exercises : IExercise[]) : void;
+//     addExercise(exercise : IExercise | IExercise[]) : void;
+//     deleteExercise(name : IExercise) : void;
+//     save(callback: (success: boolean) => void) : void;
+//     delete(callback: (success: boolean) => void) : void;
+// }
 
-export class Workout implements IWorkout{
+export class Workout{
     protected name : string;
     protected exercises : Exercise[];
-    protected workoutType : WorkoutType;
-    
+    // protected workoutType : WorkoutType;
+
     constructor(name : string);
     constructor(workout : Workout);
     constructor(arg : string | Workout | any){
         if (typeof arg === 'string') {
             this.name = arg;
             this.exercises = [];
-            this.workoutType = WorkoutType.Strength;
+            // this.workoutType = WorkoutType.Strength;
         } else if (arg.constructor == Workout){
           this.name = arg.name;
           this.exercises = arg.exercises;
-          this.workoutType = arg.workoutType;
+        //   this.workoutType = arg.workoutType;
         } else {
           const exercisesHelper : Exercise[] = [];
           arg.exercises?.forEach((exercise : any) => {
@@ -48,17 +48,17 @@ export class Workout implements IWorkout{
 
           this.name = arg.name;
           this.exercises = exercisesHelper;
-          this.workoutType = arg.workoutType;
+        //   this.workoutType = arg.workoutType;
         }
     }
 
     public getName(){
         return this.name;
     }
-    
-    public getType(){
-        return this.workoutType;
-    }
+
+    // public getType(){
+    //     return this.workoutType;
+    // }
 
     public getExercises() : Exercise[]{
         return this.exercises;
@@ -85,13 +85,13 @@ export class Workout implements IWorkout{
       return({
         name: this.name,
         exercises: this.exercises.map((value) => value.toFireBase()),
-        workoutType: this.workoutType
+        // workoutType: this.workoutType
       });
     }
 
     public async save(callback: (success: boolean) => void){
       const userEmail =  auth.currentUser?.email
-      
+
       if (userEmail) {
         const workoutDoc = doc(database, 'users', userEmail, 'workouts', this.name);
 
@@ -105,7 +105,7 @@ export class Workout implements IWorkout{
 
         callback(true);
       }
-    } 
+    }
 
     public delete(callback: (success: boolean) => void) : void{
         const userEmail =  auth.currentUser?.email
@@ -116,27 +116,27 @@ export class Workout implements IWorkout{
             deleteDoc(workoutDoc)
                 .catch((error : Error) => {
                     const errorMessage : string = error.message;
-        
+
                     Alert.alert('Error deleting data', errorMessage)
                     callback(false)
                 });
-                
+
                 callback(true)
         }
     }
-    
-    public static from(workoutData : any) : Workout | HIITWorkout {
-        const workoutResult : Workout | HIITWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData); 
-        const exercisesHelper : Exercise[] = [];
 
-        workoutData.exercises.forEach((exercise: Exercise) => {
-            exercisesHelper.push(Exercise.from(exercise));
-        });
-        workoutResult.setExercises(exercisesHelper);
+    // public static from(workoutData : any) : Workout | HIITWorkout {
+    //     const workoutResult : Workout | HIITWorkout = (workoutData.workoutType == WorkoutType.Strength) ? new Workout(workoutData) : new HIITWorkout(workoutData);
+    //     const exercisesHelper : Exercise[] = [];
 
-        return workoutResult;
-    }
-    
+    //     workoutData.exercises.forEach((exercise: Exercise) => {
+    //         exercisesHelper.push(Exercise.from(exercise));
+    //     });
+    //     workoutResult.setExercises(exercisesHelper);
+
+    //     return workoutResult;
+    // }
+
     public static async load(callback : (workouts : Workout[]) => void) {
         if(auth.currentUser?.email){
             const q = query(collection(database, "users", auth.currentUser?.email , 'workouts'));
@@ -155,44 +155,44 @@ export class Workout implements IWorkout{
 
 }
 
-export class HIITWorkout extends Workout implements IWorkout{
-    private workoutTime : string = new Date(0).toTimeString();
-    private pauseTime : string = new Date(0).toTimeString();
-    private sets : number = 1;
+// export class HIITWorkout extends Workout {
+//     private workoutTime : string = new Date(0).toTimeString();
+//     private pauseTime : string = new Date(0).toTimeString();
+//     private sets : number = 1;
 
-    constructor(name : string);
-    constructor(workout : Workout);
-    constructor(arg : string | Workout){
-        if (typeof arg === 'string') {
-            super(arg);
-            this.workoutType = WorkoutType.Interval;
-        }
-        else{
-            super(arg);
-        }
-    }
+//     constructor(name : string);
+//     constructor(workout : Workout);
+//     constructor(arg : string | Workout){
+//         if (typeof arg === 'string') {
+//             super(arg);
+//             this.workoutType = WorkoutType.Interval;
+//         }
+//         else{
+//             super(arg);
+//         }
+//     }
 
-    public getWorkoutTime() : Date{
-        return new Date(this.workoutTime);
-    }
+//     public getWorkoutTime() : Date{
+//         return new Date(this.workoutTime);
+//     }
 
-    public getPauseTime() : Date{
-        return new Date(this.pauseTime);
-    }
+//     public getPauseTime() : Date{
+//         return new Date(this.pauseTime);
+//     }
 
-    public getNumberOfSets(sets : number){
-        return this.sets;
-    }
+//     public getNumberOfSets(sets : number){
+//         return this.sets;
+//     }
 
-    public setWorkoutTime(time : Date){
-        this.workoutTime = time.toTimeString();
-    }
+//     public setWorkoutTime(time : Date){
+//         this.workoutTime = time.toTimeString();
+//     }
 
-    public setPauseTime(time : Date){
-        this.pauseTime = time.toTimeString();
-    }
+//     public setPauseTime(time : Date){
+//         this.pauseTime = time.toTimeString();
+//     }
 
-    public setNumberOfSets(sets : number){
-        this.sets = sets;
-    }
-}
+//     public setNumberOfSets(sets : number){
+//         this.sets = sets;
+//     }
+// }

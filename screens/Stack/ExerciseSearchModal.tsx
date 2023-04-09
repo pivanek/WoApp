@@ -8,7 +8,8 @@ import { PR } from "../../src/User";
 export default function ExerciseSearchScreen({ navigation, route } : any) {
   const exercisesJSON: Object[] = require("../../src/exercises.json");
   const exercisesData: Exercise[] = parseJSON(exercisesJSON);
-
+  console.log(exercisesJSON);
+  
   const [exercises, setExercises] = useState<Exercise[]>(exercisesData);
   const [addedExercises, setAddedExercises] = useState<Exercise[] | PR[]>(route.params.exercises? route.params.exercises : []);  
 
@@ -23,6 +24,13 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
       ),
     });
   });
+
+  // useEffect(() => {
+  //   fetch("../../src/exercises.json")
+  //     .then(response => response.json())
+  //     .then(json => setExercises(parseJSON(json)))
+  //     .catch(err => console.log(err));
+  // }, []);
 
   function parseJSON(exerciseData: Object[]): Exercise[] {
     const exercisesHelper: Exercise[] = [];
@@ -88,14 +96,14 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
         placeholder="Type name of exercise"
       />
       <FlatList
-        maxToRenderPerBatch={35}
         data={exercises}
-        renderItem={({ item }) => (
+        renderItem={({ item }) => 
           <RenderItem
             item={ item }
           />
-        )}
+        }
         ItemSeparatorComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
+        ListFooterComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
       />
     </View>
   );

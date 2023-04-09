@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { HIITWorkout, IWorkout, Workout } from "./Workout";
+import { Workout } from "./Workout";
 import { Dimensions } from "react-native";
 import { Log } from "./Log";
 
@@ -32,7 +32,7 @@ export function deleteWorkouts(){
         console.log('Error deleting data', error);
     });
 
-  AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(new Map<string, HIITWorkout | Workout>())))
+  AsyncStorage.setItem('Workouts', JSON.stringify(Array.from(new Map<string, Workout>())))
     .then(() => {
       console.log('Data saved successfully');
     })

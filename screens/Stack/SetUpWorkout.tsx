@@ -6,19 +6,17 @@ import { Button } from '../../components/Button';
 import { ExerciseItem } from '../../components/ExerciseItem';
 import RadioButton from '../../components/RadioButton';
 import { Pressable, Text, TextInput, TouchableOpacity, View } from '../../components/Themed';
-import TimeSetter from '../../components/TimeSetter';
 import IExercise, { Exercise } from '../../src/Exercise';
-import { HIITWorkout, IWorkout, Workout, WorkoutType } from '../../src/Workout';
+import { Workout, WorkoutType } from '../../src/Workout';
 import { useIsFocused } from "@react-navigation/native";
 
 export default function SetUpWorkout( { navigation, route } : any) {
-  const [workout, setWorkout] = useState<Workout | HIITWorkout>((route.params?.workout !== undefined)? route.params.workout : new Workout(''));
+  const [workout, setWorkout] = useState<Workout>((route.params?.workout !== undefined)? route.params.workout : new Workout(''));
 
-  const [checkedRadio, setChecked] = useState<WorkoutType>(workout.getType());
   const [name, setName] = useState<string>(workout.getName());
 
-  const [pauseTime, setPauseTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getPauseTime() : new Date(0));
-  const [workoutTime, setWorkoutTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getWorkoutTime() : new Date(0));
+  // const [pauseTime, setPauseTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getPauseTime() : new Date(0));
+  // const [workoutTime, setWorkoutTime] = useState<Date>((workout.getType() == WorkoutType.Interval)? (workout as HIITWorkout).getWorkoutTime() : new Date(0));
 
   const isFocused = useIsFocused();
 
@@ -35,27 +33,10 @@ export default function SetUpWorkout( { navigation, route } : any) {
   });
 
   useEffect(() => {
-    if(checkedRadio == WorkoutType.Interval){
-      const workoutHelper = new HIITWorkout(name);
-
-      workoutHelper.setExercises(workout.getExercises());
-
-      workoutHelper.setWorkoutTime(workoutTime);
-      workoutHelper.setPauseTime(pauseTime);
-
-      setWorkout(workoutHelper); 
-    }
-    else{
-      const workoutHelper = new Workout(name);
-
-      workoutHelper.setExercises(workout.getExercises());
-      setWorkout(workoutHelper); 
-    }
-  }, [checkedRadio]);
-
-  useEffect(() => {
     if(route.params?.exercises && isFocused){      
-      const workoutHelper = (workout.constructor == Workout)? new Workout(workout) : new HIITWorkout(workout);
+      // const workoutHelper = (workout.constructor == Workout)? new Workout(workout) : new HIITWorkout(workout);
+      const workoutHelper = new Workout(workout);
+
 
       workoutHelper.setExercises(route.params.exercises);
       setWorkout(workoutHelper);
@@ -106,7 +87,7 @@ export default function SetUpWorkout( { navigation, route } : any) {
   }
 
   function handleDelete(exercise : Exercise){
-    const updatedWorkout =  Workout.from(workout);
+    const updatedWorkout =  new Workout(workout);
     updatedWorkout.deleteExercise(exercise);
 
     setWorkout(updatedWorkout);
@@ -118,13 +99,6 @@ export default function SetUpWorkout( { navigation, route } : any) {
       renderItem={() => (
         <>
           <TextInput style={styles.input} darkColor='#313131' lightColor="#D4D4D3" placeholder='Type name of your workout' value={name} onChangeText={name => {setName(name);}}/>
-          <View style={{marginTop: 20, alignSelf: 'center', width: '90%'}}>
-            <Text style={[styles.header]}>Choose type</Text>
-            <View style={[styles.separatorHorizontal, {marginBottom: 20, height: 2}]}/>
-            <RadioButton value={WorkoutType.Strength} checked={checkedRadio==WorkoutType.Strength} onPress={() => setChecked(WorkoutType.Strength)} style = {styles.radioButton}>Strength Workout</RadioButton>
-            <RadioButton value={WorkoutType.Interval} checked={checkedRadio==WorkoutType.Interval} onPress={() => setChecked(WorkoutType.Interval)} style = {styles.radioButton}>Interval Workout</RadioButton>
-          </View>
-          {(checkedRadio == WorkoutType.Interval)? <TimeSetter workoutValue={workoutTime} pauseValue={pauseTime} onChangeWorkout={time => setWorkoutTime(time)} onChangePause={time => setPauseTime(time)}/> : null}
           <View style={{width: '90%', alignSelf: 'center', marginTop: 20}}>
             <Text style={styles.header}>Exercises</Text>
             <View style={[styles.separatorHorizontal, {height: 2}]}/>

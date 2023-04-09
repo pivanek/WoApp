@@ -5,12 +5,12 @@ import { AddNew_Empty } from '../../components/Add';
 import { Button } from '../../components/Button';
 import { Pressable } from '../../components/Themed';
 import WorkoutContainer from '../../components/WorkoutItem';
-import { IWorkout, Workout } from '../../src/Workout';
+import { Workout } from '../../src/Workout';
 import auth, { database } from '../../src/auth';
 import { useIsFocused } from '@react-navigation/native';
 
 export default function WorkoutsScreen({ navigation } : any) {
-  const [workouts, setWorkouts] = useState<IWorkout[]>();
+  const [workouts, setWorkouts] = useState<Workout[]>();
   const [isPressed, setPressed] = useState('');
   
   const isFocused = useIsFocused();

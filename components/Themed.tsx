@@ -4,22 +4,6 @@ import useColorScheme from '../hooks/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { ClassAttributes } from 'react';
 
-
-// export function useThemeColor(
-//   props: { light?: string; dark?: string },
-//   colorName: keyof typeof DarkTheme.colors & keyof typeof DefaultTheme.colors
-// ){
-//   const theme = useColorScheme();
-//   const colorFromProps = props[theme];
-//   const themes = {dark: DarkTheme, light: DefaultTheme}
-
-//   if (colorFromProps) {
-//     return colorFromProps;
-//   } else {
-//     return themes[theme].colors[colorName];
-//   }
-// }
-
 export const themes = {dark: DarkTheme, light: DefaultTheme}
 
 export function useThemeColor(

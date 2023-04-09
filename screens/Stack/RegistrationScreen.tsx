@@ -55,8 +55,8 @@ export default function RegistrationScreen({navigation} : any) {
     const userEmail =  auth.currentUser?.email;
 
     if(userEmail){
-      const cityRef = doc(database, 'users', userEmail);
-      setDoc(cityRef, { email: userEmail }, { merge: true })
+      const userRef = doc(database, 'users', userEmail);
+      setDoc(userRef, { email: userEmail }, { merge: true })
         .then(() => callback(true))
         .catch((error : Error) => {
           const errorMessage : string = error.message;

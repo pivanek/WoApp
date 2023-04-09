@@ -2,7 +2,7 @@ import { ExerciseName } from "./ExerciseName";
 import { Pressable, Text } from "../components/Themed";
 import { Component, useState } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { StrengthRow, ValueType } from "../components/ExerciseLogRow";
+import { HoldRow, StrengthRow, ValueType } from "../components/ExerciseLogRow";
 import { vw } from ".";
 
 export enum ExerciseType{
@@ -93,7 +93,7 @@ export class Exercise implements IExercise{
     });
 
     return(
-      <View style={{ marginLeft: 12, margin: 1, flexDirection: 'row'}}>
+      <View style={{ marginLeft: 12, margin: 1, flexDirection: 'row', flex: 1}}>
         <View style={{width: '79%', height: 40}}>
             <Text style={{fontSize: 18}}>{this.name}</Text>
             <Text style={{color: '#929494'}}>{ this.muscleGroups.join(' | ') }</Text>
@@ -303,10 +303,15 @@ export class HoldExercise extends Exercise implements IExercise{
           </View>
           <View style={[styles.row, {marginTop: 10}]}>
               <Text style={styles.header2}>Reps</Text>
-                  <View style={{flex: 1}}/>
-              <Text style={styles.header2}>Weight</Text>
           </View>
+          {/* <HoldRow rowIndex={0} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <HoldRow rowIndex={1} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <HoldRow rowIndex={2} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <HoldRow rowIndex={3} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <HoldRow rowIndex={4} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
+          <HoldRow rowIndex={5} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/> */}
       </View>
+
     );
   }
 }
