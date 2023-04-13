@@ -27,7 +27,7 @@ export enum WorkoutType{
 export class Workout{
     protected name : string;
     protected exercises : Exercise[];
-    // protected workoutType : WorkoutType;
+    // protected workoutType : WorkoutType; // v případě přidání jiných typů workoutu - příklad je dole
 
     constructor(name : string);
     constructor(workout : Workout);

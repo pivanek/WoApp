@@ -1,7 +1,6 @@
-import { ExerciseName } from "./ExerciseName";
 import { Pressable, Text } from "../components/Themed";
-import { Component, useState } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { HoldRow, StrengthRow, ValueType } from "../components/ExerciseLogRow";
 import { vw } from ".";
 
@@ -237,17 +236,23 @@ export class StrengthExercise extends Exercise{
 }
 
 export class HoldExercise extends Exercise implements IExercise{
-  private times : Array<Date> = [];
+  private times : Array<number> = [];
   
-  constructor(exercise : Exercise){
+  constructor(exercise : Exercise);
+  constructor(exercise : any);
+  constructor(exercise : Exercise | any){
       super(exercise);
+      if(exercise.constructor == Exercise)
+        this.times = [0,0,0,0,0,0];
+      else
+        this.times = exercise.times; 
   }
   
-  public setTimes(times : Date[]){
-      this.times =times
+  public setTimes(times : number[]){
+      this.times = times;
   }
 
-  public getTime() : Array<Date>{
+  public getTime() : Array<number>{
       return this.times;
   }
 
@@ -259,22 +264,26 @@ export class HoldExercise extends Exercise implements IExercise{
     });
   }
 
-  public renderLog(){
-      return(
-          <View style={{flex: 1}}>
-              <Text darkColor='white'> {this.name}</Text>
-              <View style={[{flexDirection: "row", paddingLeft: 10, marginRight: 30}]}>
-                  {
-                      this.times.map((value) =>
-                          <Text style={{flex: 1, alignContent: "center"}} darkColor={(value.getTime() == 0)? 'gray' : 'white'}>{value.toTimeString()}</Text>
-                      )
-                  }
-              </View>
+  public renderLog(index : number){
+    console.log(this.times);
+    
+
+    return(
+      <View key={index}>
+          <Text darkColor='white' style={{fontSize: 16}}> {this.name}</Text>
+          <View style={[{flexDirection: "row", paddingLeft: 10, marginRight: 5}]}>
+            <Text style={{width: 40, fontSize: 14}}>Time: </Text>
+              { 
+                  this.times.map((value) =>
+                      <Text style={[{flex: 1, alignContent: "center", fontSize: 14}, (value == 0)? {color: 'gray'} : {color: 'white'}]}>{Math.floor(value/60).toString() + ':' + (value%60).toString()}</Text>
+                  )
+              }
           </View>
-      );
+      </View>
+    );
   }
 
-  public renderExercisePage(){
+  public renderExercisePage(setExercise : (exercise : HoldExercise) => void){
     const styles = StyleSheet.create({
       row: {
           flexDirection: 'row',
@@ -295,23 +304,24 @@ export class HoldExercise extends Exercise implements IExercise{
       }
     });
     
+    const handleChange = (value : number, rowIndex : number) => {
+      this.times[rowIndex] = value; 
+
+      setExercise(this);
+    }
 
     return(
-      <View style = {{width: vw(100)}}>
-          <View style={styles.row}>
-              <Text style={styles.header}>{this.name}</Text>
-          </View>
-          <View style={[styles.row, {marginTop: 10}]}>
-              <Text style={styles.header2}>Reps</Text>
-          </View>
-          {/* <HoldRow rowIndex={0} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <HoldRow rowIndex={1} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <HoldRow rowIndex={2} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <HoldRow rowIndex={3} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <HoldRow rowIndex={4} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/>
-          <HoldRow rowIndex={5} editable onChange={(value, rowIndex, valueType) => handleChange(value, rowIndex, valueType)}/> */}
-      </View>
-
+        <View style = {{width: vw(100)}}>
+            <View style={styles.row}>
+                <Text style={styles.header}>Hold</Text>
+            </View>
+            <HoldRow timeValue={this.times[0]} rowIndex={0} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={this.times[1]} rowIndex={1} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={this.times[2]} rowIndex={2} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={this.times[3]} rowIndex={3} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={this.times[4]} rowIndex={4} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={this.times[5]} rowIndex={5} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+        </View>
     );
   }
 }

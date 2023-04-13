@@ -4,6 +4,7 @@ import { TextInput, View, Text, TouchableOpacity } from '../../components/Themed
 import { useState } from 'react';
 import auth from '../../src/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Button } from '../../components/Button';
 
 
 export default function LoginScreen({ navigation } : any) {
@@ -100,16 +101,16 @@ export default function LoginScreen({ navigation } : any) {
             Forgot password ? 
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <Button
           darkColor="#313130"
           lightColor="#D4D4D3"
           style={styles.button}
           onPress={() => logIn()}
         >
-          <Text style={[styles.text, { textAlign: 'left' }]}>Log In</Text>
-        </TouchableOpacity>
+          Log In
+        </Button>
         <TouchableOpacity onPress={() => navigation.navigate('RegistrationScreen')}>
-          <Text style={[styles.link, {textAlign: 'center', height: 30, textAlignVertical: 'center'}]}>
+          <Text style={[styles.link, {textAlign: 'center', height: 30, textAlignVertical: 'center', paddingVertical: 15}]}>
             Register
           </Text>
         </TouchableOpacity>
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     width: 250,
-    height: 40,
+    // height: 40,
     marginTop: 20
   },
   text:{
@@ -148,6 +149,6 @@ const styles = StyleSheet.create({
     color: '#00C5FF',
     fontWeight: '400',
     fontSize: 14,
-    width: 240
+    width: 240,
   }
 });

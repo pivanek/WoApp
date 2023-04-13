@@ -1,14 +1,20 @@
-import { StyleProp, ViewStyle, StyleSheet, PressableProps, ButtonProps } from "react-native";
+import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { Text, TouchableOpacity, TouchableOpacityProps } from "./Themed";
 import { TextProps } from "react-native";
 
+// type ButtonStyleProps ={
+//     buttonStyle?: any
+//     textStyle?: StyleProp<TextStyle>
+// }
+
+// type ButtonProps = TouchableOpacityProps & ButtonStyleProps;
 
 export function Button(props : TouchableOpacityProps) {
     const { style, children, ...otherProps } = props;
 
     return (
-        <TouchableOpacity darkColor="#313131" lightColor="#D4D4D3" style= {[props.style , styles.button]} {...otherProps}>
-            <Text style={styles.text}>{children}</Text>
+        <TouchableOpacity darkColor="#313131" lightColor="#D4D4D3" style= {[style , styles.button]} {...otherProps}>
+            <Text style={[styles.text]}>{children}</Text>
         </TouchableOpacity>
     );
 }

@@ -1,13 +1,11 @@
-import { Dimensions, StyleSheet, View as DefaultView, ViewPagerAndroidComponent } from "react-native";
-import { Button } from "./Button";
+import { StyleSheet } from "react-native";
 import { HoldRow, StrengthRow, ValueType } from "./ExerciseLogRow";
 import { View, Text } from "./Themed";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { IWorkout, Workout } from "../src/Workout";
-import { Exercise, HoldExercise, StrengthExercise } from "../src/Exercise";
+import { useState } from "react";
+import { HoldExercise, StrengthExercise } from "../src/Exercise";
 import { vw } from "../src";
 
-export function StrengthExerciseData(params: {index : number, exercise : StrengthExercise, onChange:(exerciseLog : StrengthExercise) => void}) {
+export function StrengthExerciseData(params: {index : number, exercise : StrengthExercise}) {
     const [exerciseLog, setExerciseLog] = useState<StrengthExercise>(params.exercise);
 
     const [reps, setReps] = useState<number[]>(exerciseLog.getReps());
@@ -34,7 +32,7 @@ export function StrengthExerciseData(params: {index : number, exercise : Strengt
     }
 
     return(
-        <View style = {{width: vw(100)}}>
+        <View style = {{width: vw(100)}} key={params.index}>
             <View style={styles.row}>
                 <Text style={styles.header}>{exerciseLog.getName()}</Text>
             </View>
@@ -53,30 +51,29 @@ export function StrengthExerciseData(params: {index : number, exercise : Strengt
     );
 }
 
-export function HoldExerciseData(params: {exercise : HoldExercise}) {
-    const exerciseLog = params.exercise;
-
-
-    function handleChange() {
-        console.log('handling')
-    }
+export function HoldExerciseData(params: {index : number, exercise : HoldExercise}) {
+    const [time, setTime] = useState(params.exercise.getTime())
     
-    // useEffect(() => {
-        
-    // },[reps, weight]);
+    function handleChange(value : number, rowIndex : number){
+        setTime((prevState) => {
+            const newState = [...prevState];
+            newState[rowIndex] = value;
+            return newState;
+          });
+    }
 
     return(
-        <>
+        <View style = {{width: vw(100)}} key={params.index}>
             <View style={styles.row}>
-                <Text style={styles.header}>How long did you hold ?</Text>
+                <Text style={styles.header}>Hold</Text>
             </View>
-            <HoldRow timeValue={new Date(0)} rowNumber={0} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-            <HoldRow timeValue={new Date(0)} rowNumber={1} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-            <HoldRow timeValue={new Date(0)} rowNumber={2} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-            <HoldRow timeValue={new Date(0)} rowNumber={3} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-            <HoldRow timeValue={new Date(0)} rowNumber={4} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-            <HoldRow timeValue={new Date(0)} rowNumber={5} editable handleChange={(value, rowNumber, valueType) => handleChange()}/>
-        </>
+            <HoldRow timeValue={time[0]} rowIndex={0} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={time[1]} rowIndex={1} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={time[2]} rowIndex={2} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={time[3]} rowIndex={3} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={time[4]} rowIndex={4} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+            <HoldRow timeValue={time[5]} rowIndex={5} onChange={(value, rowIndex) => handleChange(value, rowIndex)}/>
+        </View>
     );
 }
 

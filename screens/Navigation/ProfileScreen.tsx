@@ -18,6 +18,8 @@ import { Log } from "../../src/Log";
 import { Workout } from "../../src/Workout";
 import { RutineDay } from "../../components/RutineDay";
 import UserVerificationAlert from "../../components/UserVerification";
+import { Profile } from "../../components/Profile";
+import { Button } from "../../components/Button";
 
 
 export default function ProfileScreen({ navigation, route }: any) {
@@ -155,118 +157,78 @@ export default function ProfileScreen({ navigation, route }: any) {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={{flex: 1}}>
       {auth.currentUser?.emailVerified? null : <UserVerificationAlert/>}
-      <View
-        style={{
-          borderRadius: 10,
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 20,
-          paddingHorizontal: 20,
-          paddingVertical: 10,
-        }}
-        darkColor="#111111"
-      >
-        <UserProfileIcon color="#313131" style={{ flex: 1 }} />
-        <View style={{ flex: 1 }} darkColor="#111111">
-          <Text
-            style={{
-              margin: 5,
-              textAlign: "center",
-              textAlignVertical: "center",
-              fontSize: 16,
-            }}
-          >
-            {auth.currentUser?.email}
-          </Text>
-          <TouchableOpacity
-            onPress={() =>
-              Alert.alert("Singout", "Are you sure you want to sing out", [
-                { text: "Cancel" },
-                {
-                  text: "Yes",
-                  onPress: () => signOut(auth),
-                },
-              ])
-            }
-            darkColor="#252525"
-            lightColor="#D4D4D3"
-            style={[styles.button, { height: 32, width: 150}]}
-          >
-            <Text style={styles.buttonText}>Log Out</Text>
+      <ScrollView style={styles.container}>
+        <Profile auth={auth}/>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <Text style={{ fontSize: 20 }}>Weight: </Text>
+            <TextInput
+              keyboardType="numeric"
+              darkColor="#292929"
+              placeholder="000"
+              style={styles.input}
+              onChangeText={(value) => setWeight(handleNumberChange(value))}
+              value={weight}
+            />
+          </View>
+          <View style={styles.column}>
+            <Text style={{ fontSize: 20 }}>Height: </Text>
+            <TextInput
+              darkColor="#292929"
+              style={styles.input}
+              placeholder="000"
+              keyboardType="numeric"
+              onChangeText={(value) => setHeight(handleNumberChange(value))}
+              value={height}
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Current Maximums: </Text>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          {
+            exercises.map((item, index) => <RenderItem index={index} item={item} value={item.weight?.toString()??''} onChange={(index, value) => handlePRChange(index, Number(value))}/>)
+          }
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch', { prevScreen: route.name, exercises: exercises})}>
+            <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Text style={{ fontSize: 20 }}>Weight: </Text>
-          <TextInput
-            keyboardType="numeric"
-            darkColor="#292929"
-            placeholder="000"
-            style={styles.input}
-            onChangeText={(value) => setWeight(handleNumberChange(value))}
-            value={weight}
-          />
+        <View>
+          <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Rutine: </Text>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Monday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Monday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Tuesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Tuesday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Wednesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Wednesday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Thursday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Thursday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Friday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Friday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Saturday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Saturday : ''}/>
+          <View style = {{height: 2, backgroundColor: '#929494'}}/>
+          <RutineDay day='Sunday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Sunday : ''}/>
         </View>
-        <View style={styles.column}>
-          <Text style={{ fontSize: 20 }}>Height: </Text>
-          <TextInput
-            darkColor="#292929"
-            style={styles.input}
-            placeholder="000"
-            keyboardType="numeric"
-            onChangeText={(value) => setHeight(handleNumberChange(value))}
-            value={height}
-          />
-        </View>
-      </View>
-      <View>
-        <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Current Maximums: </Text>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        {
-          exercises.map((item, index) => <RenderItem index={index} item={item} value={item.weight?.toString()??''} onChange={(index, value) => handlePRChange(index, Number(value))}/>)
-        }
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <TouchableOpacity style={{alignItems: 'center'}} onPress={() => navigation.navigate('ExerciseSearch', { prevScreen: route.name, exercises: exercises})}>
-          <Text style={{fontSize: 16, padding: 12, textAlign: 'center', color: '#00C5FF'}}>Add exercises</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Text style={{fontSize: 24, width: '100%', fontWeight: 'bold', marginTop: 30}}>Your Rutine: </Text>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Monday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Monday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Tuesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Tuesday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Wednesday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Wednesday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Thursday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Thursday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Friday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Friday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Saturday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Saturday : ''}/>
-        <View style = {{height: 2, backgroundColor: '#929494'}}/>
-        <RutineDay day='Sunday' onChange={(workoutName, day) => handleRutineChange(day, workoutName)} workoutNames={workoutNames} defaultValue={rutine? rutine.Sunday : ''}/>
-      </View>
-      <TouchableOpacity
-        darkColor="#252525"
-        lightColor="#D4D4D3"
-        onPress={() => handleSave()}
-        style={[styles.button, {width: '60%', height: 50, marginVertical: 50}]}
-      >
-        <Text style={[styles.buttonText, { height: 50}]}>Save changes</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <Button
+          onPress={() => handleSave()}
+          style={[styles.button, {width: '60%', height: 50, marginVertical: 50}]}
+        >
+          <Text style={[styles.buttonText, { height: 50}]}>Save changes</Text>
+        </Button>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "90%",
-    alignSelf: "center"
+    alignSelf: "center",
+    width: '90%'
   },
   buttonText: {
     color: "#00C5FF",

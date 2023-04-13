@@ -18,16 +18,14 @@ export default function App({navigation} : any) {
     })
   }, [])
 
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    if(user != null)
-      return(<HomeScreen colorScheme={colorScheme}/>);
-    else
-      return(
-        <SafeAreaProvider>
-          <LoginStack colorScheme={colorScheme}/>
-        </SafeAreaProvider>
-      );
-  }
+  if (!isLoadingComplete) return null;
+    
+  if(user != null)
+    return(<HomeScreen colorScheme={colorScheme}/>);
+
+  return(
+    <SafeAreaProvider>
+      <LoginStack colorScheme={colorScheme}/>
+    </SafeAreaProvider>
+  );
 }

@@ -8,7 +8,6 @@ import {
   updateDoc,
   Timestamp
 } from "firebase/firestore";
-import { ExerciseName } from "./ExerciseName";
 import { database } from "./auth";
 import { Alert } from "react-native";
 import { err } from "react-native-svg/lib/typescript/xml";
@@ -151,29 +150,26 @@ export class User {
   public saveChanges(callback: (success: boolean) => void) {
     const eventDocUpdate = doc(database, "users", this.email, 'events', new Date().toISOString().split('T')[0]);
 
-    // if (this.changes.weight && this.weight) {
-    //   const weightHelper : Weight = {
-    //     weight: this.weight,
-    //     timestamp: new Date().getTime()
-    //   }
+    if (this.changes.weight && this.weight) {
 
-    //   setDoc(eventDocUpdate, {weight: weightHelper}, {merge: true}).catch((error) => {
-    //       Alert.alert("Error: ", error.message);
-    //       callback(false);
-    //     });
-    //   this.changes.weight = false;
-    // }
+      setDoc(eventDocUpdate, {weight: this.weight}, {merge: true}).catch((error) => {
+          Alert.alert("Error: ", error.message);
+          callback(false);
+        });
+
+      this.changes.weight = false;
+    }
     
-    // if (this.changes.PRs.length > 0) {
-    //   const firestoreArray : PR[] =  this.PRs.map((value) => {return {name: value.name, weight: (value.weight)? value.weight : 0};});
+    if (this.changes.PRs.length > 0) {
+      const firestoreArray : PR[] =  this.PRs.map((value) => {return {name: value.name, weight: (value.weight)? value.weight : 0};});
 
-    //   setDoc(eventDocUpdate, {PRs: firestoreArray}, {merge: true}).catch((error) => {
-    //     Alert.alert("Error: ", error.message);
-    //     callback(false);
-    //   });
+      setDoc(eventDocUpdate, {PRs: firestoreArray}, {merge: true}).catch((error) => {
+        Alert.alert("Error: ", error.message);
+        callback(false);
+      });
 
-    //   this.changes.PRs = [];
-    // }
+      this.changes.PRs = [];
+    }
 
     if (this.changes.rutine && this.rutine) {
       const rutineDocUpdate = doc(database, "users", this.email, 'events', 'rutine');
@@ -191,9 +187,12 @@ export class User {
         Alert.alert("Error: ", error.message);
         callback(false);
       });
+
+      this.changes.rutine = false;
     }
 
-    setDoc(this.userDocPath, this.userDataToFirebase()).catch((error) => {
+    
+    setDoc(this.userDocPath, this.userDataToFirebase(), {merge: true}).catch((error) => {
         Alert.alert("Error: ", error.message);
         callback(false);
       });
@@ -204,14 +203,9 @@ export class User {
   public userDataToFirebase() {
     return {
       email: this.email,
-      weight: this.weight,
       height: this.height,
-      PRs: this.PRs.map(element => {
-        return{
-          name: element.name,
-          weight: (element.weight)? element.weight : 0
-        }
-      })
+      weight: this.weight,
+      PRs: this.PRs
     };
   }
 }

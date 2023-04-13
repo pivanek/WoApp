@@ -1,341 +1,296 @@
 [
   {
-    "name": "Air Squat",
-    "muscleGroups": [
-      "Quadriceps",
-      "Glutes",
-      "Hamstrings"
-    ],
-    "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Alternating Dumbbell Curl",
-    "muscleGroups": [
-      "Biceps"
-    ],
-    "description": "Targets the biceps muscles of the upper arm.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Alternating Dumbbell Press",
-    "muscleGroups": [
-      "Chest",
-      "Shoulders"
-    ],
-    "description": "Targets the chest and shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Alternating Dumbbell Snatch",
-    "muscleGroups": [
-      "Back",
-      "Shoulders"
-    ],
-    "description": "Targets the back and shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Alternating Renegade Row",
-    "muscleGroups": [
-      "Back",
-      "Shoulders",
-      "Core"
-    ],
-    "description": "Targets the back, shoulder, and core muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Back Extension",
-    "muscleGroups": [
-      "Lower Back",
-      "Glutes",
-      "Hamstrings"
-    ],
-    "description": "Targets the lower back, glutes, and hamstrings.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Band External Shoulder Rotation",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Band Internal Shoulder Rotation",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Band Pull Apart",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Banded Side Kicks",
-    "muscleGroups": [
-      "Glutes"
-    ],
-    "description": "Targets the glutes.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Bar Dip",
-    "muscleGroups": [
-      "Triceps",
-      "Chest",
-      "Shoulders"
-    ],
-    "description": "Targets the triceps, chest, and shoulder muscles.",
-    "exerciseType": "Reps"
-  },
-  {
-    "name": "Bar Hang",
-    "muscleGroups": [
-      "Forearms"
-    ],
-    "description": "Targets the forearm muscles.",
+    "name": "Plank",
+    "muscleGroups": ["Core"],
+    "description": "Start in a push-up position, but instead of lowering yourself to the ground, hold yourself up with your forearms and toes for a set amount of time.",
     "exerciseType": "Hold"
   },
   {
-    "name": "Barbell Curl",
-    "muscleGroups": [
-      "Biceps"
-    ],
-    "description": "Targets the biceps muscles of the upper arm.",
+    "name": "Crunches",
+    "muscleGroups": ["Abs"],
+    "description": "Lie on your back with your knees bent and your hands behind your head. Lift your shoulders off the ground by contracting your abs, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Front Raise",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the front shoulder muscles.",
+    "name": "Russian twists",
+    "muscleGroups": ["Abs", "Obliques"],
+    "description": "Sit on the ground with your knees bent and your feet off the ground. Twist your torso from side to side while holding a weight or your hands together.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Hack Squat",
-    "muscleGroups": [
-      "Quadriceps",
-      "Glutes",
-      "Hamstrings"
-    ],
-    "description": "Targets the lower body, specifically the quadriceps, glutes, and hamstrings.",
+    "name": "Bicycle crunches",
+    "muscleGroups": ["Abs"],
+    "description": "Lie on your back with your hands behind your head. Bring your left elbow to your right knee while straightening your left leg, then switch to the other side.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Lunge",
-    "muscleGroups": [
-      "Quadriceps",
-      "Glutes",
-      "Hamstrings"
-    ],
-    "description": "Strengthens the lower body, focusing on the quadriceps, glutes, and hamstrings.",
+    "name": "Reverse crunches",
+    "muscleGroups": ["Lower Abs"],
+    "description": "Lie on your back with your knees bent and your hands by your sides. Lift your hips off the ground by contracting your lower abs, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Lying Triceps Extension",
-    "muscleGroups": [
-      "Triceps"
-    ],
-    "description": "Targets the triceps muscles of the upper arm while lying down on a bench.",
+    "name": "Dead bug",
+    "muscleGroups": ["Core"],
+    "description": "Lie on your back with your arms and legs in the air. Lower your opposite arm and leg towards the ground while keeping your back flat, then switch sides.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Preacher Curl",
-    "muscleGroups": [
-      "Biceps"
-    ],
-    "description": "Targets the biceps muscles of the upper arm with a preacher curl bench.",
+    "name": "Side plank",
+    "muscleGroups": ["Obliques"],
+    "description": "Lie on your side with your forearm on the ground and your feet stacked on top of each other. Lift your hips off the ground and hold.",
+    "exerciseType": "Hold"
+  },
+  {
+    "name": "Mountain climbers",
+    "muscleGroups": ["Core", "Legs"],
+    "description": "Start in a push-up position, then bring your right knee towards your chest. Quickly switch to the other side, as if you're running in place.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Rear Delt Row",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the rear deltoids of the shoulder muscles with a barbell row motion.",
+    "name": "Leg raises",
+    "muscleGroups": ["Lower Abs"],
+    "description": "Lie on your back with your legs straight. Lift your legs off the ground by contracting your lower abs, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Row",
-    "muscleGroups": [
-      "Back"
-    ],
-    "description": "Strengthens the back muscles, including the lats, traps, and rhomboids, with a barbell row motion.",
+    "name": "Woodchoppers",
+    "muscleGroups": ["Obliques"],
+    "description": "Stand with your feet shoulder-width apart and hold a weight or medicine ball. Twist your torso to one side and bring the weight up and across your body, then repeat on the other side.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Shrug",
-    "muscleGroups": [
-      "Shoulders",
-      "Traps"
-    ],
-    "description": "Targets the trapezius muscles of the upper back and the shoulder muscles with a shrugging motion.",
+    "name": "Bicep curls",
+    "muscleGroups": ["Biceps"],
+    "description": "Stand with your feet shoulder-width apart and hold a weight in each hand. Curl the weights towards your shoulders by contracting your biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Standing Triceps Extension",
-    "muscleGroups": [
-      "Triceps"
-    ],
-    "description": "Targets the triceps muscles of the upper arm with a standing triceps extension motion.",
+    "name": "Tricep dips",
+    "muscleGroups": ["Triceps"],
+    "description": "Sit on the edge of a bench or chair with your hands on either side of your hips. Lower your body towards the ground by bending your elbows, then push back up.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Upright Row",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the shoulder muscles, including the deltoids and traps, with an upright row motion.",
+    "name": "Hammer curls",
+    "muscleGroups": ["Biceps"],
+    "description": "Stand with your feet shoulder-width apart and hold a weight in each hand. Curl the weights towards your shoulders with your palms facing in, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Wrist Curl Behind the Back",
-    "muscleGroups": [
-      "Forearms"
-    ],
-    "description": "Targets the forearm muscles with a wrist curl motion behind the back.",
+    "name": "Tricep pushdowns",
+    "muscleGroups": ["Triceps"],
+    "description": "Stand in front of a cable machine with a rope or bar attachment. Push the attachment down towards your thighs by contracting your triceps, then release back up.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Wrist Curl",
-    "muscleGroups": [
-      "Forearms"
-    ],
-    "description": "Targets the forearm muscles with a wrist curl motion.",
+    "name": "Wrist curls",
+    "muscleGroups": ["Forearms"],
+    "description": "Sit on a bench or chair with a weight in one hand and your forearm resting on your leg. Curl the weight towards your wrist by contracting your forearm, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Barbell Wrist Extension",
-    "muscleGroups": [
-      "Forearms"
-    ],
-    "description": "Targets the forearm muscles with a wrist extension motion.",
+    "name": "Reverse curls",
+    "muscleGroups": ["Forearms"],
+    "description": "Stand with your feet shoulder-width apart and hold a weight in each hand with your palms facing down. Curl the weights towards your shoulders by contracting your forearms, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Behind the Neck Press",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the shoulder muscles, including the deltoids and triceps, with a press motion behind the neck.",
+    "name": "Concentration curls",
+    "muscleGroups": ["Biceps"],
+    "description": "Sit on a bench or chair with a weight in one hand and your elbow resting on your inner thigh. Curl the weight towards your shoulder by contracting your biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Bench Press",
-    "muscleGroups": [
-      "Chest",
-      "Triceps",
-      "Shoulders"
-    ],
-    "description": "Strengthens the chest, triceps, and shoulder muscles with a bench press motion.",
+    "name": "Skull crushers",
+    "muscleGroups": ["Triceps"],
+    "description": "Lie on a bench or the ground with a weight in each hand. Lower the weights towards your head by bending your elbows, then push back up.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Bicycle Crunch",
-    "muscleGroups": [
-      "Abdominals"
-    ],
-    "description": "Targets the rectus abdominis and oblique muscles through a twisting motion.",
+    "name": "Preacher curls",
+    "muscleGroups": ["Biceps"],
+    "description": "Sit at a preacher bench with a weight in each hand. Curl the weights towards your shoulders by contracting your biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Block Snatch",
-    "muscleGroups": [
-      "Shoulders",
-      "Legs"
-    ],
-    "description": "A weightlifting exercise that targets the shoulders, legs, and back.",
+    "name": "Overhead tricep extensions",
+    "muscleGroups": ["Triceps"],
+    "description": "Stand with your feet shoulder-width apart and hold a weight in both hands above your head. Lower the weight behind your head by bending your elbows, then push back up.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Body Weight Lunge",
-    "muscleGroups": [
-      "Legs"
-    ],
-    "description": "Targets the quadriceps, hamstrings, and glutes.",
+    "name": "Pull-ups",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Hang from a bar with your hands shoulder-width apart and palms facing away from you. Pull your body up towards the bar by contracting your back and biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Box Squat",
-    "muscleGroups": [
-      "Legs"
-    ],
-    "description": "A variation of the squat exercise that focuses on the glutes and hamstrings.",
+    "name": "Bent-over rows",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Hold a weight in each hand with your palms facing down and hinge forward at the hips. Pull the weights towards your chest by contracting your back and biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Bulgarian Split Squat",
-    "muscleGroups": [
-      "Legs"
-    ],
-    "description": "A unilateral exercise that targets the quads, hamstrings, and glutes.",
+    "name": "Lat pulldowns",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Sit at a lat pulldown machine with a wide bar attachment. Pull the bar down towards your chest by contracting your back and biceps, then release back up.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Burpee",
-    "muscleGroups": [
-      "Full Body"
-    ],
-    "description": "A full-body exercise that involves a squat, plank, push-up, and jump.",
+    "name": "Seated cable rows",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Sit at a cable row machine with a V-bar attachment. Pull the attachment towards your chest by contracting your back and biceps, then release back out.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Chest Press",
-    "muscleGroups": [
-      "Chest"
-    ],
-    "description": "Targets the chest muscles with resistance provided by a cable machine.",
+    "name": "T-bar rows",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Stand with your feet shoulder-width apart and hold a barbell with a V-handle attachment. Pull the bar towards your chest by contracting your back and biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Close Grip Seated Row",
-    "muscleGroups": [
-      "Back",
-      "Biceps"
-    ],
-    "description": "Targets the middle and upper back muscles, as well as the biceps.",
+    "name": "Dumbbell rows",
+    "muscleGroups": ["Back", "Biceps"],
+    "description": "Hold a weight in one hand with your other hand and knee resting on a bench. Pull the weight towards your chest by contracting your back and biceps, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Crunch",
-    "muscleGroups": [
-      "Abdominals"
-    ],
-    "description": "Targets the rectus abdominis muscles through a cable machine.",
+    "name": "Good mornings",
+    "muscleGroups": ["Back", "Glutes", "Hamstrings"],
+    "description": "Stand with your feet shoulder-width apart and a barbell resting on your upper back. Hinge forward at the hips while keeping your back straight, then lift back up to standing.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Curl With Bar",
-    "muscleGroups": [
-      "Biceps"
-    ],
-    "description": "Targets the biceps with resistance provided by a cable machine and a bar attachment.",
+    "name": "Back extensions",
+    "muscleGroups": ["Back", "Glutes"],
+    "description": "Lie face down on a back extension machine with your feet secured. Lift your upper body towards the ceiling by contracting your back and glutes, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Curl With Rope",
-    "muscleGroups": [
-      "Biceps"
-    ],
-    "description": "Targets the biceps with resistance provided by a cable machine and a rope attachment.",
+    "name": "Reverse flyes",
+    "muscleGroups": ["Back", "Shoulders"],
+    "description": "Hold a weight in each hand with your palms facing away from you and hinge forward at the hips. Lift the weights out to the sides by contracting your back and shoulders, then lower back down.",
     "exerciseType": "Reps"
   },
   {
-    "name": "Cable Lateral Raise",
-    "muscleGroups": [
-      "Shoulders"
-    ],
-    "description": "Targets the medial deltoids with resistance provided by a cable machine.",
+    "name": "Bench press",
+    "muscleGroups": ["Chest", "Triceps", "Shoulders"],
+    "description": "Lie on a bench with a barbell above you. Lower the bar down towards your chest, then push it back up using your chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Push-ups",
+    "muscleGroups": ["Chest", "Triceps", "Shoulders"],
+    "description": "Start in a plank position with your hands shoulder-width apart. Lower your body down towards the ground by bending your elbows, then push back up using your chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Dumbbell flyes",
+    "muscleGroups": ["Chest"],
+    "description": "Lie on a bench with a dumbbell in each hand. Lower the dumbbells out to the sides of your body, then bring them back up using your chest muscles.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Cable flyes",
+    "muscleGroups": ["Chest"],
+    "description": "Stand in the middle of a cable machine with a handle in each hand. Extend your arms out to the sides, then bring them back together in front of your body using your chest muscles.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Incline bench press",
+    "muscleGroups": ["Upper Chest", "Triceps", "Shoulders"],
+    "description": "Lie on an incline bench with a barbell above you. Lower the bar down towards your upper chest, then push it back up using your upper chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Decline bench press",
+    "muscleGroups": ["Lower Chest", "Triceps", "Shoulders"],
+    "description": "Lie on a decline bench with a barbell above you. Lower the bar down towards your lower chest, then push it back up using your lower chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Chest dips",
+    "muscleGroups": ["Chest", "Triceps"],
+    "description": "Hold onto parallel bars with your arms straight and feet off the ground. Lower your body down towards the ground by bending your elbows, then push back up using your chest and triceps.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Chest press machine",
+    "muscleGroups": ["Chest", "Triceps", "Shoulders"],
+    "description": "Sit in a chest press machine and push the handles forward using your chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Diamond push-ups",
+    "muscleGroups": ["Chest", "Triceps", "Shoulders"],
+    "description": "Start in a plank position with your hands close together, forming a diamond shape with your fingers. Lower your body down towards the ground by bending your elbows, then push back up using your chest, triceps, and shoulders.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Medicine ball chest passes",
+    "muscleGroups": ["Chest"],
+    "description": "Stand facing a wall with a medicine ball in your hands. Throw the ball at the wall, catch it, and repeat to work your chest muscles.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Squats",
+    "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+    "description": "Stand with your feet shoulder-width apart, lower your hips down towards the ground by bending your knees, and then push back up using your legs and glutes.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Lunges",
+    "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+    "description": "Start with one foot forward and the other foot back, then lower your body down towards the ground by bending your knees. Push back up using your legs and glutes and alternate legs.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Deadlifts",
+    "muscleGroups": ["Glutes", "Hamstrings", "Lower Back"],
+    "description": "Start with a barbell on the ground in front of you. With your feet shoulder-width apart, bend your knees, hinge at your hips, and lift the barbell up towards your hips. Lower the barbell back down to the ground and repeat.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Leg press",
+    "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+    "description": "Sit in a leg press machine with your feet on the platform. Push the platform away from you using your legs and glutes.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Step-ups",
+    "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+    "description": "Start with one foot on a raised platform and the other foot on the ground. Step up onto the platform and then step back down, alternating legs.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Calf raises",
+    "muscleGroups": ["Calves"],
+    "description": "Stand with your feet shoulder-width apart and raise up onto the balls of your feet, then lower back down.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Leg extensions",
+    "muscleGroups": ["Quadriceps"],
+    "description": "Sit in a leg extension machine with your feet under the padded bar. Extend your legs straight out in front of you and then lower back down.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Glute bridges",
+    "muscleGroups": ["Glutes"],
+    "description": "Lie on your back with your knees bent and feet on the ground. Push your hips up towards the ceiling using your glutes, then lower back down.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Bulgarian split squats",
+    "muscleGroups": ["Quadriceps", "Glutes", "Hamstrings"],
+    "description": "Start with one foot behind you on a raised platform and the other foot in front of you. Lower your body down towards the ground by bending your knees, then push back up using your legs and glutes. Alternate legs.",
+    "exerciseType": "Reps"
+  },
+  {
+    "name": "Box jumps",
+    "muscleGroups": ["Quadriceps", "Glutes"],
+    "description": "Start with both feet on the ground, then jump up onto a raised platform and jump back down, landing with both feet on the ground. Repeat.",
     "exerciseType": "Reps"
   }
 ]

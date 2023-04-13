@@ -49,7 +49,7 @@ export class Log {
         );
       });
       // this.workoutType = workoutOrLog.getType();
-    } 
+    }
     // else if (workoutOrLog.constructor == HIITWorkout) {
     //   this.name = workoutOrLog.getName();
     //   workoutOrLog.getExercises().forEach((element) => {
@@ -144,7 +144,6 @@ export class Log {
 
   public save(callback: (success: boolean) => void): void {
     const email = auth.currentUser?.email;
-    console.log('Sending query');
     
 
     if(email){

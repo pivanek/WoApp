@@ -5,10 +5,11 @@ import { TextInput, TouchableOpacity, View, Text } from "../../components/Themed
 import { Exercise } from "../../src/Exercise";
 import { PR } from "../../src/User";
 
+
+
 export default function ExerciseSearchScreen({ navigation, route } : any) {
   const exercisesJSON: Object[] = require("../../src/exercises.json");
-  const exercisesData: Exercise[] = parseJSON(exercisesJSON);
-  console.log(exercisesJSON);
+  const exercisesData: Exercise[] = parseJSON(exercisesJSON).sort((a,b) => a.name.localeCompare(b.name));
   
   const [exercises, setExercises] = useState<Exercise[]>(exercisesData);
   const [addedExercises, setAddedExercises] = useState<Exercise[] | PR[]>(route.params.exercises? route.params.exercises : []);  
@@ -63,9 +64,9 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
     setAddedExercises(addedExercisesHelper);
   }
 
-  function changeRegex(search: string): Exercise[] {
-    if (search) {
-      const regexSearch = new RegExp(search, "i");
+  function getFilteredExercises(filter: string): Exercise[] {
+    if (filter) {
+      const regexSearch = new RegExp(filter, "i");
       const exercisesHelper: Exercise[] = [];
 
       exercisesData.forEach((exercise) => {
@@ -75,7 +76,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
             .getMuscleGroups()
             ?.some((muscleGroup) => regexSearch.test(muscleGroup))
         )
-          exercisesHelper.push(exercise);
+        exercisesHelper.push(exercise);
       });
 
       return exercisesHelper;
@@ -90,7 +91,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
     <View style={{ width: "90%", alignSelf: "center" }}>
       <TextInput
         style={styles.input}
-        onChangeText={(search) => setExercises(changeRegex(search))}
+        onChangeText={(search) => setExercises(getFilteredExercises(search))}
         darkColor="#313131"
         lightColor="#D4D4D3"
         placeholder="Type name of exercise"
@@ -103,7 +104,7 @@ export default function ExerciseSearchScreen({ navigation, route } : any) {
           />
         }
         ItemSeparatorComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
-        ListFooterComponent={() => <View style = {{height: 2, backgroundColor: '#929494', marginTop: 6}}/>}
+        ListFooterComponent={() => <View style = {{marginBottom: 100}}/>}
       />
     </View>
   );
