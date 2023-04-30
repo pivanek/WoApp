@@ -3,22 +3,25 @@
     "version": ">= 3.9.0"
   },
   "build": {
+    "release": {
+      "distribution": "internal"
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "medium"
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "medium"
       }
     },
     "production": {
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "medium"
       }
     }
   },
